@@ -68,4 +68,24 @@ fn main() {
 
     rest_url();
     get_data();
+
+    // 注释: 单行注释、多行注释、嵌套注释、文档注释
+    /*
+        这个是多行注释
+    /*
+    这个是嵌套注释
+     */
+     */
+}
+
+/// 这是一个加法函数
+/// ## add
+/// ...
+/// ```rust
+/// use variables::add
+/// let result = add(1, 2);
+/// assert_eq!(result, 3); // 断言
+/// ```
+fn add(a: i32, b: i32) -> i32 {
+    a + b
 }
