@@ -2,7 +2,7 @@
 
 > 基于《Rust程序设计（第2版）》（Programming Rust）和《Rust权威指南》（The Rust Programming Language）
 > 每天约 2-3 小时，以"阅读 + 编码练习"交替推进
-> 项目结构：`rust-basics/` 基础练习 | `the-book/` 跟随《Rust程序设计》实操
+> 项目结构：`rust-basics/` 代码实操及基础练习
 
 ---
 
@@ -41,11 +41,11 @@ find . -type d -name target -exec rm -rf {} +
 
 ```
 rust-journey/
-├── rust-basics/                        # 第一阶段：基础语法练习
+├── rust-basics/                        # 基础语法练习
 │   ├── 01helloworld/                   # Hello World 与格式化输出
-│   ├── 02变量与常量/                    # 变量、常量、遮蔽、类型推断
-│   ├── 03数据类型/                      # 标量类型、复合类型、类型转换
-│   ├── 04函数与控制流/                  # 函数、if/else、循环、迭代器
+│   ├── 02变量与常量/                     # 变量、常量、遮蔽、类型推断
+│   ├── 03数据类型/                       # 标量类型、复合类型、类型转换
+│   ├── 04函数与控制流/                   # 函数、if/else、循环、迭代器
 │   ├── 05所有权/                        # 所有权、移动、克隆
 │   ├── ...
 │   └── 24模式匹配/                      # 高级模式匹配
@@ -103,16 +103,16 @@ mkdir rust-basics/05所有权/examples
 
 ---
 
-## 第一阶段：基础语法（Day 1 - Day 8）
+## 第一阶段：基础语法
 
-### Day 1 — 基本数据类型
+### 基本数据类型 (data types)
 
 **阅读**
 
 - 《Rust程序设计》第3章：基本类型
 - 《Rust权威指南》第3.1-3.2节：变量与数据类型
 
-**练习** — `rust-basics/03数据类型/`
+**练习** — `rust-basics/03数据类型/`（`--name data-types`）
 
 - [x] 整数类型 (i8/u8/i32/u32/i64/u64/usize) 的范围与溢出
 - [x] 浮点类型 f32/f64，演示精度差异
@@ -121,14 +121,14 @@ mkdir rust-basics/05所有权/examples
 - [x] 元组与数组：创建、访问、解构
 - [x] 类型推断：对比显式标注 vs 让编译器推断
 
-### Day 2 — 函数与控制流
+### 函数与控制流 (functions & control flow)
 
 **阅读**
 
 - 《Rust程序设计》第2章（函数/控制流部分）
 - 《Rust权威指南》第3.3-3.5节：函数、控制流
 
-**练习** — `rust-basics/04函数与控制流/`
+**练习** — `rust-basics/04函数与控制流/`（`--name functions`）
 
 - [ ] 函数定义、参数、返回值（显式返回 vs 表达式返回）
 - [ ] 语句 (statement) vs 表达式 (expression)：`let y = { let x = 3; x + 1 };`
@@ -136,14 +136,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] loop（含 break 返回值）、while、for..in 循环
 - [ ] 循环标签与 break/continue：`'outer: loop { ... break 'outer; }`
 
-### Day 3 — 所有权（核心！）
+### 所有权 (ownership)
 
 **阅读**
 
 - 《Rust程序设计》第4章：所有权与引用（重点精读）
 - 《Rust权威指南》第4.1节：什么是所有权
 
-**练习** — `rust-basics/05所有权/`
+**练习** — `rust-basics/05所有权/`（`--name ownership`）
 
 - [ ] String vs &str 的区别，堆 vs 栈
 - [ ] 所有权转移：`let s1 = String::from("hello"); let s2 = s1;` → s1 失效
@@ -152,14 +152,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] 函数返回值的所有权
 - [ ] 练习：写一个 `fn takes_ownership(s: String)` 和 `fn gives_ownership() -> String`
 
-### Day 4 — 引用与借用
+### 引用与借用 (references & borrowing)
 
 **阅读**
 
 - 《Rust程序设计》第4章（后半部分）
 - 《Rust权威指南》第4.2节：引用与借用
 
-**练习** — `rust-basics/06引用与借用/`
+**练习** — `rust-basics/06引用与借用/`（`--name borrowing`）
 
 - [ ] 不可变引用 `&T`：多个不可变引用可以共存
 - [ ] 可变引用 `&mut T`：同一时间只能有一个可变引用
@@ -168,14 +168,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] 切片 (slice)：字符串切片 `&str`、数组切片 `&[i32]`
 - [ ] 练习：写一个 `fn first_word(s: &str) -> &str` 函数
 
-### Day 5 — 结构体
+### 结构体 (structs)
 
 **阅读**
 
 - 《Rust程序设计》第5章（结构体部分）
 - 《Rust权威指南》第5章：使用结构体组织数据
 
-**练习** — `rust-basics/07结构体/`
+**练习** — `rust-basics/07结构体/`（`--name structs`）
 
 - [ ] 定义 struct、实例化、字段访问
 - [ ] 字段初始化简写、结构体更新语法 `..user1`
@@ -185,14 +185,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] 关联函数 `String::from()` 风格：`impl Point { fn new() -> Self { ... } }`
 - [ ] 练习：实现一个 `Rectangle` struct，包含 `area()` 和 `can_hold()` 方法
 
-### Day 6 — 枚举与模式匹配
+### 枚举与模式匹配 (enums & pattern matching)
 
 **阅读**
 
 - 《Rust程序设计》第5章（枚举部分）+ 第6章
 - 《Rust权威指南》第6章：枚举与模式匹配
 
-**练习** — `rust-basics/08枚举与模式匹配/`
+**练习** — `rust-basics/08枚举与模式匹配/`（`--name enums`）
 
 - [ ] 定义 enum 和变体：`enum Direction { Up, Down, Left, Right }`
 - [ ] 带数据的枚举：`enum Message { Quit, Echo(String), Move{x:i32,y:i32} }`
@@ -202,28 +202,28 @@ mkdir rust-basics/05所有权/examples
 - [ ] Option<T> 枚举：Some/None，替代 null
 - [ ] 练习：用 enum + match 实现一个简单的计算器（加减乘除 + 错误处理）
 
-### Day 7 — 集合类型
+### 集合类型 (collections)
 
 **阅读**
 
 - 《Rust程序设计》第2章（集合部分）
 - 《Rust权威指南》第8章：常见集合
 
-**练习** — `rust-basics/09集合类型/`
+**练习** — `rust-basics/09集合类型/`（`--name collections`）
 
 - [ ] Vec<T>：创建、push、索引、遍历、`get()` 安全访问
 - [ ] String：创建、追加、拼接、遍历（字节/标量/字形簇）
 - [ ] HashMap<K,V>：创建、插入、访问、遍历、`entry()` API
 - [ ] 练习：统计一段文本中每个单词的出现次数（用 HashMap）
 
-### Day 8 — 错误处理
+### 错误处理 (error handling)
 
 **阅读**
 
 - 《Rust程序设计》第8章
 - 《Rust权威指南》第9章：错误处理
 
-**练习** — `rust-basics/10错误处理/`
+**练习** — `rust-basics/10错误处理/`（`--name error-handling`）
 
 - [ ] `panic!` 不可恢复错误：何时使用
 - [ ] `Result<T, E>` 枚举：Ok/Err
@@ -234,16 +234,16 @@ mkdir rust-basics/05所有权/examples
 
 ---
 
-## 第二阶段：进阶特性（Day 9 - Day 16）
+## 第二阶段：进阶特性
 
-### Day 9 — 模块与包管理
+### 模块与包管理 (modules & packages)
 
 **阅读**
 
 - 《Rust程序设计》第9章
 - 《Rust权威指南》第7章：管理项目
 
-**练习** — `rust-basics/11模块与包管理/`
+**练习** — `rust-basics/11模块与包管理/`（`--name modules`）
 
 - [ ] `mod` 关键字定义模块、`pub` 控制可见性
 - [ ] `use` 导入路径、`as` 别名、嵌套导入 `use std::io::{self, Read}`
@@ -252,14 +252,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] Cargo.toml 依赖管理、`[dev-dependencies]`
 - [ ] 练习：创建一个包含多个子模块的项目，练习可见性控制
 
-### Day 10 — 泛型
+### 泛型 (generics)
 
 **阅读**
 
 - 《Rust程序设计》第10章（泛型部分）
 - 《Rust权威指南》第10.1节：泛型数据类型
 
-**练习** — `rust-basics/12泛型/`
+**练习** — `rust-basics/12泛型/`（`--name generics`）
 
 - [ ] 泛型函数：`fn largest<T: PartialOrd>(list: &[T) -> &T`
 - [ ] 泛型结构体：`struct Point<T> { x: T, y: T }`
@@ -267,14 +267,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] 泛型方法：`impl<T> Point<T> { ... }` vs `impl Point<f32>`
 - [ ] 练习：实现一个泛型栈 `Stack<T>`（push/pop/peek/is_empty）
 
-### Day 11 — Trait
+### Trait (特征)
 
 **阅读**
 
 - 《Rust程序设计》第10章（Trait 部分）
 - 《Rust权威指南》第10.2节：Trait
 
-**练习** — `rust-basics/13trait特征/`
+**练习** — `rust-basics/13trait特征/`（`--name traits`）
 
 - [ ] 定义 trait：`trait Summary { fn summarize(&self) -> String; }`
 - [ ] 为类型实现 trait：`impl Summary for Article`
@@ -284,14 +284,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] 多个 trait bound：`+` 语法和 `where` 子句
 - [ ] 练习：为自定义类型实现 `Display`、`FromStr`、`Iterator` trait
 
-### Day 12 — 生命周期
+### 生命周期 (lifetimes)
 
 **阅读**
 
 - 《Rust程序设计》第4章（生命周期部分）
 - 《Rust权威指南》第10.3节：生命周期
 
-**练习** — `rust-basics/14生命周期/`
+**练习** — `rust-basics/14生命周期/`（`--name lifetimes`）
 
 - [ ] 生命周期标注语法 `'a`：函数签名中的生命周期
 - [ ] 生命周期省略规则（三条规则）
@@ -299,14 +299,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] 生命周期子类型：`'static` 生命周期
 - [ ] 练习：写一个 `fn longest<'a>(x: &'a str, y: &'a str) -> &'a str`
 
-### Day 13 — 迭代器与闭包
+### 迭代器与闭包 (iterators & closures)
 
 **阅读**
 
 - 《Rust程序设计》第11章
 - 《Rust权威指南》第13章：迭代器与闭包
 
-**练习** — `rust-basics/15迭代器与闭包/`
+**练习** — `rust-basics/15迭代器与闭包/`（`--name closures`）
 
 - [ ] 闭包：`let add = |a, b| a + b;`
 - [ ] 闭包捕获变量：所有权 / 不可变引用 / 可变引用
@@ -315,14 +315,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] 适配器方法：map、filter、collect、fold、enumerate、zip
 - [ ] 练习：用迭代器链式调用实现数据转换管道（filter → map → collect）
 
-### Day 14 — 编写自动化测试
+### 编写自动化测试 (testing)
 
 **阅读**
 
 - 《Rust程序设计》第9章（测试部分）
 - 《Rust权威指南》第11章：编写自动化测试
 
-**练习** — `rust-basics/16测试/`
+**练习** — `rust-basics/16测试/`（`--name testing`）
 
 - [ ] `#[test]` 标注、`cargo test` 运行
 - [ ] 断言宏：`assert!`、`assert_eq!`、`assert_ne!`
@@ -331,14 +331,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] 单元测试（同文件 `#[cfg(test)]`）vs 集成测试（`tests/` 目录）
 - [ ] 练习：为之前写的 `Stack<T>` 补充完整的单元测试和集成测试
 
-### Day 15 — 智能指针
+### 智能指针 (smart pointers)
 
 **阅读**
 
 - 《Rust程序设计》第10章（智能指针部分）
 - 《Rust权威指南》第15章：智能指针
 
-**练习** — `rust-basics/17智能指针/`
+**练习** — `rust-basics/17智能指针/`（`--name smart-pointers`）
 
 - [ ] `Box<T>`：堆分配、递归类型
 - [ ] `Rc<T>`：引用计数、共享所有权
@@ -347,14 +347,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] `Drop` trait：自动资源释放
 - [ ] 练习：用 `Rc<RefCell<T>>` 实现一个双向链表节点
 
-### Day 16 — 并发编程
+### 并发编程 (concurrency)
 
 **阅读**
 
 - 《Rust程序设计》第13章
 - 《Rust权威指南》第16章：无畏并发
 
-**练习** — `rust-basics/18并发编程/`
+**练习** — `rust-basics/18并发编程/`（`--name concurrency`）
 
 - [ ] `spawn` 创建线程、`move` 闭包
 - [ ] `mpsc` 通道：单生产者-多消费者
@@ -365,9 +365,9 @@ mkdir rust-basics/05所有权/examples
 
 ---
 
-## 第三阶段：实战项目（Day 17 - Day 24）
+## 第三阶段：实战项目
 
-### Day 17 — 实战项目 I：minigrep
+### 实战项目 I：minigrep
 
 **阅读**
 
@@ -382,7 +382,7 @@ mkdir rust-basics/05所有权/examples
 - [ ] 提取到 lib.rs + 集成测试
 - [ ] 使用环境变量 `CASE_INSENSITIVE`
 
-### Day 18 — 实战项目 II：minigrep 完善 + Cargo 深入
+### 实战项目 II：minigrep 完善 + Cargo 深入
 
 **阅读**
 
@@ -395,7 +395,7 @@ mkdir rust-basics/05所有权/examples
 - [ ] `pub use` 组织公开 API
 - [ ] workspace 概念理解
 
-### Day 19 — 实战项目 III：多线程 Web Server
+### 实战项目 III：多线程 Web Server
 
 **阅读**
 
@@ -410,7 +410,7 @@ mkdir rust-basics/05所有权/examples
 - [ ] 用线程池处理并发请求
 - [ ] 优雅关闭
 
-### Day 20 — 实战项目 IV：命令行工具
+### 实战项目 IV：命令行工具 (cli tool)
 
 **阅读**
 
@@ -423,14 +423,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] 彩色终端输出（`colored` crate）
 - [ ] 完整的错误处理和用户提示
 
-### Day 21 — 异步编程
+### 异步编程 (async programming)
 
 **阅读**
 
 - 《Rust程序设计》第14章：异步编程
 - 《Rust权威指南》第17章：Async/Await
 
-**练习** — `rust-basics/19异步编程/`
+**练习** — `rust-basics/19异步编程/`（`--name async-programming`）
 
 - [ ] `async fn` 和 `.await` 语法
 - [ ] `Future` trait 概念
@@ -438,7 +438,7 @@ mkdir rust-basics/05所有权/examples
 - [ ] 异步 HTTP 请求（`reqwest`）
 - [ ] 练习：异步并发请求多个 URL 并汇总结果
 
-### Day 22 — Cargo Workspace 项目组织
+### Cargo Workspace 项目组织
 
 **阅读**
 
@@ -450,28 +450,28 @@ mkdir rust-basics/05所有权/examples
 - [ ] 共享依赖、统一版本管理
 - [ ] 各子项目间相互引用
 
-### Day 23 — 对象 oriented 特性
+### 面向对象特性 (oop features)
 
 **阅读**
 
 - 《Rust程序设计》第10章（回顾 Trait）
 - 《Rust权威指南》第18章：OOP 特性
 
-**练习** — `rust-basics/20面向对象/`
+**练习** — `rust-basics/20面向对象/`（`--name oop-features`）
 
 - [ ] 用 trait 对象实现多态：`dyn Draw`
 - [ ] 状态模式：用 enum 替代传统 OOP 状态模式
 - [ ] Trait 对象 vs 泛型（动态分发 vs 静态分发）
 - [ ] 练习：实现一个 GUI 组件系统（用 trait 对象）
 
-### Day 24 — 类型系统深入
+### 类型系统深入 (advanced types)
 
 **阅读**
 
 - 《Rust程序设计》第10章
 - 《Rust权威指南》第19章（类型系统部分）
 
-**练习** — `rust-basics/21类型系统/`
+**练习** — `rust-basics/21类型系统/`（`--name advanced-types`）
 
 - [ ] 类型别名 `type Kilometers = i32;`
 - [ ] Never 类型 `!`
@@ -481,30 +481,30 @@ mkdir rust-basics/05所有权/examples
 
 ---
 
-## 第四阶段：高级主题（Day 25 - Day 30）
+## 第四阶段：高级主题
 
-### Day 25 — 不安全 Rust
+### 不安全 Rust (unsafe rust)
 
 **阅读**
 
 - 《Rust程序设计》第16章
 - 《Rust权威指南》第19章（unsafe 部分）
 
-**练习** — `rust-basics/22不安全Rust/`
+**练习** — `rust-basics/22不安全Rust/`（`--name unsafe-rust`）
 
 - [ ] `unsafe` 块的五种能力：解引用裸指针、调用 unsafe 函数、访问可变静态变量、实现 unsafe trait、访问 union 字段
 - [ ] 裸指针 `*const T` 和 `*mut T`
 - [ ] FFI：调用 C 函数
 - [ ] 练习：用 unsafe 实现一个简单的动态数组，对比安全封装
 
-### Day 26 — 宏
+### 宏 (macros)
 
 **阅读**
 
 - 《Rust程序设计》第15章
 - 《Rust权威指南》第19章（宏部分）
 
-**练习** — `rust-basics/23宏/`
+**练习** — `rust-basics/23宏/`（`--name macros`）
 
 - [ ] `macro_rules!` 声明宏：基本语法
 - [ ] 宏 vs 函数的区别
@@ -512,14 +512,14 @@ mkdir rust-basics/05所有权/examples
 - [ ] `vec![]` 宏源码阅读
 - [ ] 练习：写一个 `hashmap!` 宏实现 `hashmap!("a" => 1, "b" => 2)`
 
-### Day 27 — 高级模式匹配
+### 高级模式匹配 (advanced pattern matching)
 
 **阅读**
 
 - 《Rust程序设计》第6章
 - 《Rust权威指南》第19章（模式部分）
 
-**练习** — `rust-basics/24模式匹配/`
+**练习** — `rust-basics/24模式匹配/`（`--name pattern-matching`）
 
 - [ ] 所有可使用模式的位置
 - [ ] 可反驳性 vs 不可反驳性
@@ -527,7 +527,7 @@ mkdir rust-basics/05所有权/examples
 - [ ] 绑定 `@` 运算符
 - [ ] 练习：用复杂模式匹配实现一个简单表达式解析器
 
-### Day 28 — 实战项目 V：完整 CLI 应用
+### 实战项目 V：完整 CLI 应用
 
 **综合练习** — `the-book/todo-cli/`
 
@@ -538,7 +538,7 @@ mkdir rust-basics/05所有权/examples
 - [ ] 错误处理与用户友好提示
 - [ ] `cargo doc` 生成文档
 
-### Day 29 — 实战项目 VI：简易 HTTP API
+### 实战项目 VI：简易 HTTP API
 
 **综合练习** — `the-book/http-api/`
 
@@ -548,7 +548,7 @@ mkdir rust-basics/05所有权/examples
 - [ ] 错误处理中间件
 - [ ] 使用 `tokio` 异步运行时
 
-### Day 30 — 总结回顾 + 进阶方向
+### 总结回顾 + 进阶方向 (review & next steps)
 
 **阅读**
 
