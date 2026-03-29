@@ -1,4 +1,4 @@
-# Rust 学习计划
+# 享受 Rust 的乐趣
 
 > 基于《Rust程序设计（第2版）》（Programming Rust）和《Rust权威指南》（The Rust Programming Language）
 > 每天约 2-3 小时，以"阅读 + 编码练习"交替推进
