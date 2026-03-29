@@ -14,6 +14,95 @@
 
 ---
 
+## 使用指南
+
+### 环境准备
+
+安装 Rust 请参考官方文档，按你的操作系统选择对应方式：<https://www.rust-lang.org/zh-CN/tools/install>
+
+### 快速开始
+
+```bash
+# 克隆仓库
+git clone https://github.com/clin211/rust-journey && cd rust-journey
+
+# 运行任意练习（以"数据类型"为例）
+cd rust-basics/03数据类型
+cargo run            # 编译并运行
+cargo test           # 运行测试（如有）
+cargo clippy         # 代码质量检查
+cd ../..
+
+# 一键清理所有练习的编译产物
+find . -type d -name target -exec rm -rf {} +
+```
+
+### 目录结构
+
+```
+rust-journey/
+├── rust-basics/                        # 第一阶段：基础语法练习
+│   ├── 01helloworld/                   # Hello World 与格式化输出
+│   ├── 02变量与常量/                    # 变量、常量、遮蔽、类型推断
+│   ├── 03数据类型/                      # 标量类型、复合类型、类型转换
+│   ├── 04函数与控制流/                  # 函数、if/else、循环、迭代器
+│   ├── 05所有权/                        # 所有权、移动、克隆
+│   ├── ...
+│   └── 24模式匹配/                      # 高级模式匹配
+│
+├── .editorconfig                       # 编辑器配置
+├── .gitignore
+└── README.md                           # 本文件
+```
+
+### 每个练习目录的规范
+
+所有练习目录统一遵循以下结构：
+
+```
+序号+中文主题/
+├── Cargo.toml              # 包配置（name 字段使用英文小写，如 name = "ownership"）
+├── src/
+│   └── main.rs             # 主入口（可选，用于本主题综合演示）
+├── examples/               # 每个知识点一个独立示例文件
+│   ├── 01_move.rs          # 运行：cargo run --example 01_move
+│   ├── 02_clone.rs         # 运行：cargo run --example 02_clone
+│   └── 03_functions.rs     # 运行：cargo run --example 03_functions
+└── README.md               # 学习笔记（知识点、踩坑记录）
+```
+
+**命名规则：**
+
+| 项目 | 格式 | 示例 |
+|------|------|------|
+| 目录名 | `两位数字编号` + `中文主题` | `05所有权`、`12泛型`、`17智能指针` |
+| `Cargo.toml` 中 `name` | 英文小写，与主题对应 | `name = "ownership"`、`name = "generics"` |
+| `examples/` 文件名 | `两位数字编号` + `_` + `英文描述.rs` | `01_move.rs`、`02_clone.rs` |
+| `README.md` | 每个目录**必须**包含 | 记录要点、坑点、代码片段 |
+| Rust edition | 统一使用 `2024` | `edition = "2024"` |
+
+**运行方式：**
+
+```bash
+cd rust-basics/05所有权
+
+# 运行某个具体示例
+cargo run --example 01_move
+
+# 列出所有可运行的示例
+cargo run --example
+```
+
+**创建新练习目录：**
+
+```bash
+# 以"所有权"为例
+cargo new rust-basics/05所有权 --name ownership
+mkdir rust-basics/05所有权/examples
+```
+
+---
+
 ## 第一阶段：基础语法（Day 1 - Day 8）
 
 ### Day 1 — 基本数据类型
@@ -39,7 +128,7 @@
 - 《Rust程序设计》第2章（函数/控制流部分）
 - 《Rust权威指南》第3.3-3.5节：函数、控制流
 
-**练习** — `rust-basics/04functions/`
+**练习** — `rust-basics/04函数与控制流/`
 
 - [ ] 函数定义、参数、返回值（显式返回 vs 表达式返回）
 - [ ] 语句 (statement) vs 表达式 (expression)：`let y = { let x = 3; x + 1 };`
@@ -54,7 +143,7 @@
 - 《Rust程序设计》第4章：所有权与引用（重点精读）
 - 《Rust权威指南》第4.1节：什么是所有权
 
-**练习** — `rust-basics/05ownership/`
+**练习** — `rust-basics/05所有权/`
 
 - [ ] String vs &str 的区别，堆 vs 栈
 - [ ] 所有权转移：`let s1 = String::from("hello"); let s2 = s1;` → s1 失效
@@ -70,7 +159,7 @@
 - 《Rust程序设计》第4章（后半部分）
 - 《Rust权威指南》第4.2节：引用与借用
 
-**练习** — `rust-basics/06references/`
+**练习** — `rust-basics/06引用与借用/`
 
 - [ ] 不可变引用 `&T`：多个不可变引用可以共存
 - [ ] 可变引用 `&mut T`：同一时间只能有一个可变引用
@@ -86,7 +175,7 @@
 - 《Rust程序设计》第5章（结构体部分）
 - 《Rust权威指南》第5章：使用结构体组织数据
 
-**练习** — `rust-basics/07structs/`
+**练习** — `rust-basics/07结构体/`
 
 - [ ] 定义 struct、实例化、字段访问
 - [ ] 字段初始化简写、结构体更新语法 `..user1`
@@ -103,7 +192,7 @@
 - 《Rust程序设计》第5章（枚举部分）+ 第6章
 - 《Rust权威指南》第6章：枚举与模式匹配
 
-**练习** — `rust-basics/08enums/`
+**练习** — `rust-basics/08枚举与模式匹配/`
 
 - [ ] 定义 enum 和变体：`enum Direction { Up, Down, Left, Right }`
 - [ ] 带数据的枚举：`enum Message { Quit, Echo(String), Move{x:i32,y:i32} }`
@@ -120,7 +209,7 @@
 - 《Rust程序设计》第2章（集合部分）
 - 《Rust权威指南》第8章：常见集合
 
-**练习** — `rust-basics/09collections/`
+**练习** — `rust-basics/09集合类型/`
 
 - [ ] Vec<T>：创建、push、索引、遍历、`get()` 安全访问
 - [ ] String：创建、追加、拼接、遍历（字节/标量/字形簇）
@@ -134,7 +223,7 @@
 - 《Rust程序设计》第8章
 - 《Rust权威指南》第9章：错误处理
 
-**练习** — `rust-basics/10errors/`
+**练习** — `rust-basics/10错误处理/`
 
 - [ ] `panic!` 不可恢复错误：何时使用
 - [ ] `Result<T, E>` 枚举：Ok/Err
@@ -154,7 +243,7 @@
 - 《Rust程序设计》第9章
 - 《Rust权威指南》第7章：管理项目
 
-**练习** — `rust-basics/11modules/`
+**练习** — `rust-basics/11模块与包管理/`
 
 - [ ] `mod` 关键字定义模块、`pub` 控制可见性
 - [ ] `use` 导入路径、`as` 别名、嵌套导入 `use std::io::{self, Read}`
@@ -170,7 +259,7 @@
 - 《Rust程序设计》第10章（泛型部分）
 - 《Rust权威指南》第10.1节：泛型数据类型
 
-**练习** — `rust-basics/12generics/`
+**练习** — `rust-basics/12泛型/`
 
 - [ ] 泛型函数：`fn largest<T: PartialOrd>(list: &[T) -> &T`
 - [ ] 泛型结构体：`struct Point<T> { x: T, y: T }`
@@ -185,7 +274,7 @@
 - 《Rust程序设计》第10章（Trait 部分）
 - 《Rust权威指南》第10.2节：Trait
 
-**练习** — `rust-basics/13traits/`
+**练习** — `rust-basics/13trait特征/`
 
 - [ ] 定义 trait：`trait Summary { fn summarize(&self) -> String; }`
 - [ ] 为类型实现 trait：`impl Summary for Article`
@@ -202,7 +291,7 @@
 - 《Rust程序设计》第4章（生命周期部分）
 - 《Rust权威指南》第10.3节：生命周期
 
-**练习** — `rust-basics/14lifetimes/`
+**练习** — `rust-basics/14生命周期/`
 
 - [ ] 生命周期标注语法 `'a`：函数签名中的生命周期
 - [ ] 生命周期省略规则（三条规则）
@@ -217,7 +306,7 @@
 - 《Rust程序设计》第11章
 - 《Rust权威指南》第13章：迭代器与闭包
 
-**练习** — `rust-basics/15iterators/`
+**练习** — `rust-basics/15迭代器与闭包/`
 
 - [ ] 闭包：`let add = |a, b| a + b;`
 - [ ] 闭包捕获变量：所有权 / 不可变引用 / 可变引用
@@ -233,7 +322,7 @@
 - 《Rust程序设计》第9章（测试部分）
 - 《Rust权威指南》第11章：编写自动化测试
 
-**练习** — `rust-basics/16testing/`
+**练习** — `rust-basics/16测试/`
 
 - [ ] `#[test]` 标注、`cargo test` 运行
 - [ ] 断言宏：`assert!`、`assert_eq!`、`assert_ne!`
@@ -249,7 +338,7 @@
 - 《Rust程序设计》第10章（智能指针部分）
 - 《Rust权威指南》第15章：智能指针
 
-**练习** — `rust-basics/17smartpointers/`
+**练习** — `rust-basics/17智能指针/`
 
 - [ ] `Box<T>`：堆分配、递归类型
 - [ ] `Rc<T>`：引用计数、共享所有权
@@ -265,7 +354,7 @@
 - 《Rust程序设计》第13章
 - 《Rust权威指南》第16章：无畏并发
 
-**练习** — `rust-basics/18concurrency/`
+**练习** — `rust-basics/18并发编程/`
 
 - [ ] `spawn` 创建线程、`move` 闭包
 - [ ] `mpsc` 通道：单生产者-多消费者
@@ -341,7 +430,7 @@
 - 《Rust程序设计》第14章：异步编程
 - 《Rust权威指南》第17章：Async/Await
 
-**练习** — `rust-basics/19async/`
+**练习** — `rust-basics/19异步编程/`
 
 - [ ] `async fn` 和 `.await` 语法
 - [ ] `Future` trait 概念
@@ -368,7 +457,7 @@
 - 《Rust程序设计》第10章（回顾 Trait）
 - 《Rust权威指南》第18章：OOP 特性
 
-**练习** — `rust-basics/20oop/`
+**练习** — `rust-basics/20面向对象/`
 
 - [ ] 用 trait 对象实现多态：`dyn Draw`
 - [ ] 状态模式：用 enum 替代传统 OOP 状态模式
@@ -382,7 +471,7 @@
 - 《Rust程序设计》第10章
 - 《Rust权威指南》第19章（类型系统部分）
 
-**练习** — `rust-basics/21typesys/`
+**练习** — `rust-basics/21类型系统/`
 
 - [ ] 类型别名 `type Kilometers = i32;`
 - [ ] Never 类型 `!`
@@ -401,7 +490,7 @@
 - 《Rust程序设计》第16章
 - 《Rust权威指南》第19章（unsafe 部分）
 
-**练习** — `rust-basics/22unsafe/`
+**练习** — `rust-basics/22不安全Rust/`
 
 - [ ] `unsafe` 块的五种能力：解引用裸指针、调用 unsafe 函数、访问可变静态变量、实现 unsafe trait、访问 union 字段
 - [ ] 裸指针 `*const T` 和 `*mut T`
@@ -415,7 +504,7 @@
 - 《Rust程序设计》第15章
 - 《Rust权威指南》第19章（宏部分）
 
-**练习** — `rust-basics/23macros/`
+**练习** — `rust-basics/23宏/`
 
 - [ ] `macro_rules!` 声明宏：基本语法
 - [ ] 宏 vs 函数的区别
@@ -430,7 +519,7 @@
 - 《Rust程序设计》第6章
 - 《Rust权威指南》第19章（模式部分）
 
-**练习** — `rust-basics/24patterns/`
+**练习** — `rust-basics/24模式匹配/`
 
 - [ ] 所有可使用模式的位置
 - [ ] 可反驳性 vs 不可反驳性
