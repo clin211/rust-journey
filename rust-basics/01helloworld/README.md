@@ -9,6 +9,8 @@
 | `03_debug.rs` | {:?} / {:#?} Debug 输出 | `cargo run --example 03_debug` |
 | `04_format_spec.rs` | 宽度、对齐、精度、进制 | `cargo run --example 04_format_spec` |
 | `05_stderr_dbg.rs` | stderr 输出、dbg! 宏 | `cargo run --example 05_stderr_dbg` |
+| `06_comments.rs` | 行注释、块注释、文档注释 | `cargo run --example 06_comments` |
+| `07_commands.rs` | rustup / cargo 常用命令速查 | `cargo run --example 07_commands` |
 
 ## 要点总结
 
@@ -109,6 +111,71 @@ cargo run --example 05_stderr_dbg > output.log 2> error.log
 ```rust
 let y = dbg!(x * 2);  // 打印 "[src/main.rs:1] x * 2 = 84"，y 得到 84
 ```
+
+### 注释（Comments）
+
+Rust 支持三种注释：
+
+| 类型 | 语法 | 说明 |
+|------|------|------|
+| 行注释 | `//` | 最常用，从 `//` 到行末都被忽略 |
+| 块注释 | `/* ... */` | 可跨多行，**支持嵌套**（这是 Rust 特色） |
+| 文档注释 | `///` | 修饰紧随其后的项（函数、struct 等），支持 Markdown |
+| 内部文档注释 | `//!` | 修饰所在的项本身（常用于 crate 根或模块根） |
+
+```rust
+// 行注释
+
+/* 块注释
+   /* 嵌套块注释 OK */  */
+
+/// 将两个整数相加。
+///
+/// # Examples
+/// ```
+/// assert_eq!(add(1, 2), 3);
+/// ```
+fn add(a: i32, b: i32) -> i32 { a + b }
+```
+
+> **生成文档：** `cargo doc --open` 会提取 `///` 和 `//!` 注释生成 HTML 文档。
+
+### rustup 常用命令
+
+| 命令 | 说明 |
+|------|------|
+| `rustup update` | 更新到最新稳定版 |
+| `rustup default stable` | 设置默认工具链为 stable |
+| `rustup default nightly` | 切换到 nightly |
+| `rustup toolchain list` | 列出已安装的工具链 |
+| `rustup toolchain install nightly` | 安装 nightly 工具链 |
+| `rustup target add <target>` | 添加交叉编译目标 |
+| `rustup show` | 显示当前工具链信息 |
+
+### cargo 常用命令
+
+| 类别 | 命令 | 说明 |
+|------|------|------|
+| 项目 | `cargo new <name>` | 创建新项目 |
+| | `cargo new --lib <name>` | 创建库项目 |
+| | `cargo init` | 在当前目录初始化 |
+| 构建 | `cargo build` | 编译（debug 模式） |
+| | `cargo build --release` | 编译（release，开启优化） |
+| | `cargo check` | 只做语法/类型检查（最快） |
+| 运行 | `cargo run` | 编译并运行 |
+| | `cargo run --example <name>` | 运行 examples/ 下的示例 |
+| 测试 | `cargo test` | 运行所有测试 |
+| 文档 | `cargo doc --open` | 生成并打开 HTML 文档 |
+| 依赖 | `cargo add <crate>` | 添加依赖 |
+| | `cargo rm <crate>` | 移除依赖 |
+| | `cargo update` | 更新依赖到兼容最新版 |
+| | `cargo tree` | 显示依赖树 |
+| 格式化 | `cargo fmt` | 自动格式化代码 |
+| 检查 | `cargo clippy` | 代码质量 lint |
+| 清理 | `cargo clean` | 删除 target/ 释放空间 |
+| 发布 | `cargo publish` | 发布 crate 到 crates.io |
+
+> **实用扩展：** `cargo expand`（查看宏展开）、`cargo watch -x run`（文件变化自动重运行），通过 `cargo install cargo-expand` 安装。
 
 ## 踩坑记录
 
