@@ -1,0 +1,183 @@
+<svg width="720" height="380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-blue" viewBox="0 0 10 7" markerWidth="10" markerHeight="7"
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#1971c2"/>
+    </marker>
+    <marker id="arr-orange" viewBox="0 0 10 7" markerWidth="10" markerHeight="7"
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e8590c"/>
+    </marker>
+  </defs>
+
+  <!-- ░░░ 白色背景 ░░░ -->
+  <rect width="720" height="380" fill="#ffffff"/>
+
+  <!-- ═══ 主标题 ═══ -->
+  <text x="360" y="32" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="18" font-weight="bold" fill="#1e1e2e">引用的内存模型</text>
+
+  <!-- ─────────────────────────────────────────────────────── -->
+  <!--  LEFT  Stack 栈区域（灰色虚线边框）                     -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <rect x="20" y="48" width="308" height="252" rx="12"
+        fill="#f8f9fa" stroke="#868e96" stroke-width="2"
+        stroke-dasharray="6,4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 标签白底打断虚线 -->
+  <rect x="148" y="42" width="58" height="14" fill="#ffffff"/>
+  <text x="177" y="54" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#868e96">Stack 栈</text>
+
+  <!-- ── owner: String 蓝色盒子 ── -->
+  <rect x="40" y="62" width="242" height="118" rx="10"
+        fill="#e7f5ff" stroke="#1971c2" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 标题栏填充（顶部圆角，底部补平） -->
+  <rect x="41" y="63" width="240" height="28" rx="9" fill="#d0ebff"/>
+  <rect x="41" y="81" width="240" height="10" fill="#d0ebff"/>
+  <text x="161" y="82" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="14" font-weight="bold" fill="#1971c2">owner: String</text>
+  <line x1="40" y1="91" x2="282" y2="91"
+        stroke="#1971c2" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- ptr 行 -->
+  <text x="58" y="113" font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="13" fill="#1e1e2e">ptr</text>
+  <line x1="84" y1="109" x2="265" y2="109"
+        stroke="#1971c2" stroke-width="1.5" stroke-dasharray="5,3" stroke-linecap="round"/>
+  <polygon points="265,105.5 275,109 265,112.5" fill="#1971c2"/>
+  <!-- len 行 -->
+  <text x="58" y="136" font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="13" fill="#1e1e2e">len  =  5</text>
+  <!-- cap 行 -->
+  <text x="58" y="158" font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="13" fill="#1e1e2e">cap  =  5</text>
+
+  <!-- ── r: &String 黄色盒子 ── -->
+  <rect x="40" y="204" width="242" height="76" rx="10"
+        fill="#fff9db" stroke="#f59f00" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 标题栏 -->
+  <rect x="41" y="205" width="240" height="26" rx="9" fill="#ffec99"/>
+  <rect x="41" y="221" width="240" height="10" fill="#ffec99"/>
+  <text x="161" y="222" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="14" font-weight="bold" fill="#e67700">r: &amp;String</text>
+  <line x1="40" y1="231" x2="282" y2="231"
+        stroke="#f59f00" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- ptr 行 -->
+  <text x="58" y="254" font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="13" fill="#1e1e2e">ptr</text>
+  <line x1="84" y1="250" x2="265" y2="250"
+        stroke="#e8590c" stroke-width="1.5" stroke-dasharray="5,3" stroke-linecap="round"/>
+  <polygon points="265,246.5 275,250 265,253.5" fill="#e8590c"/>
+
+  <!-- ─────────────────────────────────────────────────────── -->
+  <!--  RIGHT  Heap 堆区域（灰色虚线边框）                     -->
+  <!-- ─────────────────────────────────────────────────────── -->
+  <rect x="394" y="48" width="310" height="226" rx="12"
+        fill="#f8f9fa" stroke="#868e96" stroke-width="2"
+        stroke-dasharray="6,4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 标签 -->
+  <rect x="533" y="42" width="52" height="14" fill="#ffffff"/>
+  <text x="559" y="54" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#868e96">Heap 堆</text>
+
+  <!-- ── String 堆内存 绿色盒子 ── -->
+  <rect x="414" y="62" width="270" height="188" rx="10"
+        fill="#ebfbee" stroke="#2f9e44" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 标题栏 -->
+  <rect x="415" y="63" width="268" height="28" rx="9" fill="#d3f9d8"/>
+  <rect x="415" y="81" width="268" height="10" fill="#d3f9d8"/>
+  <text x="549" y="82" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="14" font-weight="bold" fill="#2f9e44">String 堆内存</text>
+  <line x1="414" y1="91" x2="684" y2="91"
+        stroke="#2f9e44" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- 字符格子（5 × 43 px，居中，起始 x=442） -->
+  <!-- 'h' -->
+  <rect x="442" y="104" width="43" height="43" rx="5"
+        fill="#ffffff" stroke="#2f9e44" stroke-width="1.5"/>
+  <text x="463" y="132" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="15" fill="#1e1e2e">'h'</text>
+  <!-- 'e' -->
+  <rect x="485" y="104" width="43" height="43" rx="5"
+        fill="#ffffff" stroke="#2f9e44" stroke-width="1.5"/>
+  <text x="506" y="132" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="15" fill="#1e1e2e">'e'</text>
+  <!-- 'l' -->
+  <rect x="528" y="104" width="43" height="43" rx="5"
+        fill="#ffffff" stroke="#2f9e44" stroke-width="1.5"/>
+  <text x="549" y="132" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="15" fill="#1e1e2e">'l'</text>
+  <!-- 'l' -->
+  <rect x="571" y="104" width="43" height="43" rx="5"
+        fill="#ffffff" stroke="#2f9e44" stroke-width="1.5"/>
+  <text x="592" y="132" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="15" fill="#1e1e2e">'l'</text>
+  <!-- 'o' -->
+  <rect x="614" y="104" width="43" height="43" rx="5"
+        fill="#ffffff" stroke="#2f9e44" stroke-width="1.5"/>
+  <text x="635" y="132" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="15" fill="#1e1e2e">'o'</text>
+
+  <!-- 字节索引标注 -->
+  <text x="463" y="163" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#868e96">0</text>
+  <text x="506" y="163" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#868e96">1</text>
+  <text x="549" y="163" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#868e96">2</text>
+  <text x="592" y="163" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#868e96">3</text>
+  <text x="635" y="163" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#868e96">4</text>
+  <text x="549" y="181" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#495057">字节: 0   1   2   3   4</text>
+
+  <!-- ═══ 指针箭头 ═══ -->
+  <!-- 蓝色：owner.ptr → 堆数据左侧中部 -->
+  <path d="M 282 109 C 346 109, 390 122, 414 127"
+        fill="none" stroke="#1971c2" stroke-width="2.5"
+        stroke-linecap="round" marker-end="url(#arr-blue)"/>
+
+  <!-- 橙色：r.ptr → 堆数据左侧偏下（曲线，向上弯） -->
+  <path d="M 282 250 C 354 250, 394 178, 414 172"
+        fill="none" stroke="#e8590c" stroke-width="2.5"
+        stroke-linecap="round" marker-end="url(#arr-orange)"/>
+
+  <!-- 箭头来源小标签 -->
+  <text x="334" y="104" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="10" fill="#1971c2">owner.ptr</text>
+  <text x="342" y="267" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="10" fill="#e8590c">r.ptr</text>
+
+  <!-- ═══ 底部注释框 ═══ -->
+  <rect x="20" y="308" width="680" height="65" rx="10"
+        fill="#fff9db" stroke="#f59f00" stroke-width="1.5"
+        stroke-dasharray="5,3" stroke-linecap="round"/>
+  <text x="360" y="330" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#495057">📌  owner 拥有堆内存，负责 drop 时释放</text>
+  <text x="360" y="356" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#495057">📌  引用 r 只是借用，drop 时不释放数据，也不能比 owner 活得更长</text>
+</svg>

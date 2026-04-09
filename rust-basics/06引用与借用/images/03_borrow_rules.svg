@@ -1,0 +1,235 @@
+<svg width="760" height="320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-green" viewBox="0 0 8 6" markerWidth="8" markerHeight="6"
+            refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2f9e44"/>
+    </marker>
+    <marker id="arr-orange" viewBox="0 0 8 6" markerWidth="8" markerHeight="6"
+            refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#e8590c"/>
+    </marker>
+    <marker id="arr-gray" viewBox="0 0 8 6" markerWidth="8" markerHeight="6"
+            refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#adb5bd"/>
+    </marker>
+  </defs>
+
+  <!-- ░░ 白色背景 ░░ -->
+  <rect width="760" height="320" fill="#ffffff"/>
+
+  <!-- ═══ 主标题 ═══ -->
+  <text x="380" y="28" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="18" font-weight="bold" fill="#1e1e2e">借用规则三条</text>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- PANEL 1  ✅ 多个 &T  （绿色，合法）                          -->
+  <!-- x=18  y=40  w=218  h=225                                      -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- 面板边框 / 背景 -->
+  <rect x="18" y="40" width="218" height="225" rx="12"
+        fill="#f6fff8" stroke="#2f9e44" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 标题栏背景：圆角顶部 + 矩形底部填充以消除底部圆角 -->
+  <rect x="19" y="41" width="216" height="40" rx="11" fill="#d3f9d8"/>
+  <rect x="19" y="69" width="216" height="12"          fill="#d3f9d8"/>
+  <!-- 标题文字 -->
+  <text x="127" y="58" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#2f9e44">规则一</text>
+  <text x="127" y="75" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="13" font-weight="bold" fill="#1e1e2e">✅ 多个 &amp;T</text>
+  <!-- 分隔线 -->
+  <line x1="18" y1="81" x2="236" y2="81"
+        stroke="#2f9e44" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- 数据盒子（绿色，居中偏上） -->
+  <rect x="97" y="93" width="60" height="30" rx="7"
+        fill="#ebfbee" stroke="#2f9e44" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="127" y="113" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#2f9e44">data</text>
+
+  <!-- 扇形线：从数据盒子底部中心 (127,123) → 三个引用标签顶部 -->
+  <line x1="127" y1="123" x2="54"  y2="163"
+        stroke="#2f9e44" stroke-width="1.8" stroke-linecap="round"
+        marker-end="url(#arr-green)"/>
+  <line x1="127" y1="123" x2="126" y2="163"
+        stroke="#2f9e44" stroke-width="1.8" stroke-linecap="round"
+        marker-end="url(#arr-green)"/>
+  <line x1="127" y1="123" x2="198" y2="163"
+        stroke="#2f9e44" stroke-width="1.8" stroke-linecap="round"
+        marker-end="url(#arr-green)"/>
+
+  <!-- r1 标签（蓝色） -->
+  <rect x="28" y="163" width="52" height="26" rx="6"
+        fill="#e7f5ff" stroke="#1971c2" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="54" y="180" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#1971c2">r1</text>
+  <!-- r2 标签 -->
+  <rect x="100" y="163" width="52" height="26" rx="6"
+        fill="#e7f5ff" stroke="#1971c2" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="126" y="180" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#1971c2">r2</text>
+  <!-- r3 标签 -->
+  <rect x="172" y="163" width="52" height="26" rx="6"
+        fill="#e7f5ff" stroke="#1971c2" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="198" y="180" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#1971c2">r3</text>
+
+  <!-- 类型注释（标签下方小字） -->
+  <text x="54"  y="200" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="10" fill="#1971c2">&amp;T</text>
+  <text x="126" y="200" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="10" fill="#1971c2">&amp;T</text>
+  <text x="198" y="200" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="10" fill="#1971c2">&amp;T</text>
+
+  <!-- 面板底部说明 -->
+  <text x="127" y="238" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#495057">任意数量的不可变引用</text>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- PANEL 2  ✅ 唯一 &mut T  （绿色，合法）                      -->
+  <!-- x=271  y=40  w=218  h=225                                     -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <rect x="271" y="40" width="218" height="225" rx="12"
+        fill="#f6fff8" stroke="#2f9e44" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="272" y="41" width="216" height="40" rx="11" fill="#d3f9d8"/>
+  <rect x="272" y="69" width="216" height="12"          fill="#d3f9d8"/>
+  <text x="380" y="58" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#2f9e44">规则二</text>
+  <text x="380" y="75" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="13" font-weight="bold" fill="#1e1e2e">✅ 唯一 &amp;mut T</text>
+  <line x1="271" y1="81" x2="489" y2="81"
+        stroke="#2f9e44" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- 数据盒子 -->
+  <rect x="350" y="93" width="60" height="30" rx="7"
+        fill="#ebfbee" stroke="#2f9e44" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="380" y="113" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#2f9e44">data</text>
+
+  <!-- 竖线 → &mut 标签 -->
+  <line x1="380" y1="123" x2="380" y2="163"
+        stroke="#e8590c" stroke-width="2.2" stroke-linecap="round"
+        marker-end="url(#arr-orange)"/>
+
+  <!-- &mut 标签（橙色，唯一） -->
+  <rect x="348" y="163" width="64" height="28" rx="6"
+        fill="#fff4e6" stroke="#e8590c" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="380" y="182" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="13" font-weight="bold" fill="#e8590c">&amp;mut</text>
+
+  <!-- 注释：唯一写权限 -->
+  <text x="380" y="207" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="10" fill="#e8590c">唯一写权限</text>
+
+  <!-- 面板底部说明 -->
+  <text x="380" y="238" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#495057">只能有一个可变引用</text>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- PANEL 3  ❌ &T + &mut T  （红色，非法）                      -->
+  <!-- x=524  y=40  w=218  h=225                                     -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <rect x="524" y="40" width="218" height="225" rx="12"
+        fill="#fff5f5" stroke="#e03131" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 标题栏（红色） -->
+  <rect x="525" y="41" width="216" height="40" rx="11" fill="#ffc9c9"/>
+  <rect x="525" y="69" width="216" height="12"          fill="#ffc9c9"/>
+  <text x="633" y="58" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#e03131">规则三</text>
+  <text x="633" y="75" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="13" font-weight="bold" fill="#1e1e2e">❌ &amp;T + &amp;mut T</text>
+  <line x1="524" y1="81" x2="742" y2="81"
+        stroke="#e03131" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- 数据盒子（灰色调，表示"危险"状态） -->
+  <rect x="603" y="93" width="60" height="30" rx="7"
+        fill="#fff0f0" stroke="#868e96" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="633" y="113" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#495057">data</text>
+
+  <!-- 扇形线（灰色，表示被拒绝的连接） -->
+  <line x1="633" y1="123" x2="594" y2="163"
+        stroke="#adb5bd" stroke-width="1.8" stroke-linecap="round"
+        marker-end="url(#arr-gray)"/>
+  <line x1="633" y1="123" x2="670" y2="163"
+        stroke="#adb5bd" stroke-width="1.8" stroke-linecap="round"
+        marker-end="url(#arr-gray)"/>
+
+  <!-- &T 标签（蓝色） -->
+  <rect x="568" y="163" width="52" height="26" rx="6"
+        fill="#e7f5ff" stroke="#1971c2" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="594" y="180" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#1971c2">&amp;T</text>
+
+  <!-- &mut T 标签（橙色） -->
+  <rect x="636" y="163" width="68" height="26" rx="6"
+        fill="#fff4e6" stroke="#e8590c" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="670" y="180" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#e8590c">&amp;mut T</text>
+
+  <!-- ✖ 大红叉：覆盖 &T 标签  (x=568 y=163 w=52 h=26) -->
+  <line x1="572" y1="167" x2="616" y2="185"
+        stroke="#e03131" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="616" y1="167" x2="572" y2="185"
+        stroke="#e03131" stroke-width="2.8" stroke-linecap="round"/>
+
+  <!-- ✖ 大红叉：覆盖 &mut T 标签  (x=636 y=163 w=68 h=26) -->
+  <line x1="640" y1="167" x2="700" y2="185"
+        stroke="#e03131" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="700" y1="167" x2="640" y2="185"
+        stroke="#e03131" stroke-width="2.8" stroke-linecap="round"/>
+
+  <!-- 编译错误注释 -->
+  <text x="633" y="206" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" font-weight="bold" fill="#e03131">✗ 编译期错误</text>
+
+  <!-- 面板底部说明 -->
+  <text x="633" y="238" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="11" fill="#495057">读写不能同时活跃</text>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- 底部总结框（浅黄色）                                          -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <rect x="18" y="272" width="724" height="38" rx="8"
+        fill="#fff9db" stroke="#f59f00" stroke-width="1.5"
+        stroke-dasharray="5,3" stroke-linecap="round"/>
+  <text x="380" y="296" text-anchor="middle"
+        font-family="'Virgil','Comic Sans MS',cursive"
+        font-size="12" fill="#495057">📌  这三条规则在编译期静态执行，是 Rust 消灭数据竞争的根本手段</text>
+</svg>
