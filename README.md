@@ -8,9 +8,18 @@
 
 ## 当前进度
 
-- [x] Hello World (`rust-basics/01helloworld`)
-- [x] 变量与基础 (`rust-basics/02变量与常量`)
-- [x] 格式化输出 Display/Debug (`rust-basics/01helloworld`)
+第一阶段：基础语法（约 2/3 已完成）
+
+- [x] Hello World 与格式化输出 (`rust-basics/01helloworld`)
+- [x] 变量与常量 (`rust-basics/02变量与常量`)
+- [x] 数据类型 (`rust-basics/03数据类型`)
+- [x] 函数与控制流 (`rust-basics/04函数与控制流`)
+- [x] 所有权 (`rust-basics/05所有权`)
+- [x] 引用与借用 (`rust-basics/06引用与借用`)
+- [x] 结构体 (`rust-basics/07结构体`)
+- [x] **枚举与模式匹配** (`rust-basics/08枚举与模式匹配`) ← 最近完成
+- [ ] 集合类型 (`rust-basics/09集合类型`)
+- [ ] 错误处理 (`rust-basics/10错误处理`)
 
 ---
 
@@ -130,11 +139,11 @@ mkdir rust-basics/05所有权/examples
 
 **练习** — `rust-basics/04函数与控制流/`（`--name functions`）
 
-- [ ] 函数定义、参数、返回值（显式返回 vs 表达式返回）
-- [ ] 语句 (statement) vs 表达式 (expression)：`let y = { let x = 3; x + 1 };`
-- [ ] if/else if/else 表达式（注意 Rust 的 if 是表达式，可以赋值）
-- [ ] loop（含 break 返回值）、while、for..in 循环
-- [ ] 循环标签与 break/continue：`'outer: loop { ... break 'outer; }`
+- [x] 函数定义、参数、返回值（显式返回 vs 表达式返回）
+- [x] 语句 (statement) vs 表达式 (expression)：`let y = { let x = 3; x + 1 };`
+- [x] if/else if/else 表达式（注意 Rust 的 if 是表达式，可以赋值）
+- [x] loop（含 break 返回值）、while、for..in 循环
+- [x] 循环标签与 break/continue：`'outer: loop { ... break 'outer; }`
 
 ### 所有权 (ownership)
 
@@ -145,12 +154,12 @@ mkdir rust-basics/05所有权/examples
 
 **练习** — `rust-basics/05所有权/`（`--name ownership`）
 
-- [ ] String vs &str 的区别，堆 vs 栈
-- [ ] 所有权转移：`let s1 = String::from("hello"); let s2 = s1;` → s1 失效
-- [ ] 克隆：`s2 = s1.clone()` → 两者独立
-- [ ] 函数传参时的所有权转移：传入 String 后原变量失效
-- [ ] 函数返回值的所有权
-- [ ] 练习：写一个 `fn takes_ownership(s: String)` 和 `fn gives_ownership() -> String`
+- [x] String vs &str 的区别，堆 vs 栈
+- [x] 所有权转移：`let s1 = String::from("hello"); let s2 = s1;` → s1 失效
+- [x] 克隆：`s2 = s1.clone()` → 两者独立
+- [x] 函数传参时的所有权转移：传入 String 后原变量失效
+- [x] 函数返回值的所有权
+- [x] 练习：写一个 `fn takes_ownership(s: String)` 和 `fn gives_ownership() -> String`
 
 ### 引用与借用 (references & borrowing)
 
@@ -161,12 +170,12 @@ mkdir rust-basics/05所有权/examples
 
 **练习** — `rust-basics/06引用与借用/`（`--name borrowing`）
 
-- [ ] 不可变引用 `&T`：多个不可变引用可以共存
-- [ ] 可变引用 `&mut T`：同一时间只能有一个可变引用
-- [ ] 悬垂引用：Rust 如何通过编译器阻止
-- [ ] 引用规则：多个 & 或 一个 &mut，不能同时存在
-- [ ] 切片 (slice)：字符串切片 `&str`、数组切片 `&[i32]`
-- [ ] 练习：写一个 `fn first_word(s: &str) -> &str` 函数
+- [x] 不可变引用 `&T`：多个不可变引用可以共存
+- [x] 可变引用 `&mut T`：同一时间只能有一个可变引用
+- [x] 悬垂引用：Rust 如何通过编译器阻止
+- [x] 引用规则：多个 & 或 一个 &mut，不能同时存在
+- [x] 切片 (slice)：字符串切片 `&str`、数组切片 `&[i32]`
+- [x] 练习：写一个 `fn first_word(s: &str) -> &str` 函数
 
 ### 结构体 (structs)
 
@@ -177,13 +186,21 @@ mkdir rust-basics/05所有权/examples
 
 **练习** — `rust-basics/07结构体/`（`--name structs`）
 
-- [ ] 定义 struct、实例化、字段访问
-- [ ] 字段初始化简写、结构体更新语法 `..user1`
-- [ ] 元组结构体 `struct Color(i32, i32, i32)`
-- [ ] 单元结构体 `struct AlwaysEqual;`
-- [ ] 为 struct 实现方法 `impl` 块：`&self`、`&mut self`、`self`
-- [ ] 关联函数 `String::from()` 风格：`impl Point { fn new() -> Self { ... } }`
-- [ ] 练习：实现一个 `Rectangle` struct，包含 `area()` 和 `can_hold()` 方法
+- [x] 定义 struct、实例化、字段访问
+- [x] 字段初始化简写、结构体更新语法 `..user1`
+- [x] 元组结构体 `struct Color(i32, i32, i32)`
+- [x] 单元结构体 `struct AlwaysEqual;`
+- [x] 为 struct 实现方法 `impl` 块：`&self`、`&mut self`、`self`
+- [x] 关联函数 `String::from()` 风格：`impl Point { fn new() -> Self { ... } }`
+- [x] 练习：实现一个 `Rectangle` struct，包含 `area()` 和 `can_hold()` 方法
+
+> **额外完成**（超出原计划）：
+>
+> - 泛型结构体、生命周期、`Display` / `From` / `Add` / `Iterator` 等手写 trait
+> - 构建器模式三层实现（含 Type-State）
+> - 内存布局与 `repr` 全景、Newtype 零开销证明
+> - `#[cfg(test)]` 单元测试
+> - API 设计准则、综合 `Rectangle` 全家桶
 
 ### 枚举与模式匹配 (enums & pattern matching)
 
@@ -194,13 +211,27 @@ mkdir rust-basics/05所有权/examples
 
 **练习** — `rust-basics/08枚举与模式匹配/`（`--name enums`）
 
-- [ ] 定义 enum 和变体：`enum Direction { Up, Down, Left, Right }`
-- [ ] 带数据的枚举：`enum Message { Quit, Echo(String), Move{x:i32,y:i32} }`
-- [ ] `match` 表达式：穷尽性检查
-- [ ] `if let` 简化单个变体匹配
-- [ ] `while let` 模式
-- [ ] Option<T> 枚举：Some/None，替代 null
-- [ ] 练习：用 enum + match 实现一个简单的计算器（加减乘除 + 错误处理）
+- [x] 定义 enum 和变体：`enum Direction { Up, Down, Left, Right }`
+- [x] 带数据的枚举：`enum Message { Quit, Echo(String), Move{x:i32,y:i32} }`
+- [x] `match` 表达式：穷尽性检查
+- [x] `if let` 简化单个变体匹配
+- [x] `while let` 模式
+- [x] Option<T> 枚举：Some/None，替代 null
+- [x] 练习：用 enum + match 实现一个简单的计算器（加减乘除 + 错误处理）
+
+> **额外完成**（超出原计划）：
+>
+> - 三种变体形态对照（单元 / 元组 / 结构体）+ 经典 Message 例子
+> - 为枚举实现方法、关联函数、Display 等手写 trait
+> - 完整模式语法：字面量 / 范围 / `\|` / 守卫 / `@` 绑定 / `ref` / 嵌套
+> - `let else`（Rust 1.65+）、`if let` 链（Rust 1.88+）
+> - `Result<T, E>` 完整 API + `?` + `From` 自动转换
+> - 状态机三种风格：自动 / 事件驱动 / Type-State
+> - 递归枚举：链表 / JSON Value / 表达式树（AST + 求值）
+> - 命令模式 / 路由 / Action（含完整单元测试）
+> - 内存布局：discriminant / NPO / `#[repr]` 全景
+> - 完整章末练习 8 道
+> - 全部代码 `cargo clippy` 0 警告，单元测试 19/19 通过
 
 ### 集合类型 (collections)
 
