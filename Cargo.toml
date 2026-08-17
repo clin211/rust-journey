@@ -1,0 +1,15 @@
+[workspace]
+resolver = "3"
+members = [
+    "rust-basics/01helloworld",
+    "rust-basics/02变量与常量",
+    "rust-basics/03数据类型",
+    "rust-basics/04函数与控制流",
+    "rust-basics/05所有权",
+    "rust-basics/06引用与借用",
+    "rust-basics/07结构体",
+    "rust-basics/08枚举与模式匹配",
+    "rust-basics/09集合类型",
+    "rust-primer/01hellword",
+    "code-practice/guessing_game",
+]
