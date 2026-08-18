@@ -56,17 +56,17 @@ struct Item {
 #[derive(Debug, Clone, PartialEq)]
 struct Order {
     order_id: u64,
-    items: Vec<Item>,                        // 包含 Vec，Vec<Item> 也是 Clone
+    items: Vec<Item>, // 包含 Vec，Vec<Item> 也是 Clone
     total: f64,
 }
 
 // ── Config：用 Default 提供无参构造 ─────────────────────────────────────────
 #[derive(Debug, Default, Clone)]
 struct Config {
-    verbose: bool,                           // default: false
-    timeout_ms: u64,                         // default: 0
-    tags: Vec<String>,                       // default: []
-    host: String,                            // default: ""
+    verbose: bool,     // default: false
+    timeout_ms: u64,   // default: 0
+    tags: Vec<String>, // default: []
+    host: String,      // default: ""
 }
 
 fn main() {
@@ -124,7 +124,7 @@ fn main() {
 
     // 没有 #[derive(Clone)] 时，u1.clone() 无法调用
     // 派生后，.clone() 对每个字段「逐字段 clone」，然后打包成新的 User
-    let u2 = u1.clone();                     // u1 仍然有效，u2 是独立副本
+    let u2 = u1.clone(); // u1 仍然有效，u2 是独立副本
 
     println!("  u1 = {:?}", u1);
     println!("  u2 = {:?}（独立副本）", u2);
@@ -147,8 +147,8 @@ fn main() {
     // Copy 要求：所有字段都实现 Copy
     // Point 的 x / y 都是 f64（Copy），所以 Point 可以 #[derive(Copy)]
     let p1 = Point { x: 1.0, y: 2.0 };
-    let p2 = p1;                             // 不是 move，是按位复制
-    let p3 = p1;                             // 可以随意多次复制
+    let p2 = p1; // 不是 move，是按位复制
+    let p3 = p1; // 可以随意多次复制
 
     println!("  p1 = {:?}, p2 = {:?}, p3 = {:?}", p1, p2, p3);
     println!("  p1 仍然可用！Copy 类型赋值不会让原变量失效");
@@ -181,9 +181,9 @@ fn main() {
         email: String::from("b@x.com"),
     };
 
-    println!("  a == b → {}", a == b);       // true：字段全部相等
-    println!("  a == c → {}", a == c);       // false：id 和 name 都不同
-    println!("  a != c → {}", a != c);       // true
+    println!("  a == b → {}", a == b); // true：字段全部相等
+    println!("  a == c → {}", a == c); // false：id 和 name 都不同
+    println!("  a != c → {}", a != c); // true
 
     // PartialEq 与 Eq 的区别：
     //   PartialEq：允许「浮点 NaN != NaN」这种不完全相等
@@ -208,7 +208,8 @@ fn main() {
     scores.insert(c.clone(), 88);
 
     // 用「等值」查找：只要字段都相同，就能查到
-    if let Some(score) = scores.get(&b) {    // b 的字段和 a 相同
+    if let Some(score) = scores.get(&b) {
+        // b 的字段和 a 相同
         println!("  b 的分数 = {score} （注意：b 和 a 字段相同，哈希命中）");
     }
     if let Some(score) = scores.get(&c) {
@@ -225,16 +226,25 @@ fn main() {
 
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
     struct Grade {
-        score: u32,  // 排序的「第一关键字」
+        score: u32,   // 排序的「第一关键字」
         name: String, // 分数相同时，按 name 字典序
     }
 
     // 派生的 Ord 是「字段从上到下逐个比较」的
     // 所以结构体里字段顺序影响排序
     let mut grades = vec![
-        Grade { score: 85, name: "Alice".into() },
-        Grade { score: 92, name: "Bob".into() },
-        Grade { score: 85, name: "Carol".into() },
+        Grade {
+            score: 85,
+            name: "Alice".into(),
+        },
+        Grade {
+            score: 92,
+            name: "Bob".into(),
+        },
+        Grade {
+            score: 85,
+            name: "Carol".into(),
+        },
     ];
 
     grades.sort(); // 按 score 升序，score 相同按 name 升序
@@ -261,7 +271,7 @@ fn main() {
     let cfg_custom = Config {
         verbose: true,
         timeout_ms: 5000,
-        ..Default::default()                 // 其他字段默认值（tags / host）
+        ..Default::default() // 其他字段默认值（tags / host）
     };
     println!("  部分覆盖 Config = {:?}", cfg_custom);
 
@@ -290,7 +300,7 @@ fn main() {
         name: "dbg".into(),
         email: "d@x.com".into(),
     };
-    let _u = dbg!(u);                        // 注意：dbg! 会 move！
+    let _u = dbg!(u); // 注意：dbg! 会 move！
 
     println!("  dbg! 的特点：");
     println!("    · 打印到 stderr（不是 stdout）");
@@ -307,8 +317,14 @@ fn main() {
     let order = Order {
         order_id: 1001,
         items: vec![
-            Item { name: "Book".into(), price: 29.9 },
-            Item { name: "Pen".into(), price: 5.5 },
+            Item {
+                name: "Book".into(),
+                price: 29.9,
+            },
+            Item {
+                name: "Pen".into(),
+                price: 5.5,
+            },
         ],
         total: 35.4,
     };
@@ -328,16 +344,46 @@ fn main() {
     // ─────────────────────────────────────────
     println!("\n【总结】常用派生速查表");
     // ─────────────────────────────────────────
-    println!("  {:<14}  作用                              | 常见要求",            "派生");
-    println!("  {:<14}  -------------------------------- | ----------------",  "---");
-    println!("  {:<14}  {{:?}} / {{:#?}} 打印               | 字段也需要 Debug",   "Debug");
-    println!("  {:<14}  .clone() 显式深拷贝               | 字段也需要 Clone",    "Clone");
-    println!("  {:<14}  赋值/传参时按位复制               | 所有字段都 Copy",     "Copy");
-    println!("  {:<14}  == / !=                           | 字段也需要 PartialEq","PartialEq");
-    println!("  {:<14}  标记「完全相等」（HashMap 必需）  | 字段也需要 Eq",       "Eq");
-    println!("  {:<14}  哈希（HashMap / HashSet 的 key）  | 配合 Eq 使用",        "Hash");
-    println!("  {:<14}  排序比较                          | 字段也需要 Ord",      "Ord");
-    println!("  {:<14}  Self::default() 无参构造         | 字段也需要 Default",  "Default");
+    println!(
+        "  {:<14}  作用                              | 常见要求",
+        "派生"
+    );
+    println!(
+        "  {:<14}  -------------------------------- | ----------------",
+        "---"
+    );
+    println!(
+        "  {:<14}  {{:?}} / {{:#?}} 打印               | 字段也需要 Debug",
+        "Debug"
+    );
+    println!(
+        "  {:<14}  .clone() 显式深拷贝               | 字段也需要 Clone",
+        "Clone"
+    );
+    println!(
+        "  {:<14}  赋值/传参时按位复制               | 所有字段都 Copy",
+        "Copy"
+    );
+    println!(
+        "  {:<14}  == / !=                           | 字段也需要 PartialEq",
+        "PartialEq"
+    );
+    println!(
+        "  {:<14}  标记「完全相等」（HashMap 必需）  | 字段也需要 Eq",
+        "Eq"
+    );
+    println!(
+        "  {:<14}  哈希（HashMap / HashSet 的 key）  | 配合 Eq 使用",
+        "Hash"
+    );
+    println!(
+        "  {:<14}  排序比较                          | 字段也需要 Ord",
+        "Ord"
+    );
+    println!(
+        "  {:<14}  Self::default() 无参构造         | 字段也需要 Default",
+        "Default"
+    );
     println!();
     println!("  推荐组合：");
     println!("    · 普通值对象 ：#[derive(Debug, Clone, PartialEq)]");

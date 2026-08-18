@@ -1,8 +1,9 @@
 fn main() {
     // 变量遮蔽（shadowing）：用 let 重新声明同名变量，后面的覆盖前面的
     let num3 = 300;
+    println!("num3 -> {}", num3); // num3 -> 300（遮蔽前）
     let num3 = 400;
-    println!("num3 -> {}", num3); // num3 -> 400
+    println!("num3 -> {}", num3); // num3 -> 400（遮蔽后）
 
     // 遮蔽可以改变类型
     let spaces = "   "; // &str

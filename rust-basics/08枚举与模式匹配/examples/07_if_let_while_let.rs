@@ -174,7 +174,7 @@ enum Event {
 }
 
 fn run_event_loop(mut queue: Vec<Event>) {
-    queue.reverse();                    // 让最早的事件在尾部，便于 pop 当作"队列"
+    queue.reverse(); // 让最早的事件在尾部，便于 pop 当作"队列"
     while let Some(ev) = queue.pop() {
         match ev {
             Event::Quit => {
@@ -193,8 +193,11 @@ fn run_event_loop(mut queue: Vec<Event>) {
 // 一个常见的 idiom：处理可变集合时的"窥视 + 弹出"。
 
 fn pop_while_positive(v: &mut Vec<i32>) {
-    while let Some(&last) = v.last() {       // last() 返回 Option<&T>
-        if last <= 0 { break; }
+    while let Some(&last) = v.last() {
+        // last() 返回 Option<&T>
+        if last <= 0 {
+            break;
+        }
         v.pop();
     }
 }
@@ -217,16 +220,25 @@ fn pop_while_positive(v: &mut Vec<i32>) {
 fn main() {
     println!("===== 1. if let（单变体）=====");
     print_if_some(Some(42));
-    print_if_some(None);                       // 啥都不打印
+    print_if_some(None); // 啥都不打印
 
     println!("\n===== 2. if let / else =====");
     println!("  {}", describe_opt(Some("alice")));
     println!("  {}", describe_opt(None));
 
     println!("\n===== 3. if let 链 =====");
-    let admin = User { name: "carol".into(), role: Role::Admin };
-    let vip = User { name: "alice".into(), role: Role::Member { vip: true } };
-    let normal = User { name: "bob".into(), role: Role::Member { vip: false } };
+    let admin = User {
+        name: "carol".into(),
+        role: Role::Admin,
+    };
+    let vip = User {
+        name: "alice".into(),
+        role: Role::Member { vip: true },
+    };
+    let normal = User {
+        name: "bob".into(),
+        role: Role::Member { vip: false },
+    };
     welcome_vip(Some(&admin));
     welcome_vip(Some(&vip));
     welcome_vip(Some(&normal));
@@ -254,7 +266,7 @@ fn main() {
         Event::Scroll(-3),
         Event::Key('A'),
         Event::Quit,
-        Event::Click,                          // 这个永远到不了
+        Event::Click, // 这个永远到不了
     ]);
 
     println!("\n===== 8. while let + 可变借用 =====");

@@ -22,7 +22,10 @@ fn makes_copy(x: i32) {
 //   String、Vec<T>、Box<T>、HashMap、File、MutexGuard 等
 // ─────────────────────────────────────────────────────────────────────────
 
-#[derive(Debug, Copy, Clone)] // 自定义类型可以派生 Copy
+#[derive(Debug, Copy, Clone)]
+// 自定义类型可以派生 Copy
+// 教学演示用：只通过 Debug 整体打印，字段不单独读取（clippy 会报 dead_code）
+#[allow(dead_code)]
 struct Point {
     x: f64,
     y: f64,
@@ -97,14 +100,17 @@ fn main() {
     // ❌ Vec<T> 不是 Copy，赋值是 move，numbers 失效
 
     println!("只读场景用借用：");
-    println!("name = {}", &name);
-    println!("numbers = {:?}", &numbers);
+    println!("name = {name}");
+    println!("numbers = {numbers:?}");
 
     println!("需要独立副本才 clone（有堆分配开销）：");
     let copied_name = name.clone();
     let copied_numbers = numbers.clone();
     println!("name = {name}, copied_name = {copied_name}");
-    println!("numbers = {:?}, copied_numbers = {:?}", numbers, copied_numbers);
+    println!(
+        "numbers = {:?}, copied_numbers = {:?}",
+        numbers, copied_numbers
+    );
 
     println!("\n7、判断 Copy 的经验：");
     println!("  ✅ 纯粹存活在栈上的值 → 通常是 Copy（整数、bool、char、&T）");

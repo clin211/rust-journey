@@ -78,10 +78,13 @@ fn api_demo() {
     println!("  Ok(7).unwrap()              = {}", ok.unwrap());
     println!("  Ok(7).unwrap_or(0)          = {}", ok.unwrap_or(0));
     println!("  Err.unwrap_or(0)            = {}", err.unwrap_or(0));
-    println!("  Err.unwrap_or_else(|e| ..)  = {}", err.unwrap_or_else(|e| {
-        println!("    [闭包看到的 e = {e:?}]");
-        -1
-    }));
+    println!(
+        "  Err.unwrap_or_else(|e| ..)  = {}",
+        err.unwrap_or_else(|e| {
+            println!("    [闭包看到的 e = {e:?}]");
+            -1
+        })
+    );
 
     // map：变换 Ok 这一侧
     let mapped: Result<i32, &str> = ok.map(|n| n * 10);
@@ -123,7 +126,7 @@ fn api_demo() {
 // 函数签名的返回值必须也是 Result（错误类型 E 兼容）才能用 `?`。
 
 fn parse_and_double(a: &str) -> Result<i32, ParseIntError> {
-    let n: i32 = a.parse()?;                     // parse 返回 Result，? 失败就 return
+    let n: i32 = a.parse()?; // parse 返回 Result，? 失败就 return
     Ok(n * 2)
 }
 
@@ -154,7 +157,7 @@ impl From<ParseIntError> for MyError {
 }
 
 fn pipeline(a: &str, b: &str) -> Result<i32, MyError> {
-    let x: i32 = a.parse()?;                     // ParseIntError -> MyError，靠 From
+    let x: i32 = a.parse()?; // ParseIntError -> MyError，靠 From
     let y: i32 = b.parse()?;
     if y == 0 {
         return Err(MyError::Logic("除数不能为 0".into()));
@@ -222,8 +225,14 @@ fn main() {
     opt_to_result_demo();
 
     println!("\n===== 6. collect 短路效应 =====");
-    println!("  parse_all(['1','2','3']) = {:?}", parse_all(&["1", "2", "3"]));
-    println!("  parse_all(['1','x','3']) = {:?}", parse_all(&["1", "x", "3"]));
+    println!(
+        "  parse_all(['1','2','3']) = {:?}",
+        parse_all(&["1", "2", "3"])
+    );
+    println!(
+        "  parse_all(['1','x','3']) = {:?}",
+        parse_all(&["1", "x", "3"])
+    );
 
     println!("\n===== 要点回顾 =====");
     println!("· Result<T,E> 也是 enum，本质和 Option 一脉相承");

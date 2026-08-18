@@ -28,14 +28,18 @@ use colored::*;
 // ─────────────────────────────────────────────────────────────────────────
 
 // ── 版本一：按字节查找空格（经典实现）────────────────────────────────────
+// 刻意保留 `&s[..]` 演示「整个字符串切片」，clippy 会建议直接写 s
+#[allow(clippy::redundant_slicing)]
 fn first_word_v1(s: &str) -> &str {
-    let bytes = s.as_bytes();                       // 获取字符串的字节视图 &[u8]，不复制数据
-    for (i, &byte) in bytes.iter().enumerate() {    // enumerate() 产生 (字节索引, 字节值)
-        if byte == b' ' {                           // b' ' 是空格字节字面量，值为 0x20
-            return &s[..i];                         // 找到空格，返回其前的切片
+    let bytes = s.as_bytes(); // 获取字符串的字节视图 &[u8]，不复制数据
+    for (i, &byte) in bytes.iter().enumerate() {
+        // enumerate() 产生 (字节索引, 字节值)
+        if byte == b' ' {
+            // b' ' 是空格字节字面量，值为 0x20
+            return &s[..i]; // 找到空格，返回其前的切片
         }
     }
-    &s[..]                                          // 没有空格，返回整个字符串的切片
+    &s[..] // 没有空格，返回整个字符串的切片
 }
 
 // ── 版本二：迭代器写法（更惯用的 Rust 风格）──────────────────────────────
@@ -64,7 +68,7 @@ fn first_word_v3(s: &str) -> &str {
 // ── 扩展练习：last_word ──────────────────────────────────────────────────
 fn last_word(s: &str) -> &str {
     // .last() 消耗迭代器，返回最后一个元素 Option<&str>
-    s.split_whitespace().last().unwrap_or("")       // 无单词时返回空串
+    s.split_whitespace().last().unwrap_or("") // 无单词时返回空串
 }
 
 // ── 扩展练习：nth_word ───────────────────────────────────────────────────
@@ -87,25 +91,35 @@ fn main() {
     // ─────────────────────────────────────────────────────────────────
     println!("\n1、版本一：as_bytes + enumerate 按字节查找空格");
 
-    let s_en = "hello world";                       // 字符串字面量，类型是 &str
-    let s_owned = String::from("rust language");    // 堆上 String
-    let s_no_space = "单词";                        // 无空格，应返回整个字符串
-    let s_empty = "";                               // 空字符串，应返回空串
+    let s_en = "hello world"; // 字符串字面量，类型是 &str
+    let s_owned = String::from("rust language"); // 堆上 String
+    let s_no_space = "单词"; // 无空格，应返回整个字符串
+    let s_empty = ""; // 空字符串，应返回空串
 
     // ✅ 正确：&String 通过 Deref 自动转为 &str，函数参数类型可以统一
     println!("  v1(\"{s_en}\")      = \"{}\"", first_word_v1(s_en));
-    println!("  v1(\"{s_owned}\") = \"{}\"（&String 自动 deref 为 &str）",
-        first_word_v1(&s_owned));
-    println!("  v1(\"{s_no_space}\")        = \"{}\"（无空格 → 返回全串）",
-        first_word_v1(s_no_space));
-    println!("  v1(\"\")            = \"{}\"（空字符串）", first_word_v1(s_empty));
+    println!(
+        "  v1(\"{s_owned}\") = \"{}\"（&String 自动 deref 为 &str）",
+        first_word_v1(&s_owned)
+    );
+    println!(
+        "  v1(\"{s_no_space}\")        = \"{}\"（无空格 → 返回全串）",
+        first_word_v1(s_no_space)
+    );
+    println!(
+        "  v1(\"\")            = \"{}\"（空字符串）",
+        first_word_v1(s_empty)
+    );
 
     // 展示字节迭代的内部过程，帮助理解返回切片的原理
     println!("  内部原理：\"hello world\" 各字节的值");
     let demo = "hello world";
     for (i, byte) in demo.bytes().enumerate() {
         if byte == b' ' {
-            println!("    [{}] 0x{:02X} ← 空格！在此截断，返回 &s[..{}]", i, byte, i);
+            println!(
+                "    [{}] 0x{:02X} ← 空格！在此截断，返回 &s[..{}]",
+                i, byte, i
+            );
         } else {
             println!("    [{}] 0x{:02X} = '{}'", i, byte, byte as char);
         }
@@ -115,30 +129,44 @@ fn main() {
     // ─────────────────────────────────────────────────────────────────
     println!("\n2、版本二：split_whitespace + next（惯用 Rust 风格）");
 
-    let s_tab  = "\t制表符\t分割";                  // 制表符也是空白字符
-    let s_nl   = "换行\n分割";                      // 换行符也是空白字符
-    let s_only = "   ";                             // 纯空格，无实际单词
-    let s_lead = "  前置空格 多个词  ";              // 前后有多余空格
+    let s_tab = "\t制表符\t分割"; // 制表符也是空白字符
+    let s_nl = "换行\n分割"; // 换行符也是空白字符
+    let s_only = "   "; // 纯空格，无实际单词
+    let s_lead = "  前置空格 多个词  "; // 前后有多余空格
 
     println!("  v2(\"{s_en}\")       = \"{}\"", first_word_v2(s_en));
-    println!("  v2(\"{s_tab}\")  = \"{}\"（制表符分隔）", first_word_v2(s_tab));
-    println!("  v2(\"{s_nl}\")    = \"{}\"（换行符分隔）", first_word_v2(s_nl));
-    println!("  v2(\"   \")            = \"{}\"（纯空格 → 空串）", first_word_v2(s_only));
-    println!("  v2(\"{s_lead}\") = \"{}\"（前置空格被忽略）", first_word_v2(s_lead));
+    println!(
+        "  v2(\"{s_tab}\")  = \"{}\"（制表符分隔）",
+        first_word_v2(s_tab)
+    );
+    println!(
+        "  v2(\"{s_nl}\")    = \"{}\"（换行符分隔）",
+        first_word_v2(s_nl)
+    );
+    println!(
+        "  v2(\"   \")            = \"{}\"（纯空格 → 空串）",
+        first_word_v2(s_only)
+    );
+    println!(
+        "  v2(\"{s_lead}\") = \"{}\"（前置空格被忽略）",
+        first_word_v2(s_lead)
+    );
     println!("小结：split_whitespace 自动处理任何 Unicode 空白及连续空白，代码更简洁");
 
     // ─────────────────────────────────────────────────────────────────
     println!("\n3、版本三：Unicode 安全（中文、日文等多字节字符）");
 
-    let s_zh      = "你好 世界";                    // 中文，每个汉字占 3 字节
-    let s_ja      = "こんにちは Rust";              // 日文混合英文
-    let s_zh_only = "纯中文无空格";                 // 无空格，应返回整个字符串
-    let s_mixed   = "中文english混合 test";          // 中英文混合
+    let s_zh = "你好 世界"; // 中文，每个汉字占 3 字节
+    let s_ja = "こんにちは Rust"; // 日文混合英文
+    let s_zh_only = "纯中文无空格"; // 无空格，应返回整个字符串
+    let s_mixed = "中文english混合 test"; // 中英文混合
 
     println!("  v3(\"{s_zh}\")     = \"{}\"", first_word_v3(s_zh));
     println!("  v3(\"{s_ja}\") = \"{}\"", first_word_v3(s_ja));
-    println!("  v3(\"{s_zh_only}\") = \"{}\"（无空格 → 返回原串）",
-        first_word_v3(s_zh_only));
+    println!(
+        "  v3(\"{s_zh_only}\") = \"{}\"（无空格 → 返回原串）",
+        first_word_v3(s_zh_only)
+    );
     println!("  v3(\"{s_mixed}\") = \"{}\"", first_word_v3(s_mixed));
 
     // 展示汉字字节值均 >= 0x80，证明 b' ' 查找不会误匹配
@@ -154,25 +182,33 @@ fn main() {
     // ─────────────────────────────────────────────────────────────────
     println!("\n4、扩展练习：last_word / nth_word / word_count");
 
-    let sentence = "the quick brown fox jumps";      // 5 个单词
+    let sentence = "the quick brown fox jumps"; // 5 个单词
 
     println!("  句子: \"{}\"", sentence);
-    println!("  last_word       = \"{}\"", last_word(sentence));          // "jumps"
-    println!("  nth_word(0)     = {:?}", nth_word(sentence, 0));          // Some("the")
-    println!("  nth_word(2)     = {:?}", nth_word(sentence, 2));          // Some("brown")
-    println!("  nth_word(4)     = {:?}", nth_word(sentence, 4));          // Some("jumps")
-    println!("  nth_word(99)    = {:?}（超出范围 → None）",
-        nth_word(sentence, 99));
-    println!("  word_count      = {}", word_count(sentence));             // 5
+    println!("  last_word       = \"{}\"", last_word(sentence)); // "jumps"
+    println!("  nth_word(0)     = {:?}", nth_word(sentence, 0)); // Some("the")
+    println!("  nth_word(2)     = {:?}", nth_word(sentence, 2)); // Some("brown")
+    println!("  nth_word(4)     = {:?}", nth_word(sentence, 4)); // Some("jumps")
+    println!(
+        "  nth_word(99)    = {:?}（超出范围 → None）",
+        nth_word(sentence, 99)
+    );
+    println!("  word_count      = {}", word_count(sentence)); // 5
 
     // 边界情况测试
-    let empty  = "";
+    let empty = "";
     let spaces = "   ";
     let single = "唯一";
     println!("  last_word(\"\")    = \"{}\"（空串）", last_word(empty));
     println!("  last_word(\"   \") = \"{}\"（纯空格）", last_word(spaces));
-    println!("  last_word(\"{single}\")   = \"{}\"（单个词）", last_word(single));
-    println!("  nth_word(\"\", 0)  = {:?}（空串无第 0 词）", nth_word(empty, 0));
+    println!(
+        "  last_word(\"{single}\")   = \"{}\"（单个词）",
+        last_word(single)
+    );
+    println!(
+        "  nth_word(\"\", 0)  = {:?}（空串无第 0 词）",
+        nth_word(empty, 0)
+    );
     println!("  word_count(\"\")   = {}（空串）", word_count(empty));
     println!("  word_count(\"   \")= {}（纯空格）", word_count(spaces));
     println!("小结：split_whitespace 的迭代器组合子让各种词操作都简洁自然");
@@ -182,15 +218,15 @@ fn main() {
 
     // ✅ 正确：返回的 &str 与原 String 共享内存，零拷贝
     let owned = String::from("ownership and borrowing");
-    let word = first_word_v1(&owned);               // word 是对 owned 内部数据的借用
-    println!("  first_word = \"{word}\"");           // word 的最后一次使用（借用在此结束）
-    println!("  owned 仍然有效: \"{owned}\"");        // owned 的所有权从未被转移
+    let word = first_word_v1(&owned); // word 是对 owned 内部数据的借用
+    println!("  first_word = \"{word}\""); // word 的最后一次使用（借用在此结束）
+    println!("  owned 仍然有效: \"{owned}\""); // owned 的所有权从未被转移
 
     // ✅ 正确：先用完借用，再修改原字符串（NLL 保证借用已结束）
     let mut text = String::from("hello world");
-    let first = first_word_v1(&text);               // first 借用 text 的内部数据
-    println!("  先用完借用: \"{first}\"");           // ← NLL：first 的借用在这行结束
-    text.push_str("!!");                             // ✅ first 借用已结束，可以安全修改
+    let first = first_word_v1(&text); // first 借用 text 的内部数据
+    println!("  先用完借用: \"{first}\""); // ← NLL：first 的借用在这行结束
+    text.push_str("!!"); // ✅ first 借用已结束，可以安全修改
     println!("  再修改原字符串: \"{text}\"");
 
     // ❌ 错误：在 first 仍然存活时调用 bad.clear()（无法编译，已注释）
@@ -225,9 +261,9 @@ fn main() {
 
     // 演示返回的切片可以继续传给其他接受 &str 的函数
     let phrase = String::from("rust programming language");
-    let first  = first_word_v2(&phrase);            // first 生命周期与 phrase 绑定
-    let second = nth_word(&phrase, 1);              // second 生命周期与 phrase 绑定
-    let total  = word_count(&phrase);               // usize，无引用，无生命周期问题
+    let first = first_word_v2(&phrase); // first 生命周期与 phrase 绑定
+    let second = nth_word(&phrase, 1); // second 生命周期与 phrase 绑定
+    let total = word_count(&phrase); // usize，无引用，无生命周期问题
     println!("  phrase  = \"{phrase}\"");
     println!("  first   = \"{first}\"（&phrase 内部的切片）");
     println!("  second  = {:?}（&phrase 内部的切片）", second);
@@ -240,28 +276,58 @@ fn main() {
 
     // 定义结构体存放测试用例（可在函数内定义结构体）
     struct Case {
-        input: &'static str,                        // 测试输入（字面量，'static 生命周期）
-        desc:  &'static str,                        // 用例描述
+        input: &'static str, // 测试输入（字面量，'static 生命周期）
+        desc: &'static str,  // 用例描述
     }
 
     let cases = [
-        Case { input: "hello world",         desc: "普通英文" },
-        Case { input: "你好 世界",            desc: "中文空格分隔" },
-        Case { input: "  leading space",      desc: "前置空格" },
-        Case { input: "trailing space  ",     desc: "尾置空格" },
-        Case { input: "one",                  desc: "单个词" },
-        Case { input: "",                     desc: "空字符串" },
-        Case { input: "   ",                  desc: "只有空格" },
-        Case { input: "a b c d e",            desc: "多个单词" },
-        Case { input: "中文english混合 test",  desc: "混合字符" },
-        Case { input: "こんにちは Rust",       desc: "日文+英文" },
+        Case {
+            input: "hello world",
+            desc: "普通英文",
+        },
+        Case {
+            input: "你好 世界",
+            desc: "中文空格分隔",
+        },
+        Case {
+            input: "  leading space",
+            desc: "前置空格",
+        },
+        Case {
+            input: "trailing space  ",
+            desc: "尾置空格",
+        },
+        Case {
+            input: "one",
+            desc: "单个词",
+        },
+        Case {
+            input: "",
+            desc: "空字符串",
+        },
+        Case {
+            input: "   ",
+            desc: "只有空格",
+        },
+        Case {
+            input: "a b c d e",
+            desc: "多个单词",
+        },
+        Case {
+            input: "中文english混合 test",
+            desc: "混合字符",
+        },
+        Case {
+            input: "こんにちは Rust",
+            desc: "日文+英文",
+        },
     ];
 
     for case in &cases {
-        let v1    = first_word_v1(case.input);      // 字节查找版本
-        let v2    = first_word_v2(case.input);      // 迭代器版本
-        let last  = last_word(case.input);           // 最后一个词
-        let count = word_count(case.input);          // 词数
+        let v1 = first_word_v1(case.input); // 字节查找版本
+        let v2 = first_word_v2(case.input); // 迭代器版本
+        let last = last_word(case.input); // 最后一个词
+        let count = word_count(case.input); // 词数
         println!("  [{}] 输入: \"{}\"", case.desc, case.input);
         println!("    v1=\"{v1}\"  v2=\"{v2}\"  last=\"{last}\"  词数={count}");
     }

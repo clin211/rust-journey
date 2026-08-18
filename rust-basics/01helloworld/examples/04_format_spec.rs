@@ -6,13 +6,15 @@ use colored::*;
 /// 3、进制：{:b} 二进制、{:o} 八进制、{:x} 十六进制
 /// 4、科学计数法：{:e}
 /// 5、补零：{:05}
+// 刻意用 π 近似值（3.14159265 / 3.14）演示精度与宽度格式，clippy 会建议用常量 PI
+#[allow(clippy::approx_constant)]
 fn main() {
     // 1、宽度与对齐
     println!("{}", "=== 宽度与对齐 ===".green());
     println!("[{:>10}]", "right"); // 右对齐，总宽度 10
     println!("[{:<10}]", "left"); // 左对齐
     println!("[{:^10}]", "center"); // 居中
-                                    // 用指定字符填充
+    // 用指定字符填充
     println!("[{:*>10}]", "right"); // 左侧用 * 填充
     println!("[{:*<10}]", "left"); // 右侧用 * 填充
     println!("[{:*^10}]", "center"); // 两侧用 * 填充
@@ -35,7 +37,7 @@ fn main() {
     println!("八进制：{:o}", num); // 52
     println!("十六进制：{:x}", num); // 2a
     println!("十六进制(大写)：{:X}", num); // 2A
-                                           // 带前缀的进制输出
+    // 带前缀的进制输出
     println!("带前缀：{:#b} {:#o} {:#x}", num, num, num);
     println!();
 

@@ -3,15 +3,20 @@ fn main() {
     {
         let arr = [1, 2, 3, 4, 5];
         let slice: &[i32] = &arr; // 完整切片
+        println!("完整切片 {:?}", slice);
         let slice: &[i32] = &arr[1..3]; // [2, 3]，左闭右开, 从索引 1 到 3（不含）
+        println!("&arr[1..3] = {:?}", slice);
         let slice: &[i32] = &arr[2..]; // [3, 4, 5]，从索引 2 到末尾，不包含 2
+        println!("&arr[2..] = {:?}", slice);
         let slice: &[i32] = &arr[..3]; // [1, 2, 3]，从开头到索引 3（不含）
+        println!("&arr[..3] = {:?}", slice);
 
         println!("第一个元素：{}", slice[0]); // 索引访问
 
         // 字符串切片 &str 本质上就是对 [u8] 的封装
         let s: &str = "hello";
         let bytes: &[u8] = s.as_bytes(); // 获取底层字节切片
+        println!("\"hello\" 的底层字节: {:?}", bytes);
     }
 
     // 切片作为函数参数
@@ -28,8 +33,7 @@ fn main() {
 
     // &str vs String 大小
     {
-        let s: &str = "hello";
-        println!("&str 大小：{} 字节", std::mem::size_of_val(&s)); // &str 大小：16 字节
+        println!("&str 大小：{} 字节", std::mem::size_of::<&str>()); // &str 大小：16 字节（胖指针：ptr + len）
 
         let s = String::from("hello");
         println!("String 大小：{} 字节", std::mem::size_of_val(&s)); // String 大小：24 字节

@@ -42,7 +42,7 @@ fn main() {
         None => String::from("4、值为 None"),
     };
     println!("{result}"); // 4、Some 中的值为 42
-                          // ❌ 如果漏掉 None 分支，编译器会报错：non-exhaustive patterns
+    // ❌ 如果漏掉 None 分支，编译器会报错：non-exhaustive patterns
 
     // 5. 多模式匹配用 |
     println!("\n{}", "=== 多模式匹配 ===".green());

@@ -32,9 +32,9 @@ fn count_naive(words: &[&str]) -> HashMap<String, i32> {
     let mut m = HashMap::new();
     for w in words {
         if m.contains_key(*w) {
-            *m.get_mut(*w).unwrap() += 1;        // 这里查了第二次!
+            *m.get_mut(*w).unwrap() += 1; // 这里查了第二次!
         } else {
-            m.insert(w.to_string(), 1);          // 又查了第三次!
+            m.insert(w.to_string(), 1); // 又查了第三次!
         }
     }
     m
@@ -60,7 +60,7 @@ fn or_insert_demo() {
     // or_insert: 不存在时插入给定值, 然后返回 &mut V
     let v = m.entry("a").or_insert(10);
     *v += 1;
-    let v = m.entry("a").or_insert(99);          // 已存在 → 99 不会被插入
+    let v = m.entry("a").or_insert(99); // 已存在 → 99 不会被插入
     *v += 1;
     println!("  or_insert: {m:?}");
 
@@ -102,10 +102,7 @@ fn and_modify_demo() {
     let now = 1729000000;
     let visitors = ["alice", "bob", "alice", "carol", "alice"];
     for v in visitors {
-        last_visit
-            .entry(v)
-            .and_modify(|t| *t = now)
-            .or_insert(now);
+        last_visit.entry(v).and_modify(|t| *t = now).or_insert(now);
     }
     println!("  last_visit: {last_visit:?}");
 }
@@ -134,7 +131,14 @@ fn counter() {
 
 // 4.2 分组 (group_by)
 fn group_by_first_letter() {
-    let words = ["apple", "banana", "avocado", "blueberry", "carrot", "cherry"];
+    let words = [
+        "apple",
+        "banana",
+        "avocado",
+        "blueberry",
+        "carrot",
+        "cherry",
+    ];
     let mut groups: HashMap<char, Vec<&str>> = HashMap::new();
 
     for w in words {
@@ -153,7 +157,9 @@ fn group_by_first_letter() {
 // 4.3 缓存 / 备忘 (memoization)
 fn memoized_fib() {
     fn fib_with_cache(n: u64, cache: &mut HashMap<u64, u64>) -> u64 {
-        if n <= 1 { return n; }
+        if n <= 1 {
+            return n;
+        }
         if let Some(&v) = cache.get(&n) {
             return v;
         }

@@ -93,10 +93,7 @@ impl Library {
         }
 
         self.on_loan.insert(book_id);
-        self.loans
-            .entry(reader_id)
-            .or_insert_with(Vec::new)
-            .push(book_id);
+        self.loans.entry(reader_id).or_default().push(book_id);
         Ok(())
     }
 
@@ -143,7 +140,12 @@ fn run() -> Result<(), BorrowError> {
     let books = [
         ("The Rust Programming Language", "Steve Klabnik", "tech", 5),
         ("Programming Rust", "Jim Blandy", "tech", 3),
-        ("Designing Data-Intensive Applications", "Martin Kleppmann", "tech", 4),
+        (
+            "Designing Data-Intensive Applications",
+            "Martin Kleppmann",
+            "tech",
+            4,
+        ),
         ("百年孤独", "García Márquez", "fiction", 2),
         ("活着", "余华", "fiction", 6),
         ("人类简史", "Yuval Harari", "history", 4),

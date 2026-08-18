@@ -42,11 +42,23 @@ fn sort_demo() {
 
     // 按结构体的某个字段
     #[derive(Debug)]
-    struct User { name: String, age: u32 }
+    struct User {
+        name: String,
+        age: u32,
+    }
     let mut users = vec![
-        User { name: "alice".into(), age: 30 },
-        User { name: "bob".into(),   age: 25 },
-        User { name: "carol".into(), age: 28 },
+        User {
+            name: "alice".into(),
+            age: 30,
+        },
+        User {
+            name: "bob".into(),
+            age: 25,
+        },
+        User {
+            name: "carol".into(),
+            age: 28,
+        },
     ];
     users.sort_by_key(|u| u.age);
     println!("  by age:");
@@ -81,7 +93,10 @@ fn bsearch_demo() {
     let v = vec![1, 3, 5, 7, 9, 11, 13];
 
     println!("  search 5  = {:?} (找到了, 索引 2)", v.binary_search(&5));
-    println!("  search 6  = {:?} (没找到, 应插在索引 3)", v.binary_search(&6));
+    println!(
+        "  search 6  = {:?} (没找到, 应插在索引 3)",
+        v.binary_search(&6)
+    );
     println!("  search 0  = {:?}", v.binary_search(&0));
     println!("  search 14 = {:?}", v.binary_search(&14));
 
@@ -103,7 +118,7 @@ fn in_place_demo() {
     // dedup：连续相同元素去重（不全局去重！排过序之后再 dedup 才是完整去重）
     let mut v = vec![1, 1, 2, 3, 3, 3, 4, 1, 1];
     v.dedup();
-    println!("  dedup（连续）   = {v:?}");      // [1, 2, 3, 4, 1]
+    println!("  dedup（连续）   = {v:?}"); // [1, 2, 3, 4, 1]
     v.sort();
     v.dedup();
     println!("  sort+dedup (全局)= {v:?}");
@@ -197,11 +212,11 @@ fn split_predicate_demo() {
 
 fn join_demo() {
     let v = vec![vec![1, 2], vec![3, 4, 5], vec![6]];
-    let flat: Vec<i32> = v.concat();           // 直接拼接
+    let flat: Vec<i32> = v.concat(); // 直接拼接
     println!("  concat   = {flat:?}");
 
     let words = vec!["rust", "is", "fun"];
-    let joined: String = words.join(" ");      // String 风格 join
+    let joined: String = words.join(" "); // String 风格 join
     println!("  join \" \"  = {joined}");
 
     // 也可以用切片拼接
@@ -239,10 +254,14 @@ fn analyse(numbers: &[i32]) {
         (a + b) / 2.0
     };
 
-    let variance: f64 = numbers.iter().map(|&x| {
-        let d = x as f64 - mean;
-        d * d
-    }).sum::<f64>() / len;
+    let variance: f64 = numbers
+        .iter()
+        .map(|&x| {
+            let d = x as f64 - mean;
+            d * d
+        })
+        .sum::<f64>()
+        / len;
     let stddev = variance.sqrt();
 
     println!("  count = {}, min = {min}, max = {max}", numbers.len());

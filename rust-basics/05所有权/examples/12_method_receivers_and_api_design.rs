@@ -56,7 +56,10 @@ impl User {
 
     fn summary(&self) -> String {
         // 返回新 String（不是借用）：无生命周期问题
-        format!("{}（{}）登录 {} 次", self.name, self.email, self.login_count)
+        format!(
+            "{}（{}）登录 {} 次",
+            self.name, self.email, self.login_count
+        )
     }
 
     // &mut self：需要修改字段
@@ -68,6 +71,8 @@ impl User {
         self.name = new_name.to_string();
     }
 
+    // 教学演示方法：主流程未调用，保留展示 &mut self 修改 bool 字段
+    #[allow(dead_code)]
     fn deactivate(&mut self) {
         self.active = false;
     }
@@ -123,7 +128,10 @@ impl RequestBuilder {
     // 最终构建：消费 Builder，"产出"结果（这里简化为打印）
     fn send(self) {
         println!("  发送请求: {} {}", self.method, self.url);
-        println!("  超时: {}s，headers: {:?}", self.timeout_secs, self.headers);
+        println!(
+            "  超时: {}s，headers: {:?}",
+            self.timeout_secs, self.headers
+        );
         // self 在这里 drop，Builder 使命完成
     }
 }
@@ -147,7 +155,7 @@ fn main() {
     println!("  小结：&self 方法调用完后，user 仍然可用；可连续调用多次");
 
     println!("\n2、&mut self：修改方法，需要 mut 绑定");
-    user.login();      // 每次调用 user 的可变借用开始，结束后才能再借
+    user.login(); // 每次调用 user 的可变借用开始，结束后才能再借
     user.login();
     user.rename("Alice Chen");
     println!("  修改后: {:?}", user);
@@ -185,8 +193,8 @@ fn main() {
     println!("\n6、to_xxx vs into_xxx vs as_xxx 命名惯例");
     let s = String::from("hello");
     // as_xxx：零拷贝，返回引用（&self）
-    let bytes: &[u8] = s.as_bytes();    // 返回 &[u8]，没有分配
-    let str_ref: &str = s.as_str();     // 返回 &str，没有分配
+    let bytes: &[u8] = s.as_bytes(); // 返回 &[u8]，没有分配
+    let str_ref: &str = s.as_str(); // 返回 &str，没有分配
     println!("  as_bytes() = {:?}（零拷贝视图）", &bytes[..3]);
     println!("  as_str() = {str_ref}（零拷贝视图）");
 
@@ -196,7 +204,10 @@ fn main() {
 
     // into_xxx：消费自身并转换（self）
     let bytes_owned: Vec<u8> = s.into_bytes(); // s 被消费，转成 Vec<u8>
-    println!("  into_bytes() = {:?}（消费 s，零拷贝转换）", &bytes_owned[..3]);
+    println!(
+        "  into_bytes() = {:?}（消费 s，零拷贝转换）",
+        &bytes_owned[..3]
+    );
     // println!("{s}"); // ❌ s 已被 into_bytes 消费
 
     println!("\n7、API 设计总结");

@@ -32,7 +32,7 @@ fn create_demo() {
     let mut s: HashSet<i32> = HashSet::new();
     s.insert(1);
     s.insert(2);
-    s.insert(2);                                 // 重复, 实际上不会变
+    s.insert(2); // 重复, 实际上不会变
     s.insert(3);
     println!("  HashSet  = {s:?}, len={}", s.len());
 
@@ -104,23 +104,30 @@ fn ops_demo() {
     println!("  b = {:?}", sorted(&b));
 
     let union: Vec<i32> = a.union(&b).copied().collect();
-    let mut union = union; union.sort();
+    let mut union = union;
+    union.sort();
     println!("  a ∪ b      = {union:?}");
 
     let inter: Vec<i32> = a.intersection(&b).copied().collect();
-    let mut inter = inter; inter.sort();
+    let mut inter = inter;
+    inter.sort();
     println!("  a ∩ b      = {inter:?}");
 
     let diff: Vec<i32> = a.difference(&b).copied().collect();
-    let mut diff = diff; diff.sort();
+    let mut diff = diff;
+    diff.sort();
     println!("  a − b      = {diff:?}");
 
     let sym: Vec<i32> = a.symmetric_difference(&b).copied().collect();
-    let mut sym = sym; sym.sort();
+    let mut sym = sym;
+    sym.sort();
     println!("  a △ b      = {sym:?}");
 
     println!("  a ⊆ b ?    = {}", a.is_subset(&b));
-    println!("  a ⊇ {{1,2}} ?= {}", a.is_superset(&[1, 2].into_iter().collect()));
+    println!(
+        "  a ⊇ {{1,2}} ?= {}",
+        a.is_superset(&[1, 2].into_iter().collect())
+    );
     let c: HashSet<i32> = [100, 200].into_iter().collect();
     println!("  a 与 c 互斥? = {}", a.is_disjoint(&c));
 }
@@ -169,7 +176,9 @@ fn strict_anagram(a: &str, b: &str) -> bool {
     for c in b.chars().filter(|c| !c.is_whitespace()) {
         let v = counts.entry(c).or_insert(0);
         *v -= 1;
-        if *v < 0 { return false; }
+        if *v < 0 {
+            return false;
+        }
     }
     counts.values().all(|&v| v == 0)
 }
@@ -200,7 +209,8 @@ fn dedup_three_ways() {
 
     // 方式 1: HashSet (最快, 但顺序丢了)
     let s: HashSet<i32> = v.iter().copied().collect();
-    let mut a: Vec<i32> = s.into_iter().collect(); a.sort();
+    let mut a: Vec<i32> = s.into_iter().collect();
+    a.sort();
     println!("  HashSet 去重 + 排序 = {a:?}");
 
     // 方式 2: BTreeSet (天然有序)
@@ -227,7 +237,11 @@ fn main() {
     btreeset_range();
 
     println!("\n===== 5. 字谜判定 =====");
-    for (a, b) in [("listen", "silent"), ("hello", "world"), ("rail safety", "fairy tales")] {
+    for (a, b) in [
+        ("listen", "silent"),
+        ("hello", "world"),
+        ("rail safety", "fairy tales"),
+    ] {
         println!("  '{a}' vs '{b}'");
         println!("    宽松 (字符集合)   = {}", loose_anagram(a, b));
         println!("    严格 (字符计数)   = {}", strict_anagram(a, b));

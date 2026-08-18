@@ -52,7 +52,7 @@ fn create_examples() {
     let c: Option<&str> = None;
 
     // 把可能失败的表达式封进 Option：
-    let d: Option<i32> = "42".parse().ok();      // parse() 返回 Result，.ok() 转成 Option
+    let d: Option<i32> = "42".parse().ok(); // parse() 返回 Result，.ok() 转成 Option
     let e: Option<i32> = "abc".parse().ok();
 
     println!("  a={a:?}, b={b:?}, c={c:?}");
@@ -73,8 +73,14 @@ fn predicates() {
     println!("  y.is_none() = {}", y.is_none());
 
     // is_some_and / is_none_or 是布尔守卫的现代写法
-    println!("  Some(3).is_some_and(|n| n > 0) = {}", Some(3).is_some_and(|n| n > 0));
-    println!("  Some(0).is_some_and(|n| n > 0) = {}", Some(0).is_some_and(|n| n > 0));
+    println!(
+        "  Some(3).is_some_and(|n| n > 0) = {}",
+        Some(3).is_some_and(|n| n > 0)
+    );
+    println!(
+        "  Some(0).is_some_and(|n| n > 0) = {}",
+        Some(0).is_some_and(|n| n > 0)
+    );
 }
 
 // ============================================================================
@@ -98,7 +104,10 @@ fn unwrap_family() {
 
     // expect：调试时优于 unwrap，错误信息更友好
     let cfg: Option<&str> = Some("/etc/app.conf");
-    println!("  cfg.expect(...)              = {}", cfg.expect("缺少配置文件"));
+    println!(
+        "  cfg.expect(...)              = {}",
+        cfg.expect("缺少配置文件")
+    );
 
     // unwrap_or：固定默认值
     println!("  Some(7).unwrap_or(0)         = {}", some_v.unwrap_or(0));
@@ -109,12 +118,21 @@ fn unwrap_family() {
         println!("  [懒求值闭包被执行]");
         99
     };
-    println!("  Some(7).unwrap_or_else(...)  = {}", some_v.unwrap_or_else(lazy_default));
-    println!("  None.unwrap_or_else(...)     = {}", none_v.unwrap_or_else(lazy_default));
+    println!(
+        "  Some(7).unwrap_or_else(...)  = {}",
+        some_v.unwrap_or_else(lazy_default)
+    );
+    println!(
+        "  None.unwrap_or_else(...)     = {}",
+        none_v.unwrap_or_else(lazy_default)
+    );
 
     // unwrap_or_default：用 T::default()
     let s: Option<String> = None;
-    println!("  None.unwrap_or_default()     = {:?}", s.unwrap_or_default());
+    println!(
+        "  None.unwrap_or_default()     = {:?}",
+        s.unwrap_or_default()
+    );
 }
 
 // ============================================================================
@@ -135,8 +153,12 @@ fn combinators() {
 
     // and_then (flat_map / bind)：闭包返回 Option，扁平化
     // 用来组合多个"可能失败"的步骤
-    fn parse(s: &str) -> Option<i32> { s.parse().ok() }
-    fn positive(n: i32) -> Option<i32> { if n > 0 { Some(n) } else { None } }
+    fn parse(s: &str) -> Option<i32> {
+        s.parse().ok()
+    }
+    fn positive(n: i32) -> Option<i32> {
+        if n > 0 { Some(n) } else { None }
+    }
     // 注意：当函数签名直接匹配时，可以直接传函数名，不必包一层闭包
     let result = Some("5").and_then(parse).and_then(positive);
     println!("  '5' -> parse -> positive    = {result:?}");
@@ -156,7 +178,7 @@ fn combinators() {
     println!("  Some(5).or(None)            = {:?}", b.or(a));
 
     // xor：恰好一个 Some 时保留，两边都是或都不是 → None
-    println!("  Some(1).xor(None)           = {:?}", Some(1).xor::<>(None));
+    println!("  Some(1).xor(None)           = {:?}", Some(1).xor(None));
     println!("  Some(1).xor(Some(2))        = {:?}", Some(1).xor(Some(2)));
 }
 
@@ -169,7 +191,7 @@ fn combinators() {
 fn conversions() {
     // as_ref: Option<T> → Option<&T>，避免 move
     let owned: Option<String> = Some("hello".to_string());
-    let r: Option<&String> = owned.as_ref();             // owned 还能继续用
+    let r: Option<&String> = owned.as_ref(); // owned 还能继续用
     let len_opt: Option<usize> = r.map(|s| s.len());
     println!("  as_ref + map.len = {len_opt:?} (owned仍可用: {owned:?})");
 
@@ -210,7 +232,7 @@ fn to_result_demo() {
 
     // 反向：Result → Option
     let res: Result<i32, &str> = Ok(8);
-    let opt = res.ok();        // Result<T,E> → Option<T>，丢弃错误
+    let opt = res.ok(); // Result<T,E> → Option<T>，丢弃错误
     println!("  Result.ok(): {opt:?}");
 }
 
@@ -253,16 +275,23 @@ fn in_place_ops() {
 // 这是写"多步可能失败"逻辑时最干净的写法（注意：函数返回值类型必须也是 Option）。
 
 #[derive(Debug)]
-struct User { id: u64, profile: Option<Profile> }
+struct User {
+    id: u64,
+    profile: Option<Profile>,
+}
 
 #[derive(Debug)]
-struct Profile { contact: Option<Contact> }
+struct Profile {
+    contact: Option<Contact>,
+}
 
 #[derive(Debug)]
-struct Contact { email: Option<String> }
+struct Contact {
+    email: Option<String>,
+}
 
 fn user_email(u: &User) -> Option<&String> {
-    let profile = u.profile.as_ref()?;            // None ? → 直接 return None
+    let profile = u.profile.as_ref()?; // None ? → 直接 return None
     let contact = profile.contact.as_ref()?;
     let email = contact.email.as_ref()?;
     Some(email)
@@ -300,9 +329,7 @@ impl AppConfig {
     }
 
     fn db_url(&self) -> Result<&str, &'static str> {
-        self.db_url
-            .as_deref()
-            .ok_or("数据库连接串未配置")
+        self.db_url.as_deref().ok_or("数据库连接串未配置")
     }
 }
 
@@ -341,7 +368,10 @@ fn main() {
         id: 2,
         profile: Some(Profile { contact: None }),
     };
-    let u_none = User { id: 3, profile: None };
+    let u_none = User {
+        id: 3,
+        profile: None,
+    };
     println!("  u_full   -> {:?}", user_email(&u_full));
     println!("  u_partial-> {:?}", user_email(&u_partial));
     println!("  u_none   -> {:?}", user_email(&u_none));
@@ -362,9 +392,15 @@ fn main() {
     println!("\n===== 10. 内存布局：NPO =====");
     use std::mem::size_of;
     println!("  size_of::<&i32>()         = {}", size_of::<&i32>());
-    println!("  size_of::<Option<&i32>>() = {} (NPO 让两者一样大)", size_of::<Option<&i32>>());
+    println!(
+        "  size_of::<Option<&i32>>() = {} (NPO 让两者一样大)",
+        size_of::<Option<&i32>>()
+    );
     println!("  size_of::<Box<i32>>()     = {}", size_of::<Box<i32>>());
-    println!("  size_of::<Option<Box<i32>>>() = {}", size_of::<Option<Box<i32>>>());
+    println!(
+        "  size_of::<Option<Box<i32>>>() = {}",
+        size_of::<Option<Box<i32>>>()
+    );
 
     println!("\n===== 要点回顾 =====");
     println!("· Rust 没有 null：用 Option<T> 在类型层面表达可空");

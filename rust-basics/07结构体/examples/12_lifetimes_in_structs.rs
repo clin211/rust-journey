@@ -105,8 +105,8 @@ impl<'a> ImportantExcerpt<'a> {
 // 这比都用 'a 更灵活：调用方可以传入两个不同生命周期的 &str
 #[derive(Debug)]
 struct Holder<'a, 'b> {
-    source: &'a str,      // 第一个借用源
-    note: &'b str,        // 另一个借用源（可以来自完全不同的作用域）
+    source: &'a str, // 第一个借用源
+    note: &'b str,   // 另一个借用源（可以来自完全不同的作用域）
 }
 
 impl<'a, 'b> Holder<'a, 'b> {
@@ -158,7 +158,7 @@ fn main() {
 
     // UserRef 只借用字符串：需要外部 name/email 先存在
     let name = String::from("Bob");
-    let email = "bob@example.com";                  // 字面量：&'static str
+    let email = "bob@example.com"; // 字面量：&'static str
     let u2 = UserRef::new(2, &name, email);
     println!("  UserRef (借用 &str) = {:?}", u2);
 

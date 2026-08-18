@@ -29,7 +29,7 @@ fn main() {
 
     // 3、dbg! 用于复杂数据结构
     println!("{}", "=== dbg! 调试复杂数据 ===".green());
-    let data = vec!["apple", "banana", "cherry"];
+    let data = ["apple", "banana", "cherry"];
     dbg!(data.get(1)); // 打印 Option 值
 
     let config = ("localhost", 8080, true);
@@ -38,7 +38,7 @@ fn main() {
 
     // 4、实际开发场景：区分日志和输出
     println!("{}", "=== 实际场景 ===".green());
-    let items = vec!["任务A", "任务B", "任务C"];
+    let items = ["任务A", "任务B", "任务C"];
     for (i, item) in items.iter().enumerate() {
         eprintln!("[调试] 正在处理第 {} 项：{}", i, item);
         println!("✓ 已完成：{}", item);

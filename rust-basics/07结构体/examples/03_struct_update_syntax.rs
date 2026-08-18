@@ -26,10 +26,10 @@ use colored::*;
 // ── 用户结构体：混合 Copy 字段和非 Copy 字段 ──────────────────────────────────
 // 后面用它来演示「部分字段被 move、base 失效」的微妙之处
 struct User {
-    username: String,                        // 非 Copy：更新时会被 move
-    email: String,                           // 非 Copy：更新时会被 move
-    age: u32,                                // Copy：更新时按位复制
-    active: bool,                            // Copy：更新时按位复制
+    username: String, // 非 Copy：更新时会被 move
+    email: String,    // 非 Copy：更新时会被 move
+    age: u32,         // Copy：更新时按位复制
+    active: bool,     // Copy：更新时按位复制
 }
 
 // ── 配置结构体：全 Copy 字段，base 可以继续使用 ──────────────────────────────
@@ -59,13 +59,13 @@ fn main() {
     // 这里只显式修改 email，其他 3 个字段都继承自 user1
     let user2 = User {
         email: String::from("alice@new.com"),
-        ..user1                              // 注意：..user1 必须写在最后
+        ..user1 // 注意：..user1 必须写在最后
     };
 
-    println!("  user2.username = {}", user2.username);  // "alice" 继承而来
-    println!("  user2.email    = {}", user2.email);     // "alice@new.com"（新值）
-    println!("  user2.age      = {}", user2.age);       // 30  继承而来
-    println!("  user2.active   = {}", user2.active);    // true 继承而来
+    println!("  user2.username = {}", user2.username); // "alice" 继承而来
+    println!("  user2.email    = {}", user2.email); // "alice@new.com"（新值）
+    println!("  user2.age      = {}", user2.age); // 30  继承而来
+    println!("  user2.active   = {}", user2.active); // true 继承而来
 
     // ⚠️ 这里 user1 已经发生了「字段级 move」：
     //   · username（String）被 move 到 user2
@@ -98,16 +98,16 @@ fn main() {
 
     // 字段顺序可以随便排，只要 ..template 是最后
     let user3 = User {
-        age: 18,                             // 先写 age
-        active: true,                        // 再写 active
+        age: 18,      // 先写 age
+        active: true, // 再写 active
         // username 和 email 都用 ..template 补充
         ..template
     };
 
     println!("  user3.username = {}", user3.username); // "template"（来自 base）
-    println!("  user3.email    = {}", user3.email);    // "template@x.com"（来自 base）
-    println!("  user3.age      = {}", user3.age);      // 18（显式覆盖）
-    println!("  user3.active   = {}", user3.active);   // true（显式覆盖）
+    println!("  user3.email    = {}", user3.email); // "template@x.com"（来自 base）
+    println!("  user3.age      = {}", user3.age); // 18（显式覆盖）
+    println!("  user3.active   = {}", user3.active); // true（显式覆盖）
 
     // ⚠️ 同样，template.username 和 template.email 被 move 进了 user3
     // 此时 template 作为整体已不可用
@@ -132,7 +132,7 @@ fn main() {
         width: 3840,
         height: 2160,
         fullscreen: true,
-        ..default_win                        // 这里 vsync 会按位复制过来
+        ..default_win // 这里 vsync 会按位复制过来
     };
 
     // ✅ default_win 仍然完整可用！因为 WindowConfig 所有字段都是 Copy
@@ -158,11 +158,11 @@ fn main() {
     let user4 = User {
         age: 99,
         active: true,
-        ..base                               // username 和 email 会被 move 到 user4
+        ..base // username 和 email 会被 move 到 user4
     };
 
     println!("  user4.username = {}", user4.username); // "partial"
-    println!("  user4.age      = {}", user4.age);      // 99
+    println!("  user4.age      = {}", user4.age); // 99
     // println!("{}", base.username);  // ❌ username 已 move
     // println!("{}", base.email);     // ❌ email    已 move
     // base.age / base.active 是 Copy，仍可访问，但 base 作为整体不可用
@@ -187,7 +187,7 @@ fn main() {
     let user5 = User {
         username: String::from("copied_out"),
         email: String::from("copied_out@x.com"),
-        ..src                                // 只 copy age / active
+        ..src // 只 copy age / active
     };
 
     println!("  user5.username = {}", user5.username);
@@ -217,7 +217,7 @@ fn main() {
     let cfg = Config {
         host: String::from("127.0.0.1"),
         port: 8080,
-        ..Default::default()                 // tls 来自 Default::default()，bool 默认 false
+        ..Default::default() // tls 来自 Default::default()，bool 默认 false
     };
     println!("  cfg = {:?}", cfg);
 
@@ -246,7 +246,7 @@ fn main() {
     let _derived = User {
         age: 2,
         active: false,
-        ..some_base                          // username / email 已被 move
+        ..some_base // username / email 已被 move
     };
     // println!("{:?}", some_base.username);  // ❌
     println!("  ❌ some_base 在 username/email 被 move 后，作为整体不可再用");

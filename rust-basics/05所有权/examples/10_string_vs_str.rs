@@ -77,9 +77,9 @@ fn main() {
     println!("  极少需要 &String 参数，因为 &str 更通用");
 
     println!("\n3、&str：对字符串切片的借用，接口最广");
-    take_str(&owned);             // &String 自动 Deref 成 &str ✅
-    take_str("字符串字面量");      // 字面量就是 &str ✅
-    take_str(&owned[0..5]);       // 切片也是 &str ✅
+    take_str(&owned); // &String 自动 Deref 成 &str ✅
+    take_str("字符串字面量"); // 字面量就是 &str ✅
+    take_str(&owned[0..5]); // 切片也是 &str ✅
     println!("  &str 参数：String/字面量/切片 统统可以传");
     println!("  Deref coercion：&String → &str 是自动的");
     println!("  编译器看到 &String 传给 &str 参数时，自动插入 .deref() 调用");
@@ -110,7 +110,7 @@ fn main() {
 
     println!("\n8、字符串字面量就是 &str，生命周期 'static");
     let literal: &str = "I live in the binary"; // 存储在程序 .rodata 段
-    let literal2: &'static str = "so do I";    // 显式标注 'static 生命周期
+    let literal2: &'static str = "so do I"; // 显式标注 'static 生命周期
     println!("  literal = {literal}");
     println!("  literal2 = {literal2}");
     println!("  'static 表示整个程序运行期间都有效，不需要任何 owner");

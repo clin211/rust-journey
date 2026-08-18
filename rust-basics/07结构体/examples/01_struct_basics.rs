@@ -31,10 +31,10 @@ use colored::*;
 // 结构体定义通常放在 main 之外（可以放任意位置，只要在使用前定义即可）。
 // 字段的类型必须在编译期明确。
 struct User {
-    username: String,   // 拥有型字段：String 由该结构体实例拥有
-    email: String,      // 同上，每个实例拥有自己的 email 字符串
-    age: u32,           // Copy 类型，按位拷贝即可，开销极小
-    active: bool,       // Copy 类型
+    username: String, // 拥有型字段：String 由该结构体实例拥有
+    email: String,    // 同上，每个实例拥有自己的 email 字符串
+    age: u32,         // Copy 类型，按位拷贝即可，开销极小
+    active: bool,     // Copy 类型
 }
 
 // ── 2. 稍微复杂一点：嵌套结构体 ───────────────────────────────────────────────
@@ -46,7 +46,7 @@ struct Address {
 
 struct Employee {
     name: String,
-    address: Address,   // 嵌套：Employee 拥有一个 Address
+    address: Address, // 嵌套：Employee 拥有一个 Address
     salary: f64,
 }
 
@@ -85,17 +85,20 @@ fn main() {
     // ─────────────────────────────────────────
 
     // 字段访问没有什么魔法，就是 实例.字段名
-    let len = user1.username.len();          // 访问字段，再调用字段自己的方法
+    let len = user1.username.len(); // 访问字段，再调用字段自己的方法
     println!("  用户名 \"{}\" 的长度 = {}", user1.username, len);
 
     // 可以把字段拿出来单独使用（只读借用）
-    let email_ref: &String = &user1.email;   // 借用字段，不转移所有权
+    let email_ref: &String = &user1.email; // 借用字段，不转移所有权
     println!("  email 的引用: {email_ref}");
     println!("  user1.email 仍然可用: {}", user1.email); // 原字段依然完整
 
     // 也可以直接对字段"复制"值（当字段是 Copy 类型时）
-    let age_copy: u32 = user1.age;           // u32 是 Copy，直接按位复制
-    println!("  age 的副本 = {age_copy}，不影响原字段 user1.age = {}", user1.age);
+    let age_copy: u32 = user1.age; // u32 是 Copy，直接按位复制
+    println!(
+        "  age 的副本 = {age_copy}，不影响原字段 user1.age = {}",
+        user1.age
+    );
 
     println!("小结：字段访问是 . 运算符，读写规则都遵守所有权和借用规则");
 
@@ -121,7 +124,7 @@ fn main() {
         active: true,
     };
 
-    user3.age += 1;                          // ✅ 可以修改
+    user3.age += 1; // ✅ 可以修改
     user3.email = String::from("carol@new.com"); // ✅ 也可以整字段替换
 
     println!("  修改后 user3.age   = {}", user3.age);
@@ -183,9 +186,9 @@ fn main() {
         active: true,
     };
 
-    describe_ref(&user4);                    // 借用：user4 还在
-    celebrate_birthday(&mut user4);          // 可变借用：修改 age
-    describe_ref(&user4);                    // 借用：看看是否变了
+    describe_ref(&user4); // 借用：user4 还在
+    celebrate_birthday(&mut user4); // 可变借用：修改 age
+    describe_ref(&user4); // 借用：看看是否变了
 
     println!("  生日后 user4.age = {}", user4.age);
 
@@ -206,7 +209,10 @@ fn main() {
 
     // 欧几里得距离：距原点的长度
     let distance = (p.x * p.x + p.y * p.y).sqrt();
-    println!("  p = ({:.1}, {:.1})，到原点距离 = {:.3}", p.x, p.y, distance);
+    println!(
+        "  p = ({:.1}, {:.1})，到原点距离 = {:.3}",
+        p.x, p.y, distance
+    );
 
     // 字段是 Copy 类型时，把字段值"复制"出来很便宜，可以随意使用
     let x_copy = p.x;

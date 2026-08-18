@@ -34,6 +34,8 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 }
 
 // 只有一个引用输入时，编译器自动推断（生命周期省略规则）
+// 刻意保留 `&s[..]` 演示「整个字符串切片」，clippy 会建议直接写 s
+#[allow(clippy::redundant_slicing)]
 fn first_word(s: &str) -> &str {
     // 等价于 fn first_word<'a>(s: &'a str) -> &'a str
     // 编译器自动插入 'a，无需程序员手写
@@ -56,10 +58,10 @@ fn main() {
 
     println!("\n1、NLL 让「用完就放」的模式自然成立");
     let mut text = String::from("hello");
-    let r1 = &text;              // r1 创建
-    println!("  r1 = {r1}");    // r1 最后一次使用 → r1 的借用到此结束
+    let r1 = &text; // r1 创建
+    println!("  r1 = {r1}"); // r1 最后一次使用 → r1 的借用到此结束
     // NLL 分析：r1 在上面这行之后不再使用，借用生命周期 = [let r1, println!(r1)]
-    let r2 = &mut text;          // ✅ r1 已结束，现在可以可变借用
+    let r2 = &mut text; // ✅ r1 已结束，现在可以可变借用
     r2.push_str(" world");
     println!("  r2 = {r2}");
     println!("  小结：不可变借用在最后一次使用后结束，之后可以立刻开始可变借用");
@@ -80,8 +82,8 @@ fn main() {
     // ✅ 正确：调整语句顺序，使区间不重叠
     let mut note = String::from("Rust");
     let read_ref = &note;
-    println!("  先用完只读借用 → {read_ref}");  // read_ref 区间在这里结束
-    let write_ref = &mut note;                   // ✅ read_ref 已结束
+    println!("  先用完只读借用 → {read_ref}"); // read_ref 区间在这里结束
+    let write_ref = &mut note; // ✅ read_ref 已结束
     write_ref.push_str(" ownership");
     println!("  再写入 → {write_ref}");
     println!("  小结：很多借用冲突只需调整语句顺序（把读用完再写）即可解决");
@@ -98,7 +100,7 @@ fn main() {
     // ✅ 正确：先读后写
     let mut title = String::from("borrow");
     let read_ref = &title;
-    println!("  先读 → {read_ref}");            // read_ref 区间结束
+    println!("  先读 → {read_ref}"); // read_ref 区间结束
     let write_ref = &mut title;
     write_ref.push_str(" checker");
     println!("  再写 → {write_ref}");

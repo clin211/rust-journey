@@ -40,7 +40,7 @@ fn vecdeque_demo() {
     dq.push_back(3);
     dq.push_front(0);
     dq.push_front(-1);
-    println!("  初始: {dq:?}");          // [-1, 0, 1, 2, 3]
+    println!("  初始: {dq:?}"); // [-1, 0, 1, 2, 3]
 
     // 双端出队
     println!("  pop_front -> {:?}", dq.pop_front());
@@ -67,9 +67,14 @@ fn vecdeque_demo() {
     let k = 3;
     let mut window: VecDeque<i32> = VecDeque::new();
     for x in stream {
-        if window.len() == k { window.pop_front(); }
+        if window.len() == k {
+            window.pop_front();
+        }
         window.push_back(x);
-        println!("    after {x}: {window:?}, sum={}", window.iter().sum::<i32>());
+        println!(
+            "    after {x}: {window:?}, sum={}",
+            window.iter().sum::<i32>()
+        );
     }
 }
 
@@ -93,14 +98,18 @@ fn binary_heap_demo() {
 
     // 顺序 pop, 拿到从大到小的序列
     print!("  顺序 pop : ");
-    while let Some(v) = heap.pop() { print!("{v} "); }
+    while let Some(v) = heap.pop() {
+        print!("{v} ");
+    }
     println!();
 
     // 最小堆: 用 Reverse
     let mut min_heap: BinaryHeap<Reverse<i32>> =
         [3, 1, 4, 1, 5, 9, 2].into_iter().map(Reverse).collect();
     print!("  最小堆 pop: ");
-    while let Some(Reverse(v)) = min_heap.pop() { print!("{v} "); }
+    while let Some(Reverse(v)) = min_heap.pop() {
+        print!("{v} ");
+    }
     println!();
 
     // Top-K 算法: 用最小堆维护 K 个最大值
@@ -143,15 +152,29 @@ fn task_priority_demo() {
     impl Ord for Task {
         fn cmp(&self, other: &Self) -> std::cmp::Ordering {
             // 注意: 默认是最大堆。我们想让 "priority 大的先出", 直接顺序比即可
-            self.priority.cmp(&other.priority).then(self.id.cmp(&other.id))
+            self.priority
+                .cmp(&other.priority)
+                .then(self.id.cmp(&other.id))
         }
     }
 
     let mut tasks = BinaryHeap::new();
-    tasks.push(Task { priority: 1, id: 100 });
-    tasks.push(Task { priority: 5, id: 101 });
-    tasks.push(Task { priority: 3, id: 102 });
-    tasks.push(Task { priority: 5, id: 103 });
+    tasks.push(Task {
+        priority: 1,
+        id: 100,
+    });
+    tasks.push(Task {
+        priority: 5,
+        id: 101,
+    });
+    tasks.push(Task {
+        priority: 3,
+        id: 102,
+    });
+    tasks.push(Task {
+        priority: 5,
+        id: 103,
+    });
 
     while let Some(t) = tasks.pop() {
         println!("  执行 -> {t:?}");
@@ -174,7 +197,9 @@ fn task_priority_demo() {
 
 fn linked_list_demo() {
     let mut a: LinkedList<i32> = LinkedList::new();
-    for x in 1..=5 { a.push_back(x); }
+    for x in 1..=5 {
+        a.push_back(x);
+    }
     println!("  原链表 = {a:?}");
 
     // O(1) 切分

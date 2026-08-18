@@ -21,9 +21,9 @@
 // 这就是为什么你能写 `let (a, b) = (1, 2);`——元组在这里不过是个模式。
 
 fn let_demo() {
-    let x = 42;                                    // 名称模式
-    let (a, b) = (1, 2);                           // 元组模式
-    let [head, mid, tail] = [10, 20, 30];          // 数组模式（长度必须确定）
+    let x = 42; // 名称模式
+    let (a, b) = (1, 2); // 元组模式
+    let [head, mid, tail] = [10, 20, 30]; // 数组模式（长度必须确定）
     println!("  let 解构: x={x}, (a,b)=({a},{b}), arr=[{head},{mid},{tail}]");
 }
 
@@ -35,7 +35,10 @@ fn let_demo() {
 // 这能让函数体短小很多。
 
 #[derive(Debug)]
-struct Point { x: f64, y: f64 }
+struct Point {
+    x: f64,
+    y: f64,
+}
 
 fn distance_to_origin(Point { x, y }: &Point) -> f64 {
     (x * x + y * y).sqrt()
@@ -110,9 +113,15 @@ fn greeting(auth: &Auth) -> String {
 // 一个 (Day, Weather) 元组的 match 是个常见技巧：用一对值同时分类两个维度。
 
 #[derive(Debug, Clone, Copy)]
-enum Day { Workday, Weekend }
+enum Day {
+    Workday,
+    Weekend,
+}
 #[derive(Debug, Clone, Copy)]
-enum Weather { Sunny, Rainy }
+enum Weather {
+    Sunny,
+    Rainy,
+}
 
 fn plan(day: Day, weather: Weather) -> &'static str {
     match (day, weather) {
@@ -167,8 +176,18 @@ fn ignore_demo() {
 
     // 结构体里：.. 跳过未提到的字段
     #[derive(Debug)]
-    struct Order { id: u64, sku: String, qty: u32, price: f64 }
-    let o = Order { id: 1, sku: "A001".into(), qty: 3, price: 9.9 };
+    struct Order {
+        id: u64,
+        sku: String,
+        qty: u32,
+        price: f64,
+    }
+    let o = Order {
+        id: 1,
+        sku: "A001".into(),
+        qty: 3,
+        price: 9.9,
+    };
     let Order { id, qty, .. } = o;
     println!("  Order 部分解构: id={id}, qty={qty}");
 }
@@ -205,7 +224,12 @@ fn main() {
 
     println!("\n===== 2. 函数参数解构 =====");
     let p = Point { x: 3.0, y: 4.0 };
-    println!("  Point({},{}) 到原点距离 = {}", p.x, p.y, distance_to_origin(&p));
+    println!(
+        "  Point({},{}) 到原点距离 = {}",
+        p.x,
+        p.y,
+        distance_to_origin(&p)
+    );
     println!("  add_pair((10,20)) = {}", add_pair((10, 20)));
 
     println!("\n===== 3. 解构枚举 =====");
@@ -222,9 +246,15 @@ fn main() {
     println!("\n===== 4. 嵌套解构 =====");
     let auths = [
         Auth::Anonymous,
-        Auth::Login(UserInfo { name: "alice".into(), age: 30 }),
+        Auth::Login(UserInfo {
+            name: "alice".into(),
+            age: 30,
+        }),
         Auth::Banned {
-            user: UserInfo { name: "bob".into(), age: 25 },
+            user: UserInfo {
+                name: "bob".into(),
+                age: 25,
+            },
             reason: "刷帖".into(),
         },
     ];

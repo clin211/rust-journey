@@ -1,0 +1,1 @@
+# Clippy 配置：保持默认 lint 集，通过 Makefile 用 -D warnings 强制零警告。

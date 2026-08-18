@@ -98,11 +98,8 @@ impl WordCounter {
 
     /// Top-N 高频词 (频次降序, 频次相同按字母升序)
     pub fn top(&self, n: usize) -> Vec<(String, u32)> {
-        let mut pairs: Vec<(String, u32)> = self
-            .counts
-            .iter()
-            .map(|(k, v)| (k.clone(), *v))
-            .collect();
+        let mut pairs: Vec<(String, u32)> =
+            self.counts.iter().map(|(k, v)| (k.clone(), *v)).collect();
         pairs.sort_by(|a, b| b.1.cmp(&a.1).then(a.0.cmp(&b.0)));
         pairs.truncate(n);
         pairs
@@ -143,19 +140,58 @@ pub fn word_freq(text: &str) -> HashMap<String, u32> {
 
 fn print_top(counter: &WordCounter, n: usize) {
     let top = counter.top(n);
-    let max_w = top.iter().map(|(w, _)| w.chars().count()).max().unwrap_or(0);
+    let max_w = top
+        .iter()
+        .map(|(w, _)| w.chars().count())
+        .max()
+        .unwrap_or(0);
     let max_n = top.first().map(|(_, n)| *n).unwrap_or(0);
     let bw = 30usize;
 
-    println!("  ╭─{:─<width$}─┬───────┬{:─<bw$}─╮", "", "", width = max_w, bw = bw);
-    println!("  │ {:width$} │ {:>5} │ {:bw$} │", "word", "count", "bar", width = max_w, bw = bw);
-    println!("  ├─{:─<width$}─┼───────┼{:─<bw$}─┤", "", "", width = max_w, bw = bw);
+    println!(
+        "  ╭─{:─<width$}─┬───────┬{:─<bw$}─╮",
+        "",
+        "",
+        width = max_w,
+        bw = bw
+    );
+    println!(
+        "  │ {:width$} │ {:>5} │ {:bw$} │",
+        "word",
+        "count",
+        "bar",
+        width = max_w,
+        bw = bw
+    );
+    println!(
+        "  ├─{:─<width$}─┼───────┼{:─<bw$}─┤",
+        "",
+        "",
+        width = max_w,
+        bw = bw
+    );
     for (w, n) in &top {
-        let len = if max_n == 0 { 0 } else { (n * bw as u32 / max_n) as usize };
+        // 刻意保留显式 if/else 防除零（教学可读性优先），clippy 会建议 checked_div
+        #[allow(clippy::manual_checked_ops)]
+        let len = if max_n == 0 {
+            0
+        } else {
+            (n * bw as u32 / max_n) as usize
+        };
         let bar = "█".repeat(len);
-        println!("  │ {w:width$} │ {n:>5} │ {bar:bw$} │", width = max_w, bw = bw);
+        println!(
+            "  │ {w:width$} │ {n:>5} │ {bar:bw$} │",
+            width = max_w,
+            bw = bw
+        );
     }
-    println!("  ╰─{:─<width$}─┴───────┴{:─<bw$}─╯", "", "", width = max_w, bw = bw);
+    println!(
+        "  ╰─{:─<width$}─┴───────┴{:─<bw$}─╯",
+        "",
+        "",
+        width = max_w,
+        bw = bw
+    );
 }
 
 fn main() {
@@ -169,8 +205,9 @@ fn main() {
     }
 
     println!("\n===== 2. WordCounter 完整版（含停用词、Top-N）=====");
-    let mut c = WordCounter::new()
-        .with_stopwords(["the", "a", "an", "and", "or", "of", "to", "in", "on", "is", "was", "be"]);
+    let mut c = WordCounter::new().with_stopwords([
+        "the", "a", "an", "and", "or", "of", "to", "in", "on", "is", "was", "be",
+    ]);
     let text = r#"
         Rust is a systems programming language that runs blazingly fast,
         prevents segfaults, and guarantees thread safety.
@@ -181,7 +218,7 @@ fn main() {
 
     println!("  全部词数:       {}", c.total_words());
     println!("  不同词数:       {}", c.unique_words());
-    println!("  'rust' 出现次数: {}", c.count("Rust"));      // 大小写不敏感
+    println!("  'rust' 出现次数: {}", c.count("Rust")); // 大小写不敏感
     println!("  'fast' 出现次数: {}", c.count("fast"));
     println!();
 
@@ -250,7 +287,7 @@ mod tests {
         assert_eq!(c.count("cat"), 1);
         assert_eq!(c.count("the"), 0);
         assert_eq!(c.count("is"), 0);
-        assert_eq!(c.unique_words(), 3);     // cat, on, mat
+        assert_eq!(c.unique_words(), 3); // cat, on, mat
     }
 
     #[test]
@@ -261,7 +298,10 @@ mod tests {
         assert_eq!(top, vec![("c".into(), 3), ("b".into(), 2)]);
 
         let top3 = c.top(3);
-        assert_eq!(top3, vec![("c".into(), 3), ("b".into(), 2), ("a".into(), 1)]);
+        assert_eq!(
+            top3,
+            vec![("c".into(), 3), ("b".into(), 2), ("a".into(), 1)]
+        );
     }
 
     #[test]
@@ -273,7 +313,11 @@ mod tests {
         // apple/mango/zebra 都是 2 次, 字典序 apple < mango < zebra
         assert_eq!(
             top,
-            vec![("apple".into(), 2), ("mango".into(), 2), ("zebra".into(), 2)]
+            vec![
+                ("apple".into(), 2),
+                ("mango".into(), 2),
+                ("zebra".into(), 2)
+            ]
         );
     }
 

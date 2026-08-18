@@ -36,8 +36,8 @@ struct MenuItem {
 #[derive(Debug, Clone, Copy)]
 enum Discount {
     None,
-    Percent(u8),       // x% off，例如 Percent(10) = 9 折
-    FixedAmount(u32),  // 直接抵 N 分
+    Percent(u8),      // x% off，例如 Percent(10) = 9 折
+    FixedAmount(u32), // 直接抵 N 分
     Code(&'static str),
 }
 
@@ -78,11 +78,31 @@ struct Menu(HashMap<String, MenuItem>);
 impl Menu {
     fn demo() -> Self {
         let items = [
-            MenuItem { name: "美式咖啡".into(), category: Category::Drink, price_cents: 1500 },
-            MenuItem { name: "鲜榨橙汁".into(), category: Category::Drink, price_cents: 2200 },
-            MenuItem { name: "牛肉汉堡".into(), category: Category::Main, price_cents: 4500 },
-            MenuItem { name: "意面套餐".into(), category: Category::Main, price_cents: 5800 },
-            MenuItem { name: "提拉米苏".into(), category: Category::Dessert, price_cents: 3200 },
+            MenuItem {
+                name: "美式咖啡".into(),
+                category: Category::Drink,
+                price_cents: 1500,
+            },
+            MenuItem {
+                name: "鲜榨橙汁".into(),
+                category: Category::Drink,
+                price_cents: 2200,
+            },
+            MenuItem {
+                name: "牛肉汉堡".into(),
+                category: Category::Main,
+                price_cents: 4500,
+            },
+            MenuItem {
+                name: "意面套餐".into(),
+                category: Category::Main,
+                price_cents: 5800,
+            },
+            MenuItem {
+                name: "提拉米苏".into(),
+                category: Category::Dessert,
+                price_cents: 3200,
+            },
         ];
         let mut map = HashMap::new();
         for it in items {
@@ -113,8 +133,8 @@ fn apply_discount(subtotal: u32, d: &Discount) -> u32 {
             // Code 内部又是一组互斥策略，再来一层 match
             "WELCOME10" => subtotal * 9 / 10,
             "VIP25" => subtotal * 75 / 100,
-            "FREE_DRINK" => subtotal,             // 这里简化，实际要看商品
-            _ => subtotal,                         // 未知码视为没折扣
+            "FREE_DRINK" => subtotal, // 这里简化，实际要看商品
+            _ => subtotal,            // 未知码视为没折扣
         },
     }
 }
@@ -267,6 +287,8 @@ fn run() -> Result<(), OrderError> {
     let drinks = ["美式咖啡", "鲜榨橙汁"];
     let mut iter = drinks.iter();
     let mut total = 0u32;
+    // 刻意用 while let + 迭代器演示本节主题，clippy 会建议改成 for 循环
+    #[allow(clippy::while_let_on_iterator)]
     while let Some(name) = iter.next() {
         if let Some(item) = menu.find(name) {
             total += item.price_cents;

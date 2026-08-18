@@ -11,7 +11,7 @@
 
 #![allow(dead_code, unused_variables)]
 
-use std::mem::{size_of, align_of};
+use std::mem::{align_of, size_of};
 
 // ============================================================================
 // 1. discriminant：每个 enum 实例都自带一个"我是谁"的标签
@@ -34,7 +34,12 @@ use std::mem::{size_of, align_of};
 // 当 enum 没有数据时 size 通常等于 "够装下 tag 的最小整数"。
 
 #[derive(Debug, Clone, Copy)]
-enum Direction { Up, Down, Left, Right }
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+}
 
 #[derive(Debug)]
 enum Mixed {
@@ -62,7 +67,7 @@ enum HttpStatus {
 
 // 可以用 `as` 转成数值
 fn http_code(s: HttpStatus) -> u16 {
-    s as u16                       // 注意：这里是 u16，因为 #[repr(u16)]
+    s as u16 // 注意：这里是 u16，因为 #[repr(u16)]
 }
 
 // ============================================================================
@@ -74,14 +79,14 @@ fn http_code(s: HttpStatus) -> u16 {
 
 #[derive(Debug)]
 enum SmallVariant {
-    OnlyByte(u8),                 // 1 字节
+    OnlyByte(u8), // 1 字节
 }
 
 #[derive(Debug)]
 enum SkewedVariants {
-    Tiny,                         // 0 字节
-    Small(u8),                    // 1 字节
-    HugeOne(u64, u64, u64, u64),  // 32 字节 → 整个 enum 至少 ~40 字节
+    Tiny,                        // 0 字节
+    Small(u8),                   // 1 字节
+    HugeOne(u64, u64, u64, u64), // 32 字节 → 整个 enum 至少 ~40 字节
 }
 
 // ============================================================================
@@ -105,7 +110,7 @@ enum SkewedVariants {
 #[derive(Debug)]
 struct Node {
     value: i32,
-    next: Option<Box<Node>>,      // Option<Box<...>> 不会比 Box<...> 大，0 表示 None
+    next: Option<Box<Node>>, // Option<Box<...>> 不会比 Box<...> 大，0 表示 None
 }
 
 // ============================================================================
@@ -116,7 +121,9 @@ struct Node {
 // 大小通常和 E 相同或仅多 1 字节，绝对不会比手写 "C 风格 errno" 慢。
 
 #[derive(Debug)]
-enum MyErr { Code(i32) }
+enum MyErr {
+    Code(i32),
+}
 
 // ============================================================================
 // 6. align_of：对齐要求
@@ -140,7 +147,12 @@ enum Padded {
 // ============================================================================
 
 fn pretty_size<T>(name: &str) {
-    println!("  {:30} size={:>3} B   align={} B", name, size_of::<T>(), align_of::<T>());
+    println!(
+        "  {:30} size={:>3} B   align={} B",
+        name,
+        size_of::<T>(),
+        align_of::<T>()
+    );
 }
 
 fn main() {
@@ -152,8 +164,14 @@ fn main() {
 
     println!("\n===== 2. 显式 #[repr(u16)] + 显式 discriminant =====");
     pretty_size::<HttpStatus>("HttpStatus (#[repr(u16)])");
-    println!("    http_code(NotFound)     = {}", http_code(HttpStatus::NotFound));
-    println!("    http_code(Ok)           = {}", http_code(HttpStatus::Ok));
+    println!(
+        "    http_code(NotFound)     = {}",
+        http_code(HttpStatus::NotFound)
+    );
+    println!(
+        "    http_code(Ok)           = {}",
+        http_code(HttpStatus::Ok)
+    );
 
     println!("\n===== 3. 带数据的枚举：大小 = max(变体) + tag =====");
     pretty_size::<Mixed>("Mixed");

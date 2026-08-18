@@ -62,7 +62,7 @@ impl Logger for SimpleLogger {
     }
 }
 
-struct LoudLogger;                          // 另一个实现，也是单元结构体
+struct LoudLogger; // 另一个实现，也是单元结构体
 
 impl Logger for LoudLogger {
     fn log(&self, msg: &str) {
@@ -85,14 +85,14 @@ fn dispatch(loggers: &[&dyn Logger], msg: &str) {
 // 用 PhantomData<State> 记录状态，单元结构体作为状态标签
 use std::marker::PhantomData;
 
-struct Draft;                                // 状态：草稿
-struct Published;                            // 状态：已发布
+struct Draft; // 状态：草稿
+struct Published; // 状态：已发布
 
 // 文章带一个状态参数 S，但这个 S 实际上不占空间（ZST）
 struct Article<S> {
     title: String,
     body: String,
-    _state: PhantomData<S>,                  // 记录状态，不占运行时空间
+    _state: PhantomData<S>, // 记录状态，不占运行时空间
 }
 
 impl Article<Draft> {
@@ -124,13 +124,13 @@ impl Article<Published> {
 
 // ── 4. 实现空 trait 做「类型安全标记」──────────────────────────────────────
 // 标记 trait：有身份、没方法，用来在类型系统里加语义
-trait Administrator {}                       // 管理员标记 trait
-trait Guest {}                               // 游客标记 trait
+trait Administrator {} // 管理员标记 trait
+trait Guest {} // 游客标记 trait
 
-struct Root;                                 // Root 是管理员
+struct Root; // Root 是管理员
 impl Administrator for Root {}
 
-struct Visitor;                              // Visitor 是游客
+struct Visitor; // Visitor 是游客
 impl Guest for Visitor {}
 
 // 泛型函数只接受实现了 Administrator 的类型
@@ -139,21 +139,24 @@ fn admin_only<T: Administrator>(_who: T) {
 }
 
 fn main() {
-    println!("{}", "=== 单元结构体 (Unit-Like Structs) ===".green().bold());
+    println!(
+        "{}",
+        "=== 单元结构体 (Unit-Like Structs) ===".green().bold()
+    );
 
     // ─────────────────────────────────────────
     println!("\n1、基础语法：struct Foo; 没有字段");
     // ─────────────────────────────────────────
 
-    let a = AlwaysEqual;                     // 直接写类型名就创建实例，无字段要填
-    let b = AlwaysEqual;                     // 所有 AlwaysEqual 实例都是「同一份 0 大小」
+    let a = AlwaysEqual; // 直接写类型名就创建实例，无字段要填
+    let b = AlwaysEqual; // 所有 AlwaysEqual 实例都是「同一份 0 大小」
 
-    let a_size = size_of_val(&a);            // 0 bytes
-    let b_size = size_of_val(&b);            // 0 bytes
+    let a_size = size_of_val(&a); // 0 bytes
+    let b_size = size_of_val(&b); // 0 bytes
     println!("  AlwaysEqual 实例 a: {a_size} 字节");
     println!("  AlwaysEqual 实例 b: {b_size} 字节");
 
-    let e = EmptyBrace {};                   // 空大括号形式也可以
+    let e = EmptyBrace {}; // 空大括号形式也可以
     println!("  EmptyBrace 实例:   {} 字节", size_of_val(&e));
 
     println!("  这就是典型的零大小类型（ZST）：概念存在，内存占用 = 0");
@@ -180,7 +183,7 @@ fn main() {
     println!("\n3、标记 trait：用单元结构体做「权限身份」");
     // ─────────────────────────────────────────
 
-    admin_only(Root);                        // ✅ Root 实现了 Administrator
+    admin_only(Root); // ✅ Root 实现了 Administrator
     // admin_only(Visitor);                  // ❌ Visitor 没实现 Administrator
 
     println!("  Root 是 Administrator，可以调用 admin_only");
@@ -228,7 +231,7 @@ fn main() {
 
     let m1 = Marker;
     let m2 = Marker;
-    assert_eq!(m1, m2);                      // ✅ 两个 Marker 永远相等
+    assert_eq!(m1, m2); // ✅ 两个 Marker 永远相等
     println!("  Marker 派生 PartialEq/Eq 后，所有实例都相等");
 
     println!("  想让单元结构体「可比较、可哈希」，通常一条 #[derive] 就够了");

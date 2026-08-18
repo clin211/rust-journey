@@ -76,12 +76,14 @@ use colored::*;
 fn make_string() -> String {
     let s = String::from("hello, ownership!"); // s：栈上控制块 + 堆上数据
     s // 返回 s 本身（所有权转移），不是引用
-      // 调用方接管所有权，堆内存由调用方负责管理，不会在这里释放
+    // 调用方接管所有权，堆内存由调用方负责管理，不会在这里释放
 }
 
 // ✅ 修复方法二：从输入参数借用并返回（最常见的合法返回引用模式）
 // 返回的 &str 来自参数 s，数据在调用方的变量中，由调用方负责管理
 // 只要调用方的数据有效，返回的引用就有效——生命周期由调用方决定
+// 刻意保留 `&s[..]` 演示「整个字符串切片」，clippy 会建议直接写 s
+#[allow(clippy::redundant_slicing)]
 fn first_word(s: &str) -> &str {
     // 编译器自动推断（生命周期省略规则）：
     //   fn first_word(s: &str) -> &str

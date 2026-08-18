@@ -1,3 +1,5 @@
+// 排版输出（表格/对齐列）刻意用「{} 占位符 + 字面量」，clippy 的 print_literal 全部豁免
+#![allow(clippy::print_literal)]
 #![allow(dead_code)]
 
 use colored::*;
@@ -125,6 +127,8 @@ struct FfiPoint {
 //   · 去掉所有 padding，字段紧贴在一起
 //   · 代价：可能导致非对齐访问（不同 CPU 可能性能差甚至 crash）
 //   · 用于：协议包头、旧格式兼容、极端空间受限场景
+// 刻意演示 repr(packed)（本节教学点：内存布局），clippy 会建议补充 ABI 限定
+#[allow(clippy::repr_packed_without_abi)]
 #[repr(packed)]
 struct PackedHeader {
     version: u8,
@@ -164,6 +168,8 @@ enum WithData {
     Empty,
 }
 
+// 刻意用 Vec::new() + push 演示 Vec<()>（ZST 集合教学点），clippy 会建议 vec![] 宏
+#[allow(clippy::vec_init_then_push)]
 fn main() {
     println!("{}", "=== 内存布局与零成本抽象 ===".green().bold());
 
@@ -173,17 +179,72 @@ fn main() {
 
     println!("  {:<15} {:<12} {}", "类型", "size", "align");
     println!("  {:-<15} {:-<12} {}", "", "", "");
-    println!("  {:<15} {:<12} {}", "bool", size_of::<bool>(), align_of::<bool>());
-    println!("  {:<15} {:<12} {}", "char", size_of::<char>(), align_of::<char>());
-    println!("  {:<15} {:<12} {}", "u8", size_of::<u8>(), align_of::<u8>());
-    println!("  {:<15} {:<12} {}", "u32", size_of::<u32>(), align_of::<u32>());
-    println!("  {:<15} {:<12} {}", "u64", size_of::<u64>(), align_of::<u64>());
-    println!("  {:<15} {:<12} {}", "f32", size_of::<f32>(), align_of::<f32>());
-    println!("  {:<15} {:<12} {}", "f64", size_of::<f64>(), align_of::<f64>());
-    println!("  {:<15} {:<12} {}", "usize", size_of::<usize>(), align_of::<usize>());
-    println!("  {:<15} {:<12} {}", "&str", size_of::<&str>(), align_of::<&str>());
-    println!("  {:<15} {:<12} {}", "String", size_of::<String>(), align_of::<String>());
-    println!("  {:<15} {:<12} {}", "Vec<i32>", size_of::<Vec<i32>>(), align_of::<Vec<i32>>());
+    println!(
+        "  {:<15} {:<12} {}",
+        "bool",
+        size_of::<bool>(),
+        align_of::<bool>()
+    );
+    println!(
+        "  {:<15} {:<12} {}",
+        "char",
+        size_of::<char>(),
+        align_of::<char>()
+    );
+    println!(
+        "  {:<15} {:<12} {}",
+        "u8",
+        size_of::<u8>(),
+        align_of::<u8>()
+    );
+    println!(
+        "  {:<15} {:<12} {}",
+        "u32",
+        size_of::<u32>(),
+        align_of::<u32>()
+    );
+    println!(
+        "  {:<15} {:<12} {}",
+        "u64",
+        size_of::<u64>(),
+        align_of::<u64>()
+    );
+    println!(
+        "  {:<15} {:<12} {}",
+        "f32",
+        size_of::<f32>(),
+        align_of::<f32>()
+    );
+    println!(
+        "  {:<15} {:<12} {}",
+        "f64",
+        size_of::<f64>(),
+        align_of::<f64>()
+    );
+    println!(
+        "  {:<15} {:<12} {}",
+        "usize",
+        size_of::<usize>(),
+        align_of::<usize>()
+    );
+    println!(
+        "  {:<15} {:<12} {}",
+        "&str",
+        size_of::<&str>(),
+        align_of::<&str>()
+    );
+    println!(
+        "  {:<15} {:<12} {}",
+        "String",
+        size_of::<String>(),
+        align_of::<String>()
+    );
+    println!(
+        "  {:<15} {:<12} {}",
+        "Vec<i32>",
+        size_of::<Vec<i32>>(),
+        align_of::<Vec<i32>>()
+    );
 
     println!("  观察:");
     println!("    · char 是 4 字节（Unicode scalar value），不是 1");
@@ -205,11 +266,17 @@ fn main() {
     let c_good = size_of::<CGoodOrder>();
 
     println!("  默认 repr:");
-    println!("    struct {{ u8, u64, u8 }} → {} 字节 (Rust 可能重排)", bad);
+    println!(
+        "    struct {{ u8, u64, u8 }} → {} 字节 (Rust 可能重排)",
+        bad
+    );
     println!("    struct {{ u64, u8, u8 }} → {} 字节", good);
     println!();
     println!("  #[repr(C)]（严格按声明顺序）:");
-    println!("    struct {{ u8, u64, u8 }} → {} 字节 (看到 padding 了吗？)", c_bad);
+    println!(
+        "    struct {{ u8, u64, u8 }} → {} 字节 (看到 padding 了吗？)",
+        c_bad
+    );
     println!("    struct {{ u64, u8, u8 }} → {} 字节", c_good);
     println!();
     println!("  布局可视化（repr(C) 下 u8, u64, u8 的情况）：");
@@ -226,11 +293,23 @@ fn main() {
     println!("\n3、零大小类型（ZST）：真的 0 字节");
     // ─────────────────────────────────────────
 
-    println!("  单元结构体   UnitMarker:        {} 字节", size_of::<UnitMarker>());
-    println!("  空结构体     EmptyStruct:       {} 字节", size_of::<EmptyStruct>());
+    println!(
+        "  单元结构体   UnitMarker:        {} 字节",
+        size_of::<UnitMarker>()
+    );
+    println!(
+        "  空结构体     EmptyStruct:       {} 字节",
+        size_of::<EmptyStruct>()
+    );
     println!("  空元组       ():                {} 字节", size_of::<()>());
-    println!("  空数组       [u8; 0]:           {} 字节", size_of::<[u8; 0]>());
-    println!("  PhantomData  OnlyPhantom<u64>:  {} 字节", size_of::<OnlyPhantom<u64>>());
+    println!(
+        "  空数组       [u8; 0]:           {} 字节",
+        size_of::<[u8; 0]>()
+    );
+    println!(
+        "  PhantomData  OnlyPhantom<u64>:  {} 字节",
+        size_of::<OnlyPhantom<u64>>()
+    );
 
     println!();
     println!("  ZST 的实用价值:");
@@ -244,8 +323,11 @@ fn main() {
     empties.push(());
     empties.push(());
     empties.push(());
-    println!("    Vec<()> 有 {} 个元素，但整个 Vec 只占 {} 字节（仅元数据）",
-        empties.len(), size_of::<Vec<()>>());
+    println!(
+        "    Vec<()> 有 {} 个元素，但整个 Vec 只占 {} 字节（仅元数据）",
+        empties.len(),
+        size_of::<Vec<()>>()
+    );
 
     println!("小结：ZST 让「类型层面的存在」和「运行时内存」解耦，是 Rust 抽象的关键工具");
 
@@ -254,15 +336,26 @@ fn main() {
     // ─────────────────────────────────────────
 
     println!("  size_of::<f64>()          = {}", size_of::<f64>());
-    println!("  size_of::<Meters>()       = {}   (#[repr(transparent)])", size_of::<Meters>());
-    println!("  size_of::<Kilometers>()   = {}   (无 repr 标注，Rust 也优化到一样)",
-        size_of::<Kilometers>());
+    println!(
+        "  size_of::<Meters>()       = {}   (#[repr(transparent)])",
+        size_of::<Meters>()
+    );
+    println!(
+        "  size_of::<Kilometers>()   = {}   (无 repr 标注，Rust 也优化到一样)",
+        size_of::<Kilometers>()
+    );
     println!();
     println!("  size_of::<bool>()         = {}", size_of::<bool>());
-    println!("  size_of::<Flag>()         = {}   (Flag = bool)", size_of::<Flag>());
+    println!(
+        "  size_of::<Flag>()         = {}   (Flag = bool)",
+        size_of::<Flag>()
+    );
     println!();
     println!("  size_of::<u64>()          = {}", size_of::<u64>());
-    println!("  size_of::<UserId>()       = {}   (UserId = u64)", size_of::<UserId>());
+    println!(
+        "  size_of::<UserId>()       = {}   (UserId = u64)",
+        size_of::<UserId>()
+    );
     println!();
     println!("  换句话说 —— Newtype 是「类型层面的包装」，不是「数据层面的包装」");
     println!("  编译优化后，Meters 和 f64 在汇编层面完全一样");
@@ -277,18 +370,34 @@ fn main() {
     // ─────────────────────────────────────────
 
     println!("  size_of::<&i32>()             = {}", size_of::<&i32>());
-    println!("  size_of::<Option<&i32>>()     = {}   ← 和 &i32 完全一样！", size_of::<Option<&i32>>());
+    println!(
+        "  size_of::<Option<&i32>>()     = {}   ← 和 &i32 完全一样！",
+        size_of::<Option<&i32>>()
+    );
     println!();
-    println!("  size_of::<Box<i32>>()         = {}", size_of::<Box<i32>>());
-    println!("  size_of::<Option<Box<i32>>>() = {}   ← Box 的 None 也用 0 表示", size_of::<Option<Box<i32>>>());
+    println!(
+        "  size_of::<Box<i32>>()         = {}",
+        size_of::<Box<i32>>()
+    );
+    println!(
+        "  size_of::<Option<Box<i32>>>() = {}   ← Box 的 None 也用 0 表示",
+        size_of::<Option<Box<i32>>>()
+    );
     println!();
     println!("  size_of::<u64>()              = {}", size_of::<u64>());
-    println!("  size_of::<Option<u64>>()      = {}   ← u64 没有「天然无效值」, 所以多 8 字节（tag + padding）",
-        size_of::<Option<u64>>());
+    println!(
+        "  size_of::<Option<u64>>()      = {}   ← u64 没有「天然无效值」, 所以多 8 字节（tag + padding）",
+        size_of::<Option<u64>>()
+    );
     println!();
-    println!("  size_of::<std::num::NonZeroU64>()       = {}", size_of::<std::num::NonZeroU64>());
-    println!("  size_of::<Option<std::num::NonZeroU64>>() = {}   ← NonZero 类型满足 null pointer optimization",
-        size_of::<Option<std::num::NonZeroU64>>());
+    println!(
+        "  size_of::<std::num::NonZeroU64>()       = {}",
+        size_of::<std::num::NonZeroU64>()
+    );
+    println!(
+        "  size_of::<Option<std::num::NonZeroU64>>() = {}   ← NonZero 类型满足 null pointer optimization",
+        size_of::<Option<std::num::NonZeroU64>>()
+    );
 
     println!();
     println!("  重点：");
@@ -310,7 +419,10 @@ fn main() {
     let normal = size_of::<FfiPoint>();
 
     println!("  FfiPoint (#[repr(C)])         = {} 字节", normal);
-    println!("  PackedHeader (#[repr(packed)]) = {} 字节 (u8 + u8 + u32 = 6, 没有 padding)", p);
+    println!(
+        "  PackedHeader (#[repr(packed)]) = {} 字节 (u8 + u8 + u32 = 6, 没有 padding)",
+        p
+    );
     println!();
     println!("  packed 的代价:");
     println!("    · 字段访问可能变慢（非对齐读写）");
@@ -328,9 +440,14 @@ fn main() {
     println!("\n7、enum 的 size：tag + 最大 variant");
     // ─────────────────────────────────────────
 
-    println!("  enum Small {{ A, B, C }} (无 data)       → {} 字节", size_of::<Small>());
-    println!("  enum WithData {{ Int(i32), Flag(bool), Empty }} → {} 字节",
-        size_of::<WithData>());
+    println!(
+        "  enum Small {{ A, B, C }} (无 data)       → {} 字节",
+        size_of::<Small>()
+    );
+    println!(
+        "  enum WithData {{ Int(i32), Flag(bool), Empty }} → {} 字节",
+        size_of::<WithData>()
+    );
     println!();
     println!("  计算规则：");
     println!("    · enum 的 size = max(各 variant 的 size) + discriminant tag");
@@ -354,9 +471,14 @@ fn main() {
     // 它在运行时完全不存在，但编译器把 T 当作这个结构体的「虚拟字段」
     // 这让类型状态机、生命周期追踪、marker trait 等高级特性成为可能
 
-    println!("  OnlyPhantom<u64>  大小 = {} 字节", size_of::<OnlyPhantom<u64>>());
-    println!("  OnlyPhantom<Vec<String>> 大小 = {} 字节",
-        size_of::<OnlyPhantom<Vec<String>>>());
+    println!(
+        "  OnlyPhantom<u64>  大小 = {} 字节",
+        size_of::<OnlyPhantom<u64>>()
+    );
+    println!(
+        "  OnlyPhantom<Vec<String>> 大小 = {} 字节",
+        size_of::<OnlyPhantom<Vec<String>>>()
+    );
     println!();
     println!("  不管 T 多大，PhantomData<T> 都是 0 字节");
     println!("  它的作用是:");
@@ -412,11 +534,26 @@ fn main() {
     println!("  · enum size = max(variant) + tag + 对齐 padding");
     println!();
     println!("  各 repr 总览：");
-    println!("    {:<25} {}", "默认（无标注）", "Rust 自己决定布局，可重排字段");
-    println!("    {:<25} {}", "#[repr(C)]", "严格按声明顺序，兼容 C，FFI 首选");
-    println!("    {:<25} {}", "#[repr(packed)]", "去掉所有 padding，可能导致非对齐访问");
-    println!("    {:<25} {}", "#[repr(transparent)]", "单字段结构体与内部字段同布局");
-    println!("    {:<25} {}", "#[repr(u8)] / #[repr(i32)]", "控制 enum 的 discriminant 类型");
+    println!(
+        "    {:<25} {}",
+        "默认（无标注）", "Rust 自己决定布局，可重排字段"
+    );
+    println!(
+        "    {:<25} {}",
+        "#[repr(C)]", "严格按声明顺序，兼容 C，FFI 首选"
+    );
+    println!(
+        "    {:<25} {}",
+        "#[repr(packed)]", "去掉所有 padding，可能导致非对齐访问"
+    );
+    println!(
+        "    {:<25} {}",
+        "#[repr(transparent)]", "单字段结构体与内部字段同布局"
+    );
+    println!(
+        "    {:<25} {}",
+        "#[repr(u8)] / #[repr(i32)]", "控制 enum 的 discriminant 类型"
+    );
     println!();
     println!("  推荐学习路径：");
     println!("    · 《Rustonomicon》—— 内存布局、UB、unsafe 的权威指南");

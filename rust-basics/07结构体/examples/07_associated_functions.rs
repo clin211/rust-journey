@@ -61,7 +61,10 @@ impl Rectangle {
     // 返回「单位矩形」的静态实例工厂
     // 这种命名一般是 unit / zero / origin 等，语义明确
     fn unit() -> Self {
-        Rectangle { width: 1, height: 1 }
+        Rectangle {
+            width: 1,
+            height: 1,
+        }
     }
 
     // 实例方法（用来和关联函数做对比）：注意它有 &self 参数
@@ -115,8 +118,8 @@ impl Config {
     fn new(host: &str) -> Self {
         Config {
             host: host.to_string(),
-            port: 8080,                      // 给一个默认端口
-            timeout_ms: 3000,                // 给一个默认超时
+            port: 8080,       // 给一个默认端口
+            timeout_ms: 3000, // 给一个默认超时
         }
     }
 
@@ -124,7 +127,7 @@ impl Config {
     // 也可以用 `self` 形式的 fluent API，看项目偏好
     fn with_port(mut self, port: u16) -> Self {
         self.port = port;
-        self                                 // 返回自己，继续链式调用
+        self // 返回自己，继续链式调用
     }
 
     fn with_timeout(mut self, timeout_ms: u64) -> Self {
@@ -149,7 +152,7 @@ struct Counter {
 impl Counter {
     // 返回 Self：意思是「当前这个类型」，不必写 Counter
     fn new() -> Self {
-        Self { value: 0, step: 1 }           // 构造时也可以用 Self { ... }
+        Self { value: 0, step: 1 } // 构造时也可以用 Self { ... }
     }
 
     fn with_step(step: i64) -> Self {
@@ -162,7 +165,10 @@ impl Counter {
 }
 
 fn main() {
-    println!("{}", "=== 关联函数（Associated Functions） ===".green().bold());
+    println!(
+        "{}",
+        "=== 关联函数（Associated Functions） ===".green().bold()
+    );
 
     // ─────────────────────────────────────────
     println!("\n1、最常见的构造器：new");
@@ -185,7 +191,10 @@ fn main() {
     let ft = Rectangle::from_tuple((7, 2));
 
     println!("  Rectangle::square(5)       → {}x{}", sq.width, sq.height);
-    println!("  Rectangle::from_tuple((7,2)) → {}x{}", ft.width, ft.height);
+    println!(
+        "  Rectangle::from_tuple((7,2)) → {}x{}",
+        ft.width, ft.height
+    );
 
     println!("  命名构造器用来「更清晰地表达意图」：");
     println!("    - square(side) 比 new(side, side) 更有语义");
@@ -198,11 +207,15 @@ fn main() {
     // ─────────────────────────────────────────
 
     let u = Rectangle::unit();
-    println!("  Rectangle::unit() → {}x{}, area = {}",
-        u.width, u.height, u.area());
+    println!(
+        "  Rectangle::unit() → {}x{}, area = {}",
+        u.width,
+        u.height,
+        u.area()
+    );
 
     // Point 的「原点」用关联常量（更合适）
-    let o = Point::ORIGIN;                   // 直接取常量，零开销
+    let o = Point::ORIGIN; // 直接取常量，零开销
     println!("  Point::ORIGIN = ({:.1}, {:.1})", o.x, o.y);
 
     println!("  关联常量（const）和返回固定值的关联函数都可以表达「特殊实例」");
@@ -220,11 +233,16 @@ fn main() {
     let pi = std::f64::consts::PI;
 
     for i in 0..4 {
-        let angle = i as f64 * pi / 2.0;     // 0, π/2, π, 3π/2
+        let angle = i as f64 * pi / 2.0; // 0, π/2, π, 3π/2
         let p = Point::from_polar(radius, angle);
         let d = p.distance_to(&Point::ORIGIN);
-        println!("  polar(r=2, θ={:>4.2}π): p=({:>5.2}, {:>5.2}), dist=(dist={:.2})",
-            angle / pi, p.x, p.y, d);
+        println!(
+            "  polar(r=2, θ={:>4.2}π): p=({:>5.2}, {:>5.2}), dist=(dist={:.2})",
+            angle / pi,
+            p.x,
+            p.y,
+            d
+        );
     }
 
     println!("  from_polar / from_str / from_tuple 等都是「从外部形式构造 Self」的命名");
@@ -236,9 +254,7 @@ fn main() {
 
     // Config::new 只要 host，剩下字段有默认值
     // 然后用 with_port / with_timeout 链式地覆盖
-    let cfg = Config::new("localhost")
-        .with_port(9090)
-        .with_timeout(5000);
+    let cfg = Config::new("localhost").with_port(9090).with_timeout(5000);
 
     println!("  cfg = {}", cfg.describe());
 
@@ -266,10 +282,16 @@ fn main() {
 
     let mut c1 = Counter::new();
     c1.value = 10;
-    println!("  Counter::new()       → value={}, step={}", c1.value, c1.step);
+    println!(
+        "  Counter::new()       → value={}, step={}",
+        c1.value, c1.step
+    );
 
     let c2 = Counter::with_step(5);
-    println!("  Counter::with_step(5) → value={}, step={}", c2.value, c2.step);
+    println!(
+        "  Counter::with_step(5) → value={}, step={}",
+        c2.value, c2.step
+    );
 
     c1.reset();
     println!("  c1.reset() 后 value = {}", c1.value);
@@ -291,10 +313,10 @@ fn main() {
     //   · 操作「现有实例」
 
     // 对比示例：
-    let r1 = Rectangle::new(3, 4);           // 关联函数：创建实例
-    let a1 = r1.area();                       // 方法：用现有实例计算
+    let r1 = Rectangle::new(3, 4); // 关联函数：创建实例
+    let a1 = r1.area(); // 方法：用现有实例计算
 
-    let a2 = Rectangle::area(&r1);            // 方法的「完全限定调用」
+    let a2 = Rectangle::area(&r1); // 方法的「完全限定调用」
     assert_eq!(a1, a2);
 
     println!("  r1.area()         → 方法调用语法（推荐写法）");
@@ -311,13 +333,13 @@ fn main() {
     // #[derive(Default)] 会自动给字段全部为 Default 的结构体派生
     #[derive(Default, Debug)]
     struct Settings {
-        volume: u8,    // u8 的 default() 是 0
-        muted: bool,   // bool 的 default() 是 false
-        name: String,  // String 的 default() 是 ""
+        volume: u8,   // u8 的 default() 是 0
+        muted: bool,  // bool 的 default() 是 false
+        name: String, // String 的 default() 是 ""
     }
 
-    let s1: Settings = Default::default();   // 显式调用 Default::default()
-    let s2 = Settings::default();            // 更常见的写法
+    let s1: Settings = Default::default(); // 显式调用 Default::default()
+    let s2 = Settings::default(); // 更常见的写法
     println!("  Settings::default() = {:?}", s1);
     println!("  s1 == s2？→ 字段都是默认值，内容一致: {:?}", s2);
 

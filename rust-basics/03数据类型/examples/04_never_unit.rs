@@ -12,6 +12,8 @@ fn main() {
     }
 
     // 单元类型 ()
+    // 刻意演示 () 的比较与 let 绑定：clippy 会提示恒真比较 / 单元值绑定，但这两处正是教学点
+    #[allow(clippy::unit_cmp, clippy::let_unit_value)]
     {
         let unit = (); // 单元类型的唯一值
         println!("{}", unit == ()); // true，因为 () 只有一个值

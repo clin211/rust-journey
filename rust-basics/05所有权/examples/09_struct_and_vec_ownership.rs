@@ -20,6 +20,8 @@ use colored::*;
 #[derive(Debug)]
 struct User {
     name: String,
+    // 教学演示用：email 只出现在构造与 Debug 输出中，不单独读取
+    #[allow(dead_code)]
     email: String,
     city: String,
     login_count: u32,
@@ -46,6 +48,8 @@ impl User {
     }
 }
 
+// 刻意用 Vec::new() + push 演示「move / clone 进 Vec」（本节教学点），clippy 会建议 vec![] 宏
+#[allow(clippy::vec_init_then_push)]
 fn main() {
     println!("{}", "=== 结构体与 Vec 的所有权 ===".green().bold());
 
@@ -59,7 +63,12 @@ fn main() {
     let name = String::from("Alice");
     let email = String::from("alice@example.com");
     let city = String::from("Hangzhou");
-    let user = User { name, email, city, login_count: 0 };
+    let user = User {
+        name,
+        email,
+        city,
+        login_count: 0,
+    };
     // name、email、city 都 move 进了 user，原变量不再有效
     // println!("name = {name}");  // ❌ 编译错误：value borrowed here after move
     println!("user = {:?}", user);
@@ -77,8 +86,8 @@ fn main() {
 
     println!("\n3、可以独立借用 struct 的不同字段（编译器分开跟踪）");
     let mut u = User::new("Carol", "carol@example.com", "Shanghai");
-    let name_ref = &u.name;    // 借用 name 字段
-    let city_ref = &u.city;    // 借用 city 字段（与 name 独立）
+    let name_ref = &u.name; // 借用 name 字段
+    let city_ref = &u.city; // 借用 city 字段（与 name 独立）
     println!("  name = {name_ref}, city = {city_ref}");
     // 两个不可变借用结束后，可以可变借用另一个字段
     u.login_count += 1; // ✅ 修改 u32 字段（Copy 类型，不影响上面的借用）
@@ -97,8 +106,8 @@ fn main() {
     let go = String::from("Go");
     let python = String::from("Python");
     let mut languages: Vec<String> = Vec::new();
-    languages.push(rust);   // rust  move 进 Vec
-    languages.push(go);     // go    move 进 Vec
+    languages.push(rust); // rust  move 进 Vec
+    languages.push(go); // go    move 进 Vec
     languages.push(python); // python move 进 Vec
     // println!("rust = {rust}"); // ❌ rust 已经 move 进 Vec
     println!("  languages = {:?}", languages);
@@ -127,7 +136,10 @@ fn main() {
     println!("  extracted_name = {extracted_name}");
     // 但还可以访问未被 move 的字段：
     full_user.login_count += 1;
-    println!("  full_user.city = {}（未被 move 的字段仍然可用）", full_user.city);
+    println!(
+        "  full_user.city = {}（未被 move 的字段仍然可用）",
+        full_user.city
+    );
     println!("  小结：部分 move 后，struct 不能被整体使用，但未 move 的字段仍然独立有效");
 
     println!("\n9、结论：所有权规则对 struct/Vec 完全一致");

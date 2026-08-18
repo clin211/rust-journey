@@ -35,8 +35,8 @@ fn classify_int(n: i32) -> &'static str {
 
 fn classify_char(c: char) -> &'static str {
     match c {
-        'a' | 'e' | 'i' | 'o' | 'u' => "vowel",       // | 多模式
-        '0'..='9' => "digit",                          // 范围
+        'a' | 'e' | 'i' | 'o' | 'u' => "vowel", // | 多模式
+        '0'..='9' => "digit",                   // 范围
         ' ' | '\t' | '\n' => "whitespace",
         _ => "other",
     }
@@ -81,14 +81,18 @@ fn grade(score: u32) -> &'static str {
 // 这两个看着像，其实工作层级不同。
 
 fn first_two((a, b, ..): (i32, i32, i32, i32, i32)) -> (i32, i32) {
-    (a, b)                                            // 用 .. 跳过后面 3 个字段
+    (a, b) // 用 .. 跳过后面 3 个字段
 }
 
 #[derive(Debug)]
-struct Point3 { x: i32, y: i32, z: i32 }
+struct Point3 {
+    x: i32,
+    y: i32,
+    z: i32,
+}
 
 fn xy_only(p: Point3) -> (i32, i32) {
-    let Point3 { x, y, .. } = p;                       // 结构体里 .. 跳过其余字段
+    let Point3 { x, y, .. } = p; // 结构体里 .. 跳过其余字段
     (x, y)
 }
 
@@ -107,8 +111,8 @@ fn shadow_trap() {
         1 => "one",
         // ❌ 你也许想说"如果 x 等于 y，则 ..."；但这里 `y` 是个新绑定！
         // 它会匹配任何值，并把那个值绑定为本臂内的 y，覆盖外面的 y=10。
-        y => "match anything (and bind to y)",     // ← 永远命中
-        _ => "other",                               // 永远到不了这里
+        y => "match anything (and bind to y)", // ← 永远命中
+        _ => "other",                          // 永远到不了这里
     };
     println!("[shadow_trap] x={x}, result={result}");
     // 注意：这里的 y=10 没被改变，只是 match 内部的 y 被 shadow 了。
@@ -145,7 +149,7 @@ fn level(entry: &LogEntry) -> &'static str {
     match entry {
         LogEntry::Info(_) => "info",
         LogEntry::Warn(_) => "warn",
-        LogEntry::Error { code, .. } if *code >= 500 => "fatal",  // 守卫 + .. 忽略
+        LogEntry::Error { code, .. } if *code >= 500 => "fatal", // 守卫 + .. 忽略
         LogEntry::Error { .. } => "error",
     }
 }
@@ -168,12 +172,21 @@ fn classify_age(age: u32) -> String {
 
 // 嵌套结构体 + @
 #[derive(Debug)]
-struct Person { id: u32, name: String }
+struct Person {
+    id: u32,
+    name: String,
+}
 
 fn describe_person(p: &Person) -> String {
     match p {
-        Person { id: id @ 1..=99, name } => format!("内部用户 #{id} {name}"),
-        Person { id: id @ 100..=999, name } => format!("付费用户 #{id} {name}"),
+        Person {
+            id: id @ 1..=99,
+            name,
+        } => format!("内部用户 #{id} {name}"),
+        Person {
+            id: id @ 100..=999,
+            name,
+        } => format!("付费用户 #{id} {name}"),
         Person { id, name } => format!("游客 #{id} {name}"),
     }
 }
@@ -197,7 +210,7 @@ fn describe_person(p: &Person) -> String {
 
 #[derive(Debug)]
 enum Shape {
-    Square(String),     // 故意带个 String，演示 move vs borrow
+    Square(String), // 故意带个 String，演示 move vs borrow
     Circle(String),
 }
 
@@ -282,8 +295,14 @@ fn main() {
     let logs = [
         LogEntry::Info("启动完成".into()),
         LogEntry::Warn("内存使用 90%".into()),
-        LogEntry::Error { code: 404, msg: "未找到".into() },
-        LogEntry::Error { code: 503, msg: "服务挂了".into() },
+        LogEntry::Error {
+            code: 404,
+            msg: "未找到".into(),
+        },
+        LogEntry::Error {
+            code: 503,
+            msg: "服务挂了".into(),
+        },
     ];
     for e in &logs {
         println!("  {:?} -> level = {}", e, level(e));
@@ -294,9 +313,18 @@ fn main() {
         println!("  {}", classify_age(age));
     }
     let people = [
-        Person { id: 7, name: "alice".into() },
-        Person { id: 200, name: "bob".into() },
-        Person { id: 99999, name: "tourist".into() },
+        Person {
+            id: 7,
+            name: "alice".into(),
+        },
+        Person {
+            id: 200,
+            name: "bob".into(),
+        },
+        Person {
+            id: 99999,
+            name: "tourist".into(),
+        },
     ];
     for p in &people {
         println!("  {}", describe_person(p));
@@ -304,16 +332,22 @@ fn main() {
 
     println!("\n===== 7. ref / borrow 对比 =====");
     let s1 = Shape::Square("box".into());
-    println!("  借用: {}", description_borrow(&s1));    // 不消耗 s1
-    println!("  借用: {}", description_borrow(&s1));    // 仍可再用
-    let consumed = description_take(s1);                 // 消耗 s1
+    println!("  借用: {}", description_borrow(&s1)); // 不消耗 s1
+    println!("  借用: {}", description_borrow(&s1)); // 仍可再用
+    let consumed = description_take(s1); // 消耗 s1
     println!("  消耗: {consumed}");
 
     println!("\n===== 8. 综合 dispatch =====");
     let cmds = [
         Cmd::Help,
-        Cmd::Set { key: "lang".into(), value: "zh".into() },
-        Cmd::Set { key: "_internal".into(), value: "secret".into() },
+        Cmd::Set {
+            key: "lang".into(),
+            value: "zh".into(),
+        },
+        Cmd::Set {
+            key: "_internal".into(),
+            value: "secret".into(),
+        },
         Cmd::Get("lang".into()),
         Cmd::History(5),
         Cmd::History(50),

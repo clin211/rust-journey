@@ -49,7 +49,7 @@ fn refutability_demo() {
 
     // ✅ let else
     let Some(x) = opt else {
-        unreachable!()                    // 这里 opt 是 Some，永不触发
+        unreachable!() // 这里 opt 是 Some，永不触发
     };
     println!("  let else: x = {x}");
 
@@ -103,7 +103,9 @@ fn where_patterns_appear() {
     println!();
 
     // 7) let else
-    fn safe_div(a: i32, b: i32) -> Option<i32> { if b == 0 { None } else { Some(a / b) } }
+    fn safe_div(a: i32, b: i32) -> Option<i32> {
+        if b == 0 { None } else { Some(a / b) }
+    }
     let Some(q) = safe_div(10, 2) else { return };
     println!("  let else 取值: q = {q}");
 }
@@ -139,10 +141,11 @@ fn city_of(a: &Account) -> Option<&str> {
     match a {
         Account::Anon => None,
         Account::Member {
-            profile: Profile {
-                address: Address { city, .. },
-                ..
-            },
+            profile:
+                Profile {
+                    address: Address { city, .. },
+                    ..
+                },
             ..
         } => Some(city.as_str()),
         Account::Admin(Profile {
@@ -167,8 +170,8 @@ enum Item {
 
 fn describe(item: &Item) -> String {
     match item {
-        Item::Single(s) => format!("一个: {s}"),    // s 是 &String
-        Item::Many(v) => format!("一组: {v:?}"),    // v 是 &Vec<String>
+        Item::Single(s) => format!("一个: {s}"), // s 是 &String
+        Item::Many(v) => format!("一组: {v:?}"), // v 是 &Vec<String>
     }
     // 函数返回后 item 仍然属于调用方，没有任何 move
 }
@@ -257,7 +260,7 @@ enum Counter {
 
 fn double_if_on(c: &mut Counter) {
     match c {
-        Counter::On(n) => *n *= 2,            // 现代写法：自动得到 &mut u32
+        Counter::On(n) => *n *= 2, // 现代写法：自动得到 &mut u32
         Counter::Off => {}
     }
 }
@@ -329,8 +332,12 @@ fn main() {
     let users = [
         Status::Active,
         Status::Inactive { since: 1729000000 },
-        Status::Banned { reason: "recent spam".into() },
-        Status::Banned { reason: "old issue".into() },
+        Status::Banned {
+            reason: "recent spam".into(),
+        },
+        Status::Banned {
+            reason: "old issue".into(),
+        },
     ];
     for u in &users {
         println!(
@@ -358,8 +365,14 @@ fn main() {
     println!("  after  = {c:?}");
 
     println!("\n===== 9. 穷尽性检查 =====");
-    println!("  coverage_demo(Active) = {}", coverage_demo(Status::Active));
-    println!("  coverage_demo(Banned) = {}", coverage_demo(Status::Banned { reason: "x".into() }));
+    println!(
+        "  coverage_demo(Active) = {}",
+        coverage_demo(Status::Active)
+    );
+    println!(
+        "  coverage_demo(Banned) = {}",
+        coverage_demo(Status::Banned { reason: "x".into() })
+    );
 
     println!("\n===== 要点回顾 =====");
     println!("· 不可反驳 = let / 函数参数；可反驳 = if let / while let");

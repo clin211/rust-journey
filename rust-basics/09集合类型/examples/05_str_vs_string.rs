@@ -28,9 +28,9 @@ use std::borrow::Cow;
 // &str 在内存里  = (ptr, len) 双字段（16 字节胖指针, 不带 cap）
 
 fn three_forms() {
-    let lit: &'static str = "I'm a literal";          // 编译进 .rodata
-    let owned: String = String::from("I'm owned");    // 堆上分配
-    let borrowed: &str = &owned[..6];                 // 借用 owned 的前 6 字节
+    let lit: &'static str = "I'm a literal"; // 编译进 .rodata
+    let owned: String = String::from("I'm owned"); // 堆上分配
+    let borrowed: &str = &owned[..6]; // 借用 owned 的前 6 字节
 
     println!("  字面量 lit       : {lit}");
     println!("  拥有型 owned     : {owned}");
@@ -39,7 +39,10 @@ fn three_forms() {
     use std::mem::size_of;
     println!("  size_of::<&str>()      = {} B", size_of::<&str>());
     println!("  size_of::<String>()    = {} B", size_of::<String>());
-    println!("  size_of::<&String>()   = {} B (一个普通指针 8B)", size_of::<&String>());
+    println!(
+        "  size_of::<&String>()   = {} B (一个普通指针 8B)",
+        size_of::<&String>()
+    );
 }
 
 // ============================================================================
@@ -49,20 +52,20 @@ fn three_forms() {
 fn convert_demo() {
     // String → &str：自动 Deref，几乎无感
     let s: String = String::from("hello");
-    let r: &str = &s;                      // 等价 s.as_str()
+    let r: &str = &s; // 等价 s.as_str()
     println!("  String -> &str: {r}");
 
     // &str → String：要显式分配
     let r: &str = "world";
-    let s1: String = r.to_string();        // 通用写法
-    let s2: String = String::from(r);      // 等价
-    let s3: String = r.to_owned();         // 偏底层
+    let s1: String = r.to_string(); // 通用写法
+    let s2: String = String::from(r); // 等价
+    let s3: String = r.to_owned(); // 偏底层
     println!("  &str -> String: {s1}, {s2}, {s3}");
 
     // &String → &str：自动 Deref，无感
     let owned = String::from("foo");
-    let _: &str = &owned;                  // ✅ 自动转换
-    let _: &str = owned.as_str();          // 显式版
+    let _: &str = &owned; // ✅ 自动转换
+    let _: &str = owned.as_str(); // 显式版
 
     // String → Vec<u8>：拿走底层字节
     let s = String::from("hi🦀");
@@ -85,19 +88,21 @@ fn convert_demo() {
 // 用 &String 接收参数, 只能传 &String。
 
 fn param_demo() {
-    fn good(s: &str) {                     // ✅ 接受所有形态
+    fn good(s: &str) {
+        // ✅ 接受所有形态
         println!("    收到 (&str): {s}");
     }
-    fn bad(s: &String) {                   // ❌ 限制太死
+    fn bad(s: &String) {
+        // ❌ 限制太死
         println!("    收到 (&String): {s}");
     }
 
     let owned = String::from("hello");
-    good(&owned);                          // &String 自动转 &str
-    good("literal");                       // 字面量本身就是 &str
-    good(&owned[..3]);                     // 切片也是 &str
+    good(&owned); // &String 自动转 &str
+    good("literal"); // 字面量本身就是 &str
+    good(&owned[..3]); // 切片也是 &str
 
-    bad(&owned);                           // 只能这一种
+    bad(&owned); // 只能这一种
     // bad("literal");                     // ❌ expected `&String`, found `&str`
 }
 
@@ -114,11 +119,13 @@ fn param_demo() {
 //   配置常量                            &'static str
 //   不确定就默认                        String
 
-fn first_word(s: &str) -> &str {           // 返回输入的子串 → &str
+fn first_word(s: &str) -> &str {
+    // 返回输入的子串 → &str
     s.split_whitespace().next().unwrap_or("")
 }
 
-fn shouting(s: &str) -> String {           // 返回拼接的新字符串 → String
+fn shouting(s: &str) -> String {
+    // 返回拼接的新字符串 → String
     format!("{}!!!", s.to_uppercase())
 }
 
@@ -151,8 +158,8 @@ fn cow_demo() {
     let a = "Hello, World";
     let b = "Are you ok?";
 
-    let r1 = maybe_replace(a);              // 不需修改, 直接借用
-    let r2 = maybe_replace(b);              // 需要替换, 分配新字符串
+    let r1 = maybe_replace(a); // 不需修改, 直接借用
+    let r2 = maybe_replace(b); // 需要替换, 分配新字符串
 
     println!("  '{a}' -> {r1:?}");
     println!("  '{b}' -> {r2:?}");
@@ -171,7 +178,7 @@ fn cow_demo() {
 // 所有字面量 "..." 都是 &'static str —— 编译期写进二进制, 整个程序运行期间有效。
 // 这就是为什么你能让 const / static 持有它们:
 
-const APP_NAME: &str = "rust-journey";        // &'static str
+const APP_NAME: &str = "rust-journey"; // &'static str
 static DESCRIPTION: &str = "a long-form Rust tutorial";
 
 fn static_lifetime_demo() {

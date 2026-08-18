@@ -112,8 +112,8 @@ impl TrafficLight {
 // ❌ 用 struct 模拟 OR：状态约定靠人记，编译器无能为力
 struct ResponseStruct {
     is_ok: bool,
-    body: Option<String>,    // 当 is_ok=true 时才有意义
-    err_code: Option<i32>,   // 当 is_ok=false 时才有意义
+    body: Option<String>,  // 当 is_ok=true 时才有意义
+    err_code: Option<i32>, // 当 is_ok=false 时才有意义
 }
 
 // ✅ 用 enum 表达 OR：每个变体都自带它自己的数据
@@ -150,7 +150,12 @@ fn main() {
     println!("dir = {:?}, light = {:?}", dir, light);
 
     // 打印所有方向（演示 enum 是 Copy，可以多次使用）
-    let all = [Direction::Up, Direction::Down, Direction::Left, Direction::Right];
+    let all = [
+        Direction::Up,
+        Direction::Down,
+        Direction::Left,
+        Direction::Right,
+    ];
     for d in all {
         println!("  {:?} 的反向是 {:?}", d, d.opposite());
     }

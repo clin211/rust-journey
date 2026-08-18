@@ -90,7 +90,9 @@ impl std::fmt::Display for CommandError {
 // - Batch 是递归的：一个命令可能由多个子命令组成，自然递归处理
 
 impl AppState {
-    pub fn new() -> Self { Self::default() }
+    pub fn new() -> Self {
+        Self::default()
+    }
 
     pub fn dispatch(&mut self, cmd: Command) -> Result<(), CommandError> {
         match cmd {
@@ -117,20 +119,33 @@ impl AppState {
         }
         self.next_id += 1;
         let id = self.next_id;
-        self.todos.insert(id, Todo { id, title, done: false });
+        self.todos.insert(
+            id,
+            Todo {
+                id,
+                title,
+                done: false,
+            },
+        );
         Ok(())
     }
 
     fn set_done(&mut self, id: u64, done: bool) -> Result<(), CommandError> {
         match self.todos.get_mut(&id) {
-            Some(t) => { t.done = done; Ok(()) }
+            Some(t) => {
+                t.done = done;
+                Ok(())
+            }
             None => Err(CommandError::NotFound(id)),
         }
     }
 
     fn toggle(&mut self, id: u64) -> Result<(), CommandError> {
         match self.todos.get_mut(&id) {
-            Some(t) => { t.done = !t.done; Ok(()) }
+            Some(t) => {
+                t.done = !t.done;
+                Ok(())
+            }
             None => Err(CommandError::NotFound(id)),
         }
     }
@@ -140,7 +155,10 @@ impl AppState {
             return Err(CommandError::EmptyTitle);
         }
         match self.todos.get_mut(&id) {
-            Some(t) => { t.title = title; Ok(()) }
+            Some(t) => {
+                t.title = title;
+                Ok(())
+            }
             None => Err(CommandError::NotFound(id)),
         }
     }
@@ -229,9 +247,15 @@ fn main() {
     let mut app = AppState::new();
 
     let initial = Command::Batch(vec![
-        Command::Add { title: "学习 enum".into() },
-        Command::Add { title: "学习 match".into() },
-        Command::Add { title: "做计算器练习".into() },
+        Command::Add {
+            title: "学习 enum".into(),
+        },
+        Command::Add {
+            title: "学习 match".into(),
+        },
+        Command::Add {
+            title: "做计算器练习".into(),
+        },
     ]);
     log_command(&initial);
     app.dispatch(initial).unwrap();
@@ -241,7 +265,10 @@ fn main() {
     println!("\n===== 2. 标记完成 + 重命名 =====");
     let mut updates = vec![
         Command::Complete { id: 1 },
-        Command::Rename { id: 2, title: "深入掌握 match 语法".into() },
+        Command::Rename {
+            id: 2,
+            title: "深入掌握 match 语法".into(),
+        },
         Command::Toggle { id: 3 },
     ];
     for cmd in updates.drain(..) {
@@ -252,9 +279,14 @@ fn main() {
 
     println!("\n===== 3. 错误路径 =====");
     let bad_cases = [
-        Command::Add { title: "   ".into() },          // 空标题
-        Command::Complete { id: 9999 },                 // 不存在
-        Command::Rename { id: 1, title: "".into() },    // 空标题
+        Command::Add {
+            title: "   ".into(),
+        }, // 空标题
+        Command::Complete { id: 9999 }, // 不存在
+        Command::Rename {
+            id: 1,
+            title: "".into(),
+        }, // 空标题
     ];
     for cmd in bad_cases {
         log_command(&cmd);
@@ -274,7 +306,10 @@ fn main() {
         Route::Index,
         Route::UserDetail { id: 7 },
         Route::UserEdit { id: 7 },
-        Route::Search { keyword: "rust".into(), page: 2 },
+        Route::Search {
+            keyword: "rust".into(),
+            page: 2,
+        },
         Route::NotFound("/never/exist".into()),
     ];
     for r in routes {
@@ -296,7 +331,9 @@ fn main() {
 mod tests {
     use super::*;
 
-    fn fresh() -> AppState { AppState::new() }
+    fn fresh() -> AppState {
+        AppState::new()
+    }
 
     #[test]
     fn add_and_count() {
@@ -330,12 +367,14 @@ mod tests {
         let mut s = fresh();
         let batch = Command::Batch(vec![
             Command::Add { title: "ok".into() },
-            Command::Complete { id: 9999 },          // ← 这里失败
-            Command::Add { title: "never".into() },  // ← 不会执行
+            Command::Complete { id: 9999 }, // ← 这里失败
+            Command::Add {
+                title: "never".into(),
+            }, // ← 不会执行
         ]);
         let r = s.dispatch(batch);
         assert!(matches!(r, Err(CommandError::NotFound(9999))));
-        assert_eq!(s.todos.len(), 1);                 // 只有第一条进去了
+        assert_eq!(s.todos.len(), 1); // 只有第一条进去了
     }
 
     #[test]

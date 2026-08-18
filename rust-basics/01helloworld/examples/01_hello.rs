@@ -13,14 +13,23 @@ fn main() {
     // 3、print! 不换行输出
     print!("Hello, "); // 不会换行
     print!("world! "); // 紧接上一行
-    println!();        // 单独换行
+    println!(); // 单独换行
 
     // 4、print! 配合手动换行符
-    print!("第一行\n");
-    print!("第二行\n");
+    // 刻意用 print!(\"...\\n\") 演示手动换行，clippy 会建议改用 println!
+    #[allow(clippy::print_with_newline)]
+    {
+        print!("第一行\n");
+        print!("第二行\n");
+    }
 
     // 5、输出多个值
     let name = "Alice";
     let age = 30;
-    println!("{}{}{}", "姓名：".green(), name.green(), format!("，年龄：{}", age).green());
+    println!(
+        "{}{}{}",
+        "姓名：".green(),
+        name.green(),
+        format!("，年龄：{}", age).green()
+    );
 }

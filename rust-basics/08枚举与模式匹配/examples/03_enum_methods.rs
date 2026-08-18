@@ -25,8 +25,8 @@ use std::fmt;
 // "完全相等" 的语义（NaN != NaN）。要进 HashMap 的 key 请见下面 Currency 那个例子。
 #[derive(Debug, Clone, Copy, PartialEq)]
 enum Shape {
-    Circle(f64),                     // 半径
-    Square(f64),                     // 边长
+    Circle(f64), // 半径
+    Square(f64), // 边长
     Rectangle { w: f64, h: f64 },
 }
 
@@ -110,7 +110,7 @@ impl fmt::Display for Shape {
 enum LogLevel {
     Trace,
     Debug,
-    #[default]                           // ← 默认变体
+    #[default] // ← 默认变体
     Info,
     Warn,
     Error,
@@ -155,7 +155,7 @@ enum Currency {
     CNY,
     USD,
     EUR,
-    Custom(String),       // String 也是 PartialEq + Eq + Hash
+    Custom(String), // String 也是 PartialEq + Eq + Hash
 }
 
 // ============================================================================

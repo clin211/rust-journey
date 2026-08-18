@@ -54,8 +54,8 @@ fn create_demo() {
 
 fn append_demo() {
     let mut s = String::from("hello");
-    s.push_str(", world");      // 追加 &str
-    s.push('!');                // 追加 char
+    s.push_str(", world"); // 追加 &str
+    s.push('!'); // 追加 char
     println!("  push 后: {s:?}");
 
     // push_str 接受任何 &str（包括字面量、&String 自动 deref）
@@ -80,7 +80,7 @@ fn concat_demo() {
     // + 操作符
     let s1 = String::from("Hello");
     let s2 = String::from("World");
-    let s3 = s1 + ", " + &s2 + "!";   // s1 被消费, s2 必须 &
+    let s3 = s1 + ", " + &s2 + "!"; // s1 被消费, s2 必须 &
     println!("  + 拼接: {s3}");
     // println!("{s1}");              // ❌ s1 已被 move 进 + 里
 
@@ -174,7 +174,8 @@ fn parse_demo() {
     println!("  'abc'.parse::<i32>() = {bad:?}");
 
     // 实际工程中: 用 .ok() 转成 Option, 配合 unwrap_or
-    let port: u16 = std::env::var("PORT").ok()
+    let port: u16 = std::env::var("PORT")
+        .ok()
         .and_then(|s| s.parse().ok())
         .unwrap_or(8080);
     println!("  PORT (默认 8080)     = {port}");
@@ -196,15 +197,15 @@ fn coercion_demo() {
     }
 
     let owned = String::from("alice");
-    greet(&owned);                    // &String → &str (Deref)
-    greet("bob");                     // 字面量直接是 &str
-    greet(&owned[..3]);               // 字符串切片也是 &str
+    greet(&owned); // &String → &str (Deref)
+    greet("bob"); // 字面量直接是 &str
+    greet(&owned[..3]); // 字符串切片也是 &str
 
     // 反向: 想要 String 时不能传 &str
     fn want_string(s: String) {
         println!("  收到 String: {s}");
     }
-    want_string("hi".to_string());    // 显式转
+    want_string("hi".to_string()); // 显式转
     want_string(String::from("hello"));
 }
 

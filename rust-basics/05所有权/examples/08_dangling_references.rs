@@ -54,6 +54,8 @@ fn no_dangle() -> String {
 // ✅ 正确做法二：从输入参数借用后返回
 // 返回的 &str 来自参数 s，生命周期与 s 绑定
 // 只要调用方持有的数据有效，返回的引用就有效
+// 刻意保留 `&s[..]` 演示「整个字符串切片」，clippy 会建议直接写 s
+#[allow(clippy::redundant_slicing)]
 fn first_word(s: &str) -> &str {
     // 编译器自动推断：返回值的生命周期 = 参数 s 的生命周期
     let bytes = s.as_bytes();

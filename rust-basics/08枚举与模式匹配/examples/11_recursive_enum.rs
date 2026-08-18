@@ -203,7 +203,9 @@ impl Expr {
             Expr::Mul(a, b) => Ok(a.eval(env)? * b.eval(env)?),
             Expr::Div(a, b) => {
                 let bv = b.eval(env)?;
-                if bv == 0.0 { return Err(EvalError::DivByZero); }
+                if bv == 0.0 {
+                    return Err(EvalError::DivByZero);
+                }
                 Ok(a.eval(env)? / bv)
             }
             Expr::Neg(a) => Ok(-a.eval(env)?),
@@ -212,13 +214,27 @@ impl Expr {
 }
 
 // 几个构造帮手，让构造表达式更顺
-fn n(x: f64) -> Expr { Expr::Num(x) }
-fn v(s: &str) -> Expr { Expr::Var(s.into()) }
-fn add(a: Expr, b: Expr) -> Expr { Expr::Add(Box::new(a), Box::new(b)) }
-fn sub(a: Expr, b: Expr) -> Expr { Expr::Sub(Box::new(a), Box::new(b)) }
-fn mul(a: Expr, b: Expr) -> Expr { Expr::Mul(Box::new(a), Box::new(b)) }
-fn div(a: Expr, b: Expr) -> Expr { Expr::Div(Box::new(a), Box::new(b)) }
-fn neg(a: Expr) -> Expr { Expr::Neg(Box::new(a)) }
+fn n(x: f64) -> Expr {
+    Expr::Num(x)
+}
+fn v(s: &str) -> Expr {
+    Expr::Var(s.into())
+}
+fn add(a: Expr, b: Expr) -> Expr {
+    Expr::Add(Box::new(a), Box::new(b))
+}
+fn sub(a: Expr, b: Expr) -> Expr {
+    Expr::Sub(Box::new(a), Box::new(b))
+}
+fn mul(a: Expr, b: Expr) -> Expr {
+    Expr::Mul(Box::new(a), Box::new(b))
+}
+fn div(a: Expr, b: Expr) -> Expr {
+    Expr::Div(Box::new(a), Box::new(b))
+}
+fn neg(a: Expr) -> Expr {
+    Expr::Neg(Box::new(a))
+}
 
 // ============================================================================
 // 4. 链表的"持有共享尾部"：Rc 简介

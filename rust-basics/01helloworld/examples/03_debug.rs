@@ -19,7 +19,7 @@ fn main() {
 
     // 2、复合类型的 Debug 输出
     println!("{}", "=== 复合类型 ===".green());
-    let tuple = (1, "hello", 3.14);
+    let tuple = (1, "hello", 3.5);
     let arr = [1, 2, 3, 4, 5];
     println!("元组：{:?}", tuple);
     println!("数组：{:?}", arr);
@@ -39,11 +39,7 @@ fn main() {
 
     // 4、{:?} vs {:#?} 对比
     println!("{}", "=== {:?} vs {:#?} ===".green());
-    let data = vec![
-        ("Alice", 90),
-        ("Bob", 85),
-        ("Charlie", 95),
-    ];
+    let data = vec![("Alice", 90), ("Bob", 85), ("Charlie", 95)];
     println!("单行：{:?}", data);
     println!("美化：\n{:#?}", data);
 }

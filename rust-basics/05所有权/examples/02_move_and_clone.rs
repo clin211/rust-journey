@@ -8,6 +8,8 @@ fn read_only(text: &str) {
     println!("只读借用: {text}");
 } // 借用结束，原数据不受影响
 
+// 刻意用 Vec::new() + push 演示"值 move 进 Vec"，clippy 会建议用 vec![] 宏
+#[allow(clippy::vec_init_then_push)]
 fn main() {
     println!("{}", "=== move 与 clone ===".green().bold());
 

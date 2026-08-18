@@ -23,10 +23,10 @@
 
 #[derive(Debug, Clone, Copy)]
 enum Coin {
-    Penny,    // 1 分
-    Nickel,   // 5 分
-    Dime,     // 10 分
-    Quarter,  // 25 分
+    Penny,   // 1 分
+    Nickel,  // 5 分
+    Dime,    // 10 分
+    Quarter, // 25 分
 }
 
 fn cents(c: Coin) -> u32 {
@@ -64,9 +64,9 @@ fn cents(c: Coin) -> u32 {
 
 fn coin_class(c: Coin) -> &'static str {
     match c {
-        Coin::Penny | Coin::Nickel => "小面额",     // 多模式 |
+        Coin::Penny | Coin::Nickel => "小面额", // 多模式 |
         Coin::Dime => "中等面额",
-        _ => "大面额",                               // 兜底，所有剩余变体进这里
+        _ => "大面额", // 兜底，所有剩余变体进这里
     }
 }
 
@@ -76,7 +76,7 @@ fn describe_number(n: i32) -> String {
         0 => "zero".to_string(),
         1 => "one".to_string(),
         2 => "two".to_string(),
-        other => format!("number {other}"),       // ← `other` 是个绑定变量
+        other => format!("number {other}"), // ← `other` 是个绑定变量
     }
 }
 
@@ -177,7 +177,7 @@ fn main() {
     let coins = [Coin::Penny, Coin::Nickel, Coin::Dime, Coin::Quarter];
     let mut total = 0;
     for c in coins {
-        let v = cents(c);            // ← match 的值可以直接 let
+        let v = cents(c); // ← match 的值可以直接 let
         println!("  {v} cents");
         total += v;
     }

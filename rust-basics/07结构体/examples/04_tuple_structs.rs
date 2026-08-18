@@ -93,8 +93,8 @@ fn main() {
     // ─────────────────────────────────────────
 
     // 构造时像函数调用，按位置传参
-    let black = Color(0, 0, 0);              // 纯黑
-    let red = Color(255, 0, 0);              // 纯红
+    let black = Color(0, 0, 0); // 纯黑
+    let red = Color(255, 0, 0); // 纯红
     let origin = Point3D(0, 0, 0);
 
     // 通过 .0 / .1 / .2 按位置访问字段
@@ -129,11 +129,11 @@ fn main() {
     println!("\n3、Newtype 模式 1：让单位进入类型系统");
     // ─────────────────────────────────────────
 
-    let d1 = Meters(5000.0);                 // 5 km == 5000 m
-    let d2 = Kilometers(5.0);                // 5 km
+    let d1 = Meters(5000.0); // 5 km == 5000 m
+    let d2 = Kilometers(5.0); // 5 km
 
-    run_meters(d1);                          // ✅ 参数类型匹配
-    run_kilometers(d2);                      // ✅ 参数类型匹配
+    run_meters(d1); // ✅ 参数类型匹配
+    run_kilometers(d2); // ✅ 参数类型匹配
 
     // ❌ 如果参数传错单位，编译期就拦截
     // run_meters(Kilometers(5.0));          // expected Meters, found Kilometers
@@ -190,7 +190,7 @@ fn main() {
     let color = Color(128, 64, 200);
 
     // 像解构元组一样解构元组结构体
-    let Color(r, g, b) = color;              // r=128, g=64, b=200
+    let Color(r, g, b) = color; // r=128, g=64, b=200
     println!("  解构后 r={r}, g={g}, b={b}");
 
     // 甚至可以在函数参数里直接解构

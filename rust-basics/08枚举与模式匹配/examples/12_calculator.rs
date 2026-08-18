@@ -64,7 +64,7 @@ impl Op {
 #[derive(Debug, PartialEq)]
 pub enum CalcError {
     DivByZero,
-    Overflow,           // 整数溢出
+    Overflow, // 整数溢出
     InvalidNumber(String),
     InvalidOperator(String),
     InvalidSyntax(String),
@@ -128,7 +128,7 @@ pub fn parse_binary(input: &str) -> Result<(i64, Op, i64), CalcError> {
         if let Some(op) = Op::parse(c) {
             // 找到了运算符，前后切两段
             let (left, right) = trimmed.split_at(i);
-            let right = &right[c.len_utf8()..];   // 跳过运算符本身
+            let right = &right[c.len_utf8()..]; // 跳过运算符本身
 
             let a: i64 = left
                 .trim()
@@ -170,8 +170,8 @@ fn main() {
         (10, Op::Sub, 7),
         (6, Op::Mul, 7),
         (20, Op::Div, 4),
-        (10, Op::Div, 0),                    // 除 0
-        (i64::MAX, Op::Add, 1),              // 溢出
+        (10, Op::Div, 0),       // 除 0
+        (i64::MAX, Op::Add, 1), // 溢出
     ];
     for (a, op, b) in cases {
         match calc(a, op, b) {
@@ -182,29 +182,18 @@ fn main() {
 
     println!("\n===== 2. 字符串表达式 =====");
     for input in [
-        "3 + 4",
-        "10 - 7",
-        "6*7",
-        "20 / 4",
-        "10/0",
-        "-3 + 5",
-        "abc + 5",
-        "5 % 2",       // 不支持的运算符
+        "3 + 4", "10 - 7", "6*7", "20 / 4", "10/0", "-3 + 5", "abc + 5",
+        "5 % 2", // 不支持的运算符
         "what",
     ] {
         pretty_run(input);
     }
 
     println!("\n===== 3. 综合：一组表达式批量求值 =====");
-    let total: i64 = [
-        "1 + 2",
-        "3 * 4",
-        "100 - 30",
-        "16 / 4",
-    ]
-    .into_iter()
-    .filter_map(|s| evaluate(s).ok())
-    .sum();
+    let total: i64 = ["1 + 2", "3 * 4", "100 - 30", "16 / 4"]
+        .into_iter()
+        .filter_map(|s| evaluate(s).ok())
+        .sum();
     println!("  汇总 = {total}");
 
     println!("\n===== 要点回顾 =====");
@@ -245,7 +234,7 @@ mod tests {
     #[test]
     fn basic_div() {
         assert_eq!(calc(20, Op::Div, 4), Ok(5));
-        assert_eq!(calc(7, Op::Div, 2), Ok(3));        // 整除截断
+        assert_eq!(calc(7, Op::Div, 2), Ok(3)); // 整除截断
     }
 
     #[test]

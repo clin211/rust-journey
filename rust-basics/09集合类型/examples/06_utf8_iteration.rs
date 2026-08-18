@@ -78,8 +78,8 @@ fn slice_safety() {
     let s = String::from("中文Rust");
 
     // 字符的字节起始位置: 0(中)、3(文)、6(R)、7(u)、8(s)、9(t)
-    let chinese = &s[0..3];        // ✅ 0..3 是 "中"
-    let english = &s[6..];         // ✅ 6.. 是 "Rust"
+    let chinese = &s[0..3]; // ✅ 0..3 是 "中"
+    let english = &s[6..]; // ✅ 6.. 是 "Rust"
     println!("  '{s}'");
     println!("  &s[0..3] = {chinese:?}");
     println!("  &s[6..]  = {english:?}");
@@ -90,8 +90,8 @@ fn slice_safety() {
     // 安全做法: 先用 char_indices 找边界
     let prefix: &str = s
         .char_indices()
-        .nth(2)                    // 取第 3 个字符的起始位置
-        .map(|(i, _)| &s[..i])     // 切到那里
+        .nth(2) // 取第 3 个字符的起始位置
+        .map(|(i, _)| &s[..i]) // 切到那里
         .unwrap_or(&s);
     println!("  前 2 个字符 = {prefix:?}");
 
@@ -112,7 +112,7 @@ fn reverse_demo() {
 
     // 字节反向 (危险, 字节流可能不是合法 UTF-8 的反向)
     let bytes_rev: Vec<u8> = s.bytes().rev().collect();
-    let _ = bytes_rev;       // 拿到的字节序列不一定是合法字符串
+    let _ = bytes_rev; // 拿到的字节序列不一定是合法字符串
 
     // 字符反向 (推荐)
     let chars_rev: String = s.chars().rev().collect();
@@ -139,15 +139,28 @@ fn char_filter_demo() {
     // 大写字母 → 小写, 其它保持
     let lowered: String = s
         .chars()
-        .map(|c| if c.is_ascii_uppercase() { c.to_ascii_lowercase() } else { c })
+        .map(|c| {
+            if c.is_ascii_uppercase() {
+                c.to_ascii_lowercase()
+            } else {
+                c
+            }
+        })
         .collect();
     println!("  lowered = {lowered:?}");
 
     // 大小写翻转 (Unicode 安全)
-    let toggled: String = s.chars()
-        .map(|c| if c.is_lowercase() { c.to_ascii_uppercase() }
-                 else if c.is_uppercase() { c.to_ascii_lowercase() }
-                 else { c })
+    let toggled: String = s
+        .chars()
+        .map(|c| {
+            if c.is_lowercase() {
+                c.to_ascii_uppercase()
+            } else if c.is_uppercase() {
+                c.to_ascii_lowercase()
+            } else {
+                c
+            }
+        })
         .collect();
     println!("  toggle  = {toggled:?}");
 }
@@ -173,7 +186,10 @@ fn grapheme_pitfall() {
 
     println!("  '{zwj_emoji}'");
     println!("    .len() bytes        = {}", zwj_emoji.len());
-    println!("    .chars().count()    = {}  ← 视觉上 1 个, 实际 7 个 char", zwj_emoji.chars().count());
+    println!(
+        "    .chars().count()    = {}  ← 视觉上 1 个, 实际 7 个 char",
+        zwj_emoji.chars().count()
+    );
 
     println!("  → 想数'用户看到的字符', 用 unicode-segmentation crate");
 }

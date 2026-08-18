@@ -12,20 +12,24 @@ fn main() {
 
     // 元组解构注意事项
     {
-        let tup: (i32, f64, &str) = (42, 3.14, "hello");
+        let tup: (i32, f64, &str) = (42, 3.5, "hello");
 
         // ❌ 数量不匹配
         // let (a, b) = tup; // 编译错误：expected 3 elements, found 2
 
         // ✅ 用 _ 忽略不需要的元素
         let (a, _, c) = tup;
+        println!("解构后 a = {a}, c = {c}");
 
         // ❌ 类型不匹配
         // let (a, b, c): (i32, i32, i32) = tup; // 编译错误：类型不匹配
 
         // ⚠️ 单元素元组必须有逗号
+        // 刻意保留 `(5)`：演示「没有逗号就不是元组」，clippy 会建议去掉括号
+        #[allow(unused_parens)]
         let single = (5); // 这不是元组！类型是 i32
         let tuple = (5,); // 这才是元组，类型是 (i32,)
+        println!("tuple = {:?}", tuple); // (5,) — 确实是元组
         println!("{}", single * 2); // 10 — 说明 single 是 i32，不是元组
 
         {

@@ -236,15 +236,18 @@ fn main() {
     println!("\n2、多类型参数：Pair<T, U>");
     // ─────────────────────────────────────────
 
-    let p1 = Pair::new(1, "hello");              // T=i32, U=&str
-    let p2 = Pair::new(3.14, true);              // T=f64, U=bool
+    let p1 = Pair::new(1, "hello"); // T=i32, U=&str
+    let p2 = Pair::new(3.5, true); // T=f64, U=bool
 
     println!("  p1.first = {}, p1.second = {}", p1.first, p1.second);
     println!("  p2.first = {}, p2.second = {}", p2.first, p2.second);
 
     // 交换两个字段：Pair<T, U> → Pair<U, T>
     let swapped = p1.swap();
-    println!("  p1.swap() 之后 first = {}, second = {}", swapped.first, swapped.second);
+    println!(
+        "  p1.swap() 之后 first = {}, second = {}",
+        swapped.first, swapped.second
+    );
 
     println!("  Pair 两个类型参数彼此独立，swap() 返回类型也跟着变");
     println!("小结：多参数泛型适合「字段之间没有关系，各自可以是任意类型」的场景");
@@ -254,8 +257,8 @@ fn main() {
     // ─────────────────────────────────────────
 
     // 同一个 Point<T> 模板，产出两种完全不同的类型
-    let p_int = Point::<i32>::new(3, 4);          // 显式写 Point::<i32>::new
-    let p_float = Point::new(3.0_f64, 4.0_f64);   // 由字面量推断出 f64
+    let p_int = Point::<i32>::new(3, 4); // 显式写 Point::<i32>::new
+    let p_float = Point::new(3.0_f64, 4.0_f64); // 由字面量推断出 f64
 
     println!("  p_int    = ({}, {})", p_int.x, p_int.y);
     println!("  p_float  = ({}, {})", p_float.x, p_float.y);
@@ -297,6 +300,8 @@ fn main() {
     let p1 = Point::new(10, 5);
     p1.print_larger();
 
+    // 刻意用 π / e 的近似值演示泛型方法，clippy 会建议使用常量
+    #[allow(clippy::approx_constant)]
     let p2 = Point::new(3.14_f64, 2.71_f64);
     p2.print_larger();
 
@@ -337,11 +342,11 @@ fn main() {
     // ─────────────────────────────────────────
 
     let n = 42;
-    let r = Ref::new(&n);                        // T=i32, 'a='临时
+    let r = Ref::new(&n); // T=i32, 'a='临时
     r.show();
 
     let s = String::from("borrowed");
-    let r2 = Ref::new(&s);                       // T=String, 'a=s 的生命周期
+    let r2 = Ref::new(&s); // T=String, 'a=s 的生命周期
     r2.show();
 
     println!("  结构体可以同时带生命周期 'a 和类型参数 T");

@@ -37,14 +37,17 @@ fn char_count(text: &str) -> usize {
 }
 
 // ✅ 从输入 &str 中截取第一个单词（返回的切片来自参数，生命周期由调用方决定）
+// 刻意保留 `&s[..]`：演示"整个字符串切片"的写法（见下方第 2 节），clippy 会建议直接写 s
+#[allow(clippy::redundant_slicing)]
 fn first_word(s: &str) -> &str {
     // 编译器自动推断生命周期（生命周期省略规则）：
     // fn first_word(s: &str) -> &str
     // 等价于：fn first_word<'a>(s: &'a str) -> &'a str
     let bytes = s.as_bytes(); // 以字节视图遍历字符串
     for (i, &byte) in bytes.iter().enumerate() {
-        if byte == b' ' {    // 找到第一个 ASCII 空格字节
-            return &s[..i];  // 返回空格前的切片（来自参数 s，非局部变量）
+        if byte == b' ' {
+            // 找到第一个 ASCII 空格字节
+            return &s[..i]; // 返回空格前的切片（来自参数 s，非局部变量）
         }
     }
     &s[..] // 没有空格，返回整个字符串的切片
@@ -55,7 +58,7 @@ fn safe_prefix(s: &str, char_count: usize) -> &str {
     // char_indices() 返回 (字节偏移, 字符) 的迭代器，字节偏移是合法的 UTF-8 边界
     match s.char_indices().nth(char_count) {
         Some((byte_idx, _)) => &s[..byte_idx], // byte_idx 是合法字节边界，安全切片
-        None => s,                              // 字符总数不足 char_count，返回全部
+        None => s,                             // 字符总数不足 char_count，返回全部
     }
 }
 
@@ -82,9 +85,9 @@ fn main() {
     let s = String::from("hello, world!"); // 重新绑定 s（遮蔽上面的 s）
     //                    0123456789012   ← 字节索引
     let a = &s[0..5]; // 字节 0~4，"hello"（完整写法）
-    let b = &s[..5];  // 等同于 &s[0..5]，起始索引 0 可省略
-    let c = &s[7..];  // 字节 7 到末尾，"world!"（结束索引可省略）
-    let d = &s[..];   // 整个字符串，等同于 &s[0..s.len()]
+    let b = &s[..5]; // 等同于 &s[0..5]，起始索引 0 可省略
+    let c = &s[7..]; // 字节 7 到末尾，"world!"（结束索引可省略）
+    let d = &s[..]; // 整个字符串，等同于 &s[0..s.len()]
     println!("  s = \"{s}\"");
     println!("  &s[0..5] = \"{a}\"  ← 完整写法，字节 0 到 4（含）");
     println!("  &s[..5]  = \"{b}\"  ← 省略起始索引，从头开始");
@@ -95,15 +98,21 @@ fn main() {
 
     println!("\n3、&str 比 &String 更通用：同一函数接受三种来源");
     let owned = String::from("hello rust world"); // 来源①：String（堆上）
-    let literal = "learn rust today";             // 来源②：字面量（只读段）
-    let slice_str: &str = &owned[6..];            // 来源③：&str 切片，"rust world"
+    let literal = "learn rust today"; // 来源②：字面量（只读段）
+    let slice_str: &str = &owned[6..]; // 来源③：&str 切片，"rust world"
 
     // word_count 参数是 &str，三种来源都能直接传入
     println!("  String 的单词数:   {} (\"{owned}\")", word_count(&owned));
     // &owned 是 &String，会通过 Deref 自动转成 &str，再传入函数
-    println!("  字面量的单词数:    {} (\"{literal}\")", word_count(literal));
+    println!(
+        "  字面量的单词数:    {} (\"{literal}\")",
+        word_count(literal)
+    );
     // &str 字面量直接传，类型完全匹配
-    println!("  切片 &str 的单词数: {} (\"{slice_str}\")", word_count(slice_str));
+    println!(
+        "  切片 &str 的单词数: {} (\"{slice_str}\")",
+        word_count(slice_str)
+    );
     // &str 切片直接传
 
     // ❌ 错误：如果参数写 &String，字面量和切片就无法传入
@@ -118,7 +127,7 @@ fn main() {
     // 字面量在编译时嵌入程序二进制文件的 .rodata（只读数据段）
     // 程序运行的整个生命周期内都有效，因此生命周期是 'static
     let s1: &'static str = "I live in the binary!"; // 显式写出 'static
-    let s2: &str = "me too, inferred!";              // 'static 可省略，编译器推断
+    let s2: &str = "me too, inferred!"; // 'static 可省略，编译器推断
     println!("  s1 = \"{s1}\"");
     println!("  s2 = \"{s2}\"");
     println!("  两者都存储在程序二进制文件中，不在堆上，不需要 String");
@@ -133,13 +142,23 @@ fn main() {
     let zh = String::from("你好，Rust！"); // 中文 UTF-8 字符串
     // UTF-8 编码规则：ASCII 字符 1 字节，中文字符 3 字节，全角标点 3 字节
     println!("  字符串: \"{}\"", zh);
-    println!("  字节数（.len()）:    {}  ← UTF-8 编码的字节总数", zh.len());
-    println!("  字符数（.chars().count()）: {}  ← Unicode 标量值数量", char_count(&zh));
+    println!(
+        "  字节数（.len()）:    {}  ← UTF-8 编码的字节总数",
+        zh.len()
+    );
+    println!(
+        "  字符数（.chars().count()）: {}  ← Unicode 标量值数量",
+        char_count(&zh)
+    );
     println!("  字节边界详细映射：");
     for (byte_idx, ch) in zh.char_indices() {
         // char_indices() 给出每个字符的字节起始偏移
-        println!("    字节偏移 {:2} → 字符 '{}' （占 {} 字节）",
-            byte_idx, ch, ch.len_utf8());
+        println!(
+            "    字节偏移 {:2} → 字符 '{}' （占 {} 字节）",
+            byte_idx,
+            ch,
+            ch.len_utf8()
+        );
     }
 
     // ❌ 危险：按错误的字节边界切片 → 运行时 panic
@@ -213,7 +232,10 @@ fn main() {
 
     // starts_with / ends_with：检查前缀/后缀（不分配新字符串）
     let sentence = "Rust is fast and safe";
-    println!("  starts_with(\"Rust\")   → {}", sentence.starts_with("Rust"));
+    println!(
+        "  starts_with(\"Rust\")   → {}",
+        sentence.starts_with("Rust")
+    );
     println!("  ends_with(\"safe\")     → {}", sentence.ends_with("safe"));
 
     // contains()：检查是否包含子串
@@ -221,7 +243,10 @@ fn main() {
 
     // to_uppercase / to_lowercase：这两个返回新的 String（需要堆分配，因为大小可能变）
     let upper = sentence.to_uppercase();
-    println!("  .to_uppercase()       → \"{}\" (新 String，有分配)", upper);
+    println!(
+        "  .to_uppercase()       → \"{}\" (新 String，有分配)",
+        upper
+    );
 
     println!("小结：split/trim/lines/starts_with 等方法返回 &str，零拷贝；");
     println!("      to_uppercase/to_lowercase 等返回 String，需要堆分配");

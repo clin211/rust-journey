@@ -1,10 +1,13 @@
+// 命令速查表刻意用「{} 占位符 + 字面量」排版输出（bullet 着色 + 文本），
+// clippy 的 print_literal 会建议把字面量内联进格式串，这里全部豁免
+#![allow(clippy::print_literal)]
+
 /// # 07 rustup 与 cargo 常用命令速查
 ///
 /// 本文件以代码注释的形式整理 rustup 和 cargo 最常用的命令，
 /// 方便随时查阅。
 ///
 /// 运行：`cargo run --example 07_commands`
-
 use colored::*;
 
 fn main() {
@@ -30,9 +33,21 @@ fn main() {
     */
 
     println!("  {}  {}", "•".yellow(), "rustup update — 更新到最新稳定版");
-    println!("  {}  {}", "•".yellow(), "rustup default stable/nightly — 切换工具链");
-    println!("  {}  {}", "•".yellow(), "rustup toolchain list — 列出已安装工具链");
-    println!("  {}  {}", "•".yellow(), "rustup target add <target> — 添加交叉编译目标");
+    println!(
+        "  {}  {}",
+        "•".yellow(),
+        "rustup default stable/nightly — 切换工具链"
+    );
+    println!(
+        "  {}  {}",
+        "•".yellow(),
+        "rustup toolchain list — 列出已安装工具链"
+    );
+    println!(
+        "  {}  {}",
+        "•".yellow(),
+        "rustup target add <target> — 添加交叉编译目标"
+    );
 
     // ─────────────────────────────────────
     // rustc — Rust 编译器（一般通过 cargo 间接调用）

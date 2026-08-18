@@ -74,7 +74,7 @@ fn sorted_traversal() {
         (3, "three"),
         (1, "one"),
         (4, "four"),
-        (1, "ONE"),     // 重复 key, 后者覆盖
+        (1, "ONE"), // 重复 key, 后者覆盖
         (5, "five"),
         (9, "nine"),
         (2, "two"),
@@ -108,8 +108,15 @@ fn sorted_traversal() {
 
 fn range_demo() {
     let mut scores = BTreeMap::new();
-    for (k, v) in [("alex", 85), ("bob", 72), ("carol", 91), ("david", 60),
-                   ("eve", 78), ("frank", 88), ("grace", 95)] {
+    for (k, v) in [
+        ("alex", 85),
+        ("bob", 72),
+        ("carol", 91),
+        ("david", 60),
+        ("eve", 78),
+        ("frank", 88),
+        ("grace", 95),
+    ] {
         scores.insert(k, v);
     }
 
@@ -152,18 +159,18 @@ fn range_demo() {
 // ============================================================================
 
 fn first_last_demo() {
-    let m: BTreeMap<&str, i32> = BTreeMap::from([
-        ("apple", 1),
-        ("banana", 2),
-        ("cherry", 3),
-    ]);
+    let m: BTreeMap<&str, i32> = BTreeMap::from([("apple", 1), ("banana", 2), ("cherry", 3)]);
 
     println!("  first = {:?}", m.first_key_value());
     println!("  last  = {:?}", m.last_key_value());
 
     // 用作"优先队列"的两端: pop_first / pop_last
     let mut m: BTreeMap<i32, &str> = BTreeMap::from([
-        (3, "three"), (1, "one"), (4, "four"), (1, "ONE"), (5, "five"),
+        (3, "three"),
+        (1, "one"),
+        (4, "four"),
+        (1, "ONE"),
+        (5, "five"),
     ]);
     while let Some((k, v)) = m.pop_first() {
         println!("  pop_first -> ({k}, {v})");
@@ -221,13 +228,17 @@ fn performance_hint() {
     // HashMap
     let mut hm: HashMap<i32, i32> = HashMap::with_capacity(n);
     let t = Instant::now();
-    for i in 0..n as i32 { hm.insert(i, i); }
+    for i in 0..n as i32 {
+        hm.insert(i, i);
+    }
     let t1 = t.elapsed();
 
     // BTreeMap
     let mut bm: BTreeMap<i32, i32> = BTreeMap::new();
     let t = Instant::now();
-    for i in 0..n as i32 { bm.insert(i, i); }
+    for i in 0..n as i32 {
+        bm.insert(i, i);
+    }
     let t2 = t.elapsed();
 
     println!("  插入 {n} 个元素:");
@@ -237,11 +248,15 @@ fn performance_hint() {
     // 查询
     let t = Instant::now();
     let mut sum = 0i64;
-    for i in 0..n as i32 { sum += hm.get(&i).copied().unwrap_or(0) as i64; }
+    for i in 0..n as i32 {
+        sum += hm.get(&i).copied().unwrap_or(0) as i64;
+    }
     let q1 = t.elapsed();
     let t = Instant::now();
     let mut sum2 = 0i64;
-    for i in 0..n as i32 { sum2 += bm.get(&i).copied().unwrap_or(0) as i64; }
+    for i in 0..n as i32 {
+        sum2 += bm.get(&i).copied().unwrap_or(0) as i64;
+    }
     let q2 = t.elapsed();
 
     println!("  查询 {n} 次:");

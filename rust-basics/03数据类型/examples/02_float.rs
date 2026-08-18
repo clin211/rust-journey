@@ -29,8 +29,12 @@ fn main() {
     // let neg_inf = f64::NEG_INFINITY; // 负无穷
     let nan = f64::NAN; // Not a Number
 
-    println!("nan == nan {}", nan == nan); // false！NaN 不等于任何值，包括自己
-    println!("使用 is_nan 函数检测是否是 NaN {}", nan.is_nan()); // true — 用 is_nan() 检测
-    println!("0.0 / 0.0 是 NaN  {}", 0.0 / 0.0); // NaN
-    println!(" 1.0 / 0.0 是 正无穷大 {}", 1.0 / 0.0); // inf
+    // 刻意演示 NaN 语义与 0.0/0.0：clippy 会提示恒假比较 / 恒 NaN，但这是本节教学点
+    #[allow(clippy::eq_op, clippy::zero_divided_by_zero)]
+    {
+        println!("nan == nan {}", nan == nan); // false！NaN 不等于任何值，包括自己
+        println!("使用 is_nan 函数检测是否是 NaN {}", nan.is_nan()); // true — 用 is_nan() 检测
+        println!("0.0 / 0.0 是 NaN  {}", 0.0 / 0.0); // NaN
+        println!(" 1.0 / 0.0 是 正无穷大 {}", 1.0 / 0.0); // inf
+    }
 }

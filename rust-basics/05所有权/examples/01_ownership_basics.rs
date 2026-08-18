@@ -28,7 +28,7 @@ fn main() {
     //    → 因为一个值同一时刻只能有一个 owner
 
     let topic = String::from("borrowing");
-    println!("转移前先借用读取 -> {}", &topic); // 借用：不转移所有权
+    println!("转移前先借用读取 -> {topic}"); // 借用：不转移所有权
     let topic_owner = topic; // 所有权转移给 topic_owner
     println!("转移后由新 owner 继续使用 -> {topic_owner}");
     println!("小结：move 后旧绑定失效，只能通过新 owner 访问数据");
@@ -44,7 +44,7 @@ fn main() {
     // 正确：在外层创建，内层只借用
     let framework = String::from("Actix Web");
     {
-        println!("内层借用 -> {}", &framework); // 借用，不影响 owner
+        println!("内层借用 -> {framework}"); // 借用，不影响 owner
     }
     println!("外层 owner 仍可用 -> {framework}");
     println!("小结：drop 是自动的，不需要手动 free，不会忘记释放");

@@ -8,7 +8,7 @@ fn main() {
     // ❌ 在 Rust 中，语句不能赋值给变量
     // let x = (let y = 5); // 编译错误！let 是语句，不返回值
 
-    // 2. 块表达式：{} 花括号包围的代码块也是表达式
+    // 2、块表达式：{} 花括号包围的代码块也是表达式
     let y = {
         let x = 3;
         x + 1 // ⚠️ 没有分号！这是块的返回值
@@ -16,15 +16,19 @@ fn main() {
     println!("2、块表达式：{{ let x = 3; x + 1 }} = {}", y); // y = 4
 
     // 对比：如果加了分号，块返回 ()
-    let z = {
-        let x = 3;
-        x + 1; // 有分号，变成语句，块返回 ()
-    };
-    println!(
-        "2、加了分号后，块表达式返回：{} = {:?}",
-        "单元类型".green(),
-        z
-    ); // z = ()
+    // 刻意保留「x + 1;」与「let z = 块」演示语句 vs 表达式，clippy 会报 no_effect / let_unit_value
+    #[allow(clippy::let_unit_value, clippy::no_effect, unused_must_use)]
+    {
+        let z = {
+            let x = 3;
+            x + 1; // 有分号，变成语句，块返回 ()
+        };
+        println!(
+            "2、加了分号后，块表达式返回：{} = {:?}",
+            "单元类型".green(),
+            z
+        ); // z = ()
+    }
 
     // 3. 块表达式的实际应用：计算最终价格
     let price = 100;
@@ -33,7 +37,9 @@ fn main() {
         let discounted = price as f64 * (1.0 - discount);
         let tax = 0.08;
         let total = discounted * (1.0 + tax);
-        println!("3、用块表达式计算最终价格: discounted = {discounted} 元, tax = {tax}, total = {total} 元"); // 3、用块表达式计算最终价格: discounted = 80 元, tax = 0.08, total = 86.4 元
+        println!(
+            "3、用块表达式计算最终价格: discounted = {discounted} 元, tax = {tax}, total = {total} 元"
+        ); // 3、用块表达式计算最终价格: discounted = 80 元, tax = 0.08, total = 86.4 元
         total as i32 // ⚠️ 没有分号！这是块的返回值; 显示类型转换会丢掉小数
     };
     println!("3、用块表达式计算最终价格: {final_price} 元"); // 3、用块表达式计算最终价格: 86 元

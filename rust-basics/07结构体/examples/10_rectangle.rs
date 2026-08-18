@@ -47,18 +47,24 @@ impl Rectangle {
 
     // 正方形：边长相同的特殊情况，用专门的命名构造器更清晰
     fn square(side: u32) -> Self {
-        Rectangle { width: side, height: side }
+        Rectangle {
+            width: side,
+            height: side,
+        }
     }
 
     // 从元组构造：常见于解析后得到 (w, h) 的场景
     fn from_tuple(size: (u32, u32)) -> Self {
         let (width, height) = size;
-        Self { width, height }               // 等价于 Rectangle { ... }
+        Self { width, height } // 等价于 Rectangle { ... }
     }
 
     // 单位矩形：1x1，通常用作测试或默认值
     fn unit() -> Self {
-        Rectangle { width: 1, height: 1 }
+        Rectangle {
+            width: 1,
+            height: 1,
+        }
     }
 }
 
@@ -115,7 +121,10 @@ impl Rectangle {
     // 消费原实例 → 返回新实例
     fn into_square(self) -> Rectangle {
         let side = self.width.max(self.height);
-        Rectangle { width: side, height: side }
+        Rectangle {
+            width: side,
+            height: side,
+        }
     }
 
     // 拆成 (width, height) 的元组，消费自身
@@ -132,7 +141,10 @@ fn main() {
     // ─────────────────────────────────────────
 
     // 方式 1：直接用结构体字面量（所有字段显式）
-    let a = Rectangle { width: 30, height: 50 };
+    let a = Rectangle {
+        width: 30,
+        height: 50,
+    };
 
     // 方式 2：关联函数 new
     let b = Rectangle::new(10, 40);
@@ -171,8 +183,8 @@ fn main() {
 
     let r = Rectangle::new(3, 4);
     println!("  r              = {:?}", r);
-    println!("  r.area()       = {}", r.area());        // 12
-    println!("  r.perimeter()  = {}", r.perimeter());   // 14
+    println!("  r.area()       = {}", r.area()); // 12
+    println!("  r.perimeter()  = {}", r.perimeter()); // 14
     println!("  r.diagonal()   = {:.3}", r.diagonal()); // 5.000
 
     println!("  所有这些方法都是 &self：读完就结束，不修改 r");
@@ -186,13 +198,22 @@ fn main() {
     let inner = Rectangle::new(5, 6);
     let too_wide = Rectangle::new(11, 2);
 
-    println!("  outer.can_hold(&inner)          = {}", outer.can_hold(&inner));      // true
-    println!("  outer.can_hold(&too_wide)       = {}", outer.can_hold(&too_wide));   // false
-    println!("  outer.can_hold_inclusive(&outer)= {}", outer.can_hold_inclusive(&outer)); // true (自包含)
+    println!(
+        "  outer.can_hold(&inner)          = {}",
+        outer.can_hold(&inner)
+    ); // true
+    println!(
+        "  outer.can_hold(&too_wide)       = {}",
+        outer.can_hold(&too_wide)
+    ); // false
+    println!(
+        "  outer.can_hold_inclusive(&outer)= {}",
+        outer.can_hold_inclusive(&outer)
+    ); // true (自包含)
 
     let s = Rectangle::square(9);
-    println!("  s.is_square()                   = {}", s.is_square());               // true
-    println!("  r.is_square()                   = {}", r.is_square());               // false
+    println!("  s.is_square()                   = {}", s.is_square()); // true
+    println!("  r.is_square()                   = {}", r.is_square()); // false
 
     println!("  can_hold 是《Rust 权威指南》里的经典题目：不修改、比较两个实例");
     println!("小结：判断类方法天然适合 &self + &other 组合，不涉及所有权转移");
@@ -204,10 +225,10 @@ fn main() {
     let mut m = Rectangle::new(3, 4);
     println!("  初始       m = {:?}", m);
 
-    m.scale(3);                              // 宽高各乘 3：9x12
+    m.scale(3); // 宽高各乘 3：9x12
     println!("  scale(3)    m = {:?}", m);
 
-    m.rotate_90();                           // 交换宽高：12x9
+    m.rotate_90(); // 交换宽高：12x9
     println!("  rotate_90() m = {:?}", m);
 
     println!("  注意：要调用 scale / rotate_90，m 必须是 let mut；");
@@ -219,7 +240,7 @@ fn main() {
     // ─────────────────────────────────────────
 
     let r = Rectangle::new(6, 10);
-    let s = r.into_square();                 // r 被消费（move 进方法）
+    let s = r.into_square(); // r 被消费（move 进方法）
     // println!("{:?}", r);                  // ❌ r 已失效
     println!("  r.into_square() 得到的 s = {:?}", s);
 
@@ -236,12 +257,12 @@ fn main() {
     // ─────────────────────────────────────────
 
     let r1 = Rectangle::new(5, 5);
-    let r2 = r1.clone();                     // 显式深拷贝
+    let r2 = r1.clone(); // 显式深拷贝
     let r3 = Rectangle::new(6, 5);
 
-    println!("  r1 == r2 → {}", r1 == r2);   // true
-    println!("  r1 == r3 → {}", r1 == r3);   // false
-    println!("  r1 仍可用: {:?}", r1);        // clone 不 move 原值
+    println!("  r1 == r2 → {}", r1 == r2); // true
+    println!("  r1 == r3 → {}", r1 == r3); // false
+    println!("  r1 仍可用: {:?}", r1); // clone 不 move 原值
     println!("  r2 仍可用: {:?}", r2);
 
     println!("  Clone 在结构体里非常常见：当你需要「两份独立副本」时用 .clone()");
@@ -253,8 +274,11 @@ fn main() {
 
     // Rectangle 所有字段都是 Copy（u32），是 ..base 最友好的情况
     let base = Rectangle::new(100, 80);
-    let wider = Rectangle { width: 200, ..base };   // height 继承 base
-    let taller = Rectangle { height: 400, ..base }; // width 继承 base
+    let wider = Rectangle { width: 200, ..base }; // height 继承 base
+    let taller = Rectangle {
+        height: 400,
+        ..base
+    }; // width 继承 base
 
     println!("  base   = {:?}", base);
     println!("  wider  = {:?}", wider);
@@ -273,8 +297,8 @@ fn main() {
     let r = Rectangle::new(30, 50);
 
     // dbg! 打印到 stderr，同时附带文件 / 行号 / 表达式原文
-    let w2 = dbg!(r.width * 2);              // 打印 r.width * 2 的值，并返回它
-    let area_dbg = dbg!(r.area());           // 打印方法调用结果
+    let w2 = dbg!(r.width * 2); // 打印 r.width * 2 的值，并返回它
+    let area_dbg = dbg!(r.area()); // 打印方法调用结果
 
     println!("  w2       = {w2}");
     println!("  area_dbg = {area_dbg}");
@@ -288,15 +312,15 @@ fn main() {
     let rects = vec![
         Rectangle::new(3, 4),
         Rectangle::new(10, 2),
-        Rectangle::square(5),                // 5x5 = 25
-        Rectangle::from_tuple((7, 6)),       // 42
-        Rectangle::new(8, 8),                // 64
+        Rectangle::square(5),          // 5x5 = 25
+        Rectangle::from_tuple((7, 6)), // 42
+        Rectangle::new(8, 8),          // 64
     ];
 
     // 只读借用每个矩形，计算面积并找最大
     let largest = rects
-        .iter()                              // 返回 &Rectangle 的迭代器
-        .max_by_key(|r| r.area())            // 根据 area() 选最大
+        .iter() // 返回 &Rectangle 的迭代器
+        .max_by_key(|r| r.area()) // 根据 area() 选最大
         .unwrap();
 
     println!("  所有矩形:");
@@ -368,7 +392,13 @@ mod tests {
     #[test]
     fn from_tuple_destructures_correctly() {
         let r = Rectangle::from_tuple((7, 2));
-        assert_eq!(r, Rectangle { width: 7, height: 2 });
+        assert_eq!(
+            r,
+            Rectangle {
+                width: 7,
+                height: 2
+            }
+        );
     }
 
     #[test]
@@ -494,8 +524,8 @@ mod tests {
     #[test]
     fn scale_then_rotate_works_correctly() {
         let mut r = Rectangle::new(3, 4);
-        r.scale(3);          // 9 x 12
-        r.rotate_90();       // 12 x 9
+        r.scale(3); // 9 x 12
+        r.rotate_90(); // 12 x 9
         assert_eq!(r, Rectangle::new(12, 9));
     }
 

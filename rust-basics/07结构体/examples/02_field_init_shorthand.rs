@@ -37,11 +37,12 @@ struct Point {
 
 // ── 传统写法：字段名和变量名重复 ────────────────────────────────────────────
 // 在简写出现之前，每个字段都得写两遍，对参数多的结构体特别啰嗦。
-#[allow(clippy::needless_return)]
+// 刻意保留冗余写法（return、重复字段名）演示"简写前"的样子，clippy 会建议精简
+#[allow(clippy::needless_return, clippy::redundant_field_names)]
 fn build_user_verbose(username: String, email: String) -> User {
     return User {
-        username: username,  // 这里「username: username」冗余
-        email: email,        // 这里「email: email」也冗余
+        username: username, // 这里「username: username」冗余
+        email: email,       // 这里「email: email」也冗余
         age: 0,
         active: true,
     };
@@ -51,9 +52,9 @@ fn build_user_verbose(username: String, email: String) -> User {
 // 只要参数名和字段名一致，就可以省略 `name:` 重复部分。
 fn build_user(username: String, email: String) -> User {
     User {
-        username,            // 等价于 username: username
-        email,               // 等价于 email: email
-        age: 0,              // 和字段名不同的名字（比如字面值）仍然要写全
+        username, // 等价于 username: username
+        email,    // 等价于 email: email
+        age: 0,   // 和字段名不同的名字（比如字面值）仍然要写全
         active: true,
     }
 }
@@ -71,7 +72,7 @@ fn build_user_with_age(name_input: String, email: String, age: u32) -> User {
 
 // ── 简写用在 Point 构造器上 ──────────────────────────────────────────────────
 fn make_point(x: f64, y: f64) -> Point {
-    Point { x, y }           // 参数名 x/y 恰好与字段名一致，简写很自然
+    Point { x, y } // 参数名 x/y 恰好与字段名一致，简写很自然
 }
 
 fn main() {
@@ -86,7 +87,7 @@ fn main() {
 
     // 传统写法（不简写）：每个字段写两遍名字
     let _u1 = User {
-        username: username.clone(),  // 注意：这里是为了演示，才 clone 一份
+        username: username.clone(), // 注意：这里是为了演示，才 clone 一份
         email: email.clone(),
         age: 30,
         active: true,
@@ -95,8 +96,8 @@ fn main() {
     // 简写写法：变量 username → 直接 username，
     // 编译器自动理解成 username: username
     let u2 = User {
-        username,                    // 等价于 username: username
-        email,                       // 等价于 email: email
+        username, // 等价于 username: username
+        email,    // 等价于 email: email
         age: 30,
         active: true,
     };
@@ -113,17 +114,17 @@ fn main() {
     println!("\n2、典型场景：工厂函数（build_user）");
     // ─────────────────────────────────────────
 
-    let user_ver = build_user_verbose(
-        String::from("verbose"),
-        String::from("verbose@example.com"),
-    );
-    let user_sho = build_user(
-        String::from("short"),
-        String::from("short@example.com"),
-    );
+    let user_ver = build_user_verbose(String::from("verbose"), String::from("verbose@example.com"));
+    let user_sho = build_user(String::from("short"), String::from("short@example.com"));
 
-    println!("  build_user_verbose 返回: username={}, age={}", user_ver.username, user_ver.age);
-    println!("  build_user         返回: username={}, age={}", user_sho.username, user_sho.age);
+    println!(
+        "  build_user_verbose 返回: username={}, age={}",
+        user_ver.username, user_ver.age
+    );
+    println!(
+        "  build_user         返回: username={}, age={}",
+        user_sho.username, user_sho.age
+    );
 
     println!("  两个函数行为完全一致，只是写法更紧凑");
     println!("小结：简写最常用在工厂函数里，大幅减少样板代码");
@@ -162,8 +163,10 @@ fn main() {
         username,
     };
 
-    println!("  u4.username = {}, u4.age = {}, u4.active = {}",
-        u4.username, u4.age, u4.active);
+    println!(
+        "  u4.username = {}, u4.age = {}, u4.active = {}",
+        u4.username, u4.age, u4.active
+    );
     println!("  顺序怎么写都可以，最终字段的对应关系看名字");
     println!("小结：Rust 结构体字段是「命名」对齐，而不是「位置」对齐，顺序随意");
 
@@ -172,7 +175,7 @@ fn main() {
     // ─────────────────────────────────────────
 
     let p1 = make_point(3.0, 4.0);
-    let p2 = Point { x: 1.0, y: 2.0 };       // 当然也可以直接写
+    let p2 = Point { x: 1.0, y: 2.0 }; // 当然也可以直接写
 
     println!("  p1 = ({:.1}, {:.1})", p1.x, p1.y);
     println!("  p2 = ({:.1}, {:.1})", p2.x, p2.y);
@@ -180,7 +183,10 @@ fn main() {
     // 搭配临时变量：从参数计算得到 x/y 后再组装
     let dx = 10.0;
     let dy = 20.0;
-    let p3 = Point { x: dx + 1.0, y: dy + 2.0 }; // 这里就不能简写了（不是直接变量）
+    let p3 = Point {
+        x: dx + 1.0,
+        y: dy + 2.0,
+    }; // 这里就不能简写了（不是直接变量）
     println!("  p3 = ({:.1}, {:.1})", p3.x, p3.y);
     println!("  只有「直接一个同名变量」时才能简写，表达式 / 字面量仍需 `field: expr`");
     println!("小结：简写是「最简情况」下的语法糖，复杂表达式请继续用完整语法");
@@ -189,12 +195,12 @@ fn main() {
     println!("\n6、常见误区：不同名字就不能简写");
     // ─────────────────────────────────────────
 
-    let user_name = String::from("dave");    // 变量叫 user_name
+    let user_name = String::from("dave"); // 变量叫 user_name
     // let u = User { username, ... };       // ❌ 字段叫 username，名字不一致
 
     // 正确做法：要么把变量也命名成 username，要么写完整 `field: expr`
     let u5 = User {
-        username: user_name,                 // ✅ 明确写出映射关系
+        username: user_name, // ✅ 明确写出映射关系
         email: String::from("dave@x.com"),
         age: 0,
         active: true,

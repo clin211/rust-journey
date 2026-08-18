@@ -4,6 +4,9 @@ mod mock {
 
 static mut API_URL: &str = "https://api.baidu.com";
 
+// 刻意在 unsafe 块内读取 mutable static（本节教学点：可变静态变量需 unsafe），
+// rustc 2024 edition 的 static_mut_refs lint 会建议改用原子类型/加锁
+#[allow(static_mut_refs)]
 fn get_data() {
     unsafe {
         println!("请求数据: {}", API_URL);
@@ -11,6 +14,7 @@ fn get_data() {
     }
 }
 
+#[allow(static_mut_refs)]
 fn reset_url() {
     unsafe {
         API_URL = "https://new-api.baidu.com";

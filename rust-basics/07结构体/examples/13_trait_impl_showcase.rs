@@ -38,8 +38,8 @@ use std::ops::{Add, AddAssign, Mul};
 // 最常用的做法是 write!(f, "...") / writeln!(f, "...")，就像 println! 但写入 f
 #[derive(Debug)]
 struct Money {
-    amount: i64,                                 // 以「分」为单位，避免浮点精度
-    currency: &'static str,                      // "CNY" / "USD" / "EUR"
+    amount: i64,            // 以「分」为单位，避免浮点精度
+    currency: &'static str, // "CNY" / "USD" / "EUR"
 }
 
 impl Money {
@@ -257,9 +257,9 @@ fn main() {
         println!("  价格: {}", money);
     }
 
-    print_price(1000);                             // i64 → Money
-    print_price((5000, "USD"));                    // (i64, &str) → Money
-    print_price(Money::new(8888, "EUR"));          // 直接传 Money
+    print_price(1000); // i64 → Money
+    print_price((5000, "USD")); // (i64, &str) → Money
+    print_price(Money::new(8888, "EUR")); // 直接传 Money
 
     println!("  一次实现 From，调用方获得多种写法 —— 这就是 Rust 的表达力");
     println!("小结：From<T> 是 Rust 里「隐式转换」的正规入口，标准库到处都在用");
@@ -271,14 +271,14 @@ fn main() {
     let a = Vec2::new(1.0, 2.0);
     let b = Vec2::new(3.0, 4.0);
 
-    let sum = a + b;                               // 触发 Add::add
+    let sum = a + b; // 触发 Add::add
     println!("  a + b   = {:?}", sum);
 
-    let scaled = a * 3.0;                          // 触发 Mul::mul
+    let scaled = a * 3.0; // 触发 Mul::mul
     println!("  a * 3.0 = {:?}", scaled);
 
     let mut acc = Vec2::new(0.0, 0.0);
-    acc += a;                                      // 触发 AddAssign::add_assign
+    acc += a; // 触发 AddAssign::add_assign
     acc += b;
     println!("  acc 累加 a 和 b 后 = {:?}", acc);
 
@@ -301,9 +301,9 @@ fn main() {
 
     // 配合 ..Default::default() 使用：只覆盖需要定制的字段
     let dev_cfg = ServerConfig {
-        port: 9090,                                // 开发用 9090
-        timeout_ms: 10000,                         // 长超时便于调试
-        ..Default::default()                       // 其他字段用默认
+        port: 9090,           // 开发用 9090
+        timeout_ms: 10000,    // 长超时便于调试
+        ..Default::default()  // 其他字段用默认
     };
     println!("  定制后的 dev_cfg = {:?}", dev_cfg);
 
@@ -325,10 +325,13 @@ fn main() {
 
     // 甚至可以链式用迭代器适配器
     let even_fibs: Vec<u64> = Fibonacci::new(20)
-        .filter(|n| n % 2 == 0)                    // 保留偶数
-        .take(5)                                   // 取前 5 个
+        .filter(|n| n % 2 == 0) // 保留偶数
+        .take(5) // 取前 5 个
         .collect();
-    println!("  前 20 个 Fibonacci 里的偶数（取前 5 个）= {:?}", even_fibs);
+    println!(
+        "  前 20 个 Fibonacci 里的偶数（取前 5 个）= {:?}",
+        even_fibs
+    );
 
     // for 循环遍历
     print!("  for 循环遍历 Fibonacci::new(8)：");
@@ -371,7 +374,10 @@ fn main() {
         Vec2::new(0.0, 1.0),
         Vec2::new(-0.5, 0.5),
     ];
-    let total_move = moves.iter().copied().fold(Vec2::new(0.0, 0.0), |acc, v| acc + v);
+    let total_move = moves
+        .iter()
+        .copied()
+        .fold(Vec2::new(0.0, 0.0), |acc, v| acc + v);
     println!("  向量累加结果 = {:?}", total_move);
 
     println!("  自定义类型 + trait 实现 = 和标准库同等地位");

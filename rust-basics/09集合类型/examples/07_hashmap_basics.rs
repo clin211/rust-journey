@@ -34,11 +34,7 @@ fn create_demo() {
     println!("  a = {a:?}");
 
     // 2) HashMap::from
-    let b = HashMap::from([
-        ("apple", 3),
-        ("banana", 2),
-        ("cherry", 5),
-    ]);
+    let b = HashMap::from([("apple", 3), ("banana", 2), ("cherry", 5)]);
     println!("  b = {b:?}");
 
     // 3) collect
@@ -108,7 +104,7 @@ fn ownership_demo() {
     let value = String::from("alice");
 
     let mut m: HashMap<String, String> = HashMap::new();
-    m.insert(key, value);                    // key, value 都被 move
+    m.insert(key, value); // key, value 都被 move
     // println!("{key}");                    // ❌ borrow of moved value
 
     println!("  插入后 m = {m:?}");
@@ -132,20 +128,20 @@ fn ownership_demo() {
 // Rust 默认随机化 hasher seed, 让顺序不可预测。
 
 fn iter_demo() {
-    let mut m = HashMap::from([
-        ("alice", 95),
-        ("bob", 87),
-        ("carol", 78),
-    ]);
+    let mut m = HashMap::from([("alice", 95), ("bob", 87), ("carol", 78)]);
 
     // 只看 key
     print!("  keys:    ");
-    for k in m.keys() { print!("{k} "); }
+    for k in m.keys() {
+        print!("{k} ");
+    }
     println!();
 
     // 只看 value
     print!("  values:  ");
-    for v in m.values() { print!("{v} "); }
+    for v in m.values() {
+        print!("{v} ");
+    }
     println!();
 
     // 都要 (借用)
@@ -156,7 +152,9 @@ fn iter_demo() {
     println!();
 
     // 可变 value
-    for v in m.values_mut() { *v += 1; }
+    for v in m.values_mut() {
+        *v += 1;
+    }
     println!("  values+1 后: {m:?}");
 
     // 消耗式: 把 (K, V) 都拿走
@@ -170,11 +168,7 @@ fn iter_demo() {
 // ============================================================================
 
 fn sorted_iter() {
-    let m = HashMap::from([
-        ("apple", 3),
-        ("banana", 2),
-        ("cherry", 5),
-    ]);
+    let m = HashMap::from([("apple", 3), ("banana", 2), ("cherry", 5)]);
 
     // 把 (K, V) 收集到 Vec, 排序
     let mut pairs: Vec<(&&str, &i32)> = m.iter().collect();
@@ -185,7 +179,7 @@ fn sorted_iter() {
     }
 
     let mut pairs: Vec<(&&str, &i32)> = m.iter().collect();
-    pairs.sort_by(|a, b| b.1.cmp(a.1));   // 按 value 降序
+    pairs.sort_by(|a, b| b.1.cmp(a.1)); // 按 value 降序
     println!("  按 value 降序:");
     for (k, v) in pairs {
         println!("    {k} = {v}");
@@ -216,10 +210,25 @@ fn custom_key_demo() {
     }
 
     let mut scores: HashMap<UserId, i32> = HashMap::new();
-    scores.insert(UserId { region: "us-west-1".into(), id: 1 }, 95);
-    scores.insert(UserId { region: "eu-east-1".into(), id: 1 }, 88);
+    scores.insert(
+        UserId {
+            region: "us-west-1".into(),
+            id: 1,
+        },
+        95,
+    );
+    scores.insert(
+        UserId {
+            region: "eu-east-1".into(),
+            id: 1,
+        },
+        88,
+    );
 
-    let key = UserId { region: "us-west-1".into(), id: 1 };
+    let key = UserId {
+        region: "us-west-1".into(),
+        id: 1,
+    };
     println!("  scores[key] = {:?}", scores.get(&key));
 }
 

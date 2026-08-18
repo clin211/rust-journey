@@ -27,5 +27,5 @@ fn main() {
     let s = "hello🦀";
     println!("s 的字节长度 {}", s.len()); // 9（5 + 4），不是 6
     println!("s 的字符数{}", s.chars().count()); // 6（字符数）
-    println!("s 的字节数{}", s.bytes().count()); // 9（字节数）
+    println!("s 的字节数{}", s.len()); // 9（字节数，与 bytes().count() 等价）
 }

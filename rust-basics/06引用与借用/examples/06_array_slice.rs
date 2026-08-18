@@ -52,10 +52,7 @@ fn summarize(nums: &[i32]) -> String {
         // 恰好两个元素，分别绑定
         [first, second] => format!("两个元素: {first} 和 {second}"),
         // 三个及以上：首尾绑定，中间用 .. 忽略
-        [first, .., last] => format!(
-            "首={first}, 尾={last}, 共 {} 个元素",
-            nums.len()
-        ),
+        [first, .., last] => format!("首={first}, 尾={last}, 共 {} 个元素", nums.len()),
     }
 }
 
@@ -86,9 +83,9 @@ fn main() {
     //                     0   1   2   3   4    ← 索引
 
     let s1: &[i32] = &arr[1..4]; // 索引 1,2,3 → 元素 20, 30, 40
-    let s2: &[i32] = &arr[..];   // 整个数组 → 所有 5 个元素
-    let s3: &[i32] = &arr[3..];  // 索引 3 到末尾 → 元素 40, 50
-    let s4: &[i32] = &arr[..2];  // 索引 0 到 1 → 元素 10, 20
+    let s2: &[i32] = &arr[..]; // 整个数组 → 所有 5 个元素
+    let s3: &[i32] = &arr[3..]; // 索引 3 到末尾 → 元素 40, 50
+    let s4: &[i32] = &arr[..2]; // 索引 0 到 1 → 元素 10, 20
 
     println!("  arr 原始数组     = {:?}", arr);
     println!("  &arr[1..4]      = {:?}  (索引 1,2,3 对应的元素)", s1);
@@ -122,7 +119,7 @@ fn main() {
     // ─────────────────────────────────────────────────────────────────────
     println!("\n3、Vec 切片：Vec<T> 与 &[T] 的关系");
     let vec: Vec<i32> = vec![100, 200, 300, 400, 500]; // Vec 数据分配在堆上
-    let v_all: &[i32] = &vec[..];    // 整个 Vec 的切片（等同于 vec.as_slice()）
+    let v_all: &[i32] = &vec[..]; // 整个 Vec 的切片（等同于 vec.as_slice()）
     let v_part: &[i32] = &vec[1..3]; // 部分切片：200, 300
 
     println!("  vec（Vec<i32>，数据在堆）= {:?}", vec);
@@ -136,16 +133,28 @@ fn main() {
 
     // ─────────────────────────────────────────────────────────────────────
     println!("\n4、函数参数写 &[T] 比 &Vec<T> 更通用（演示同一函数接受多种来源）");
-    let arr2: [i32; 4] = [1, 2, 3, 4];          // 栈上固定大小数组
-    let vec2: Vec<i32> = vec![10, 20, 30];       // 堆上动态数组
-    let slice2: &[i32] = &arr2[1..];             // 另一个切片
+    let arr2: [i32; 4] = [1, 2, 3, 4]; // 栈上固定大小数组
+    let vec2: Vec<i32> = vec![10, 20, 30]; // 堆上动态数组
+    let slice2: &[i32] = &arr2[1..]; // 另一个切片
 
     // sum() 参数是 &[i32]，三种来源都可以直接传入
-    println!("  sum(&arr2)        = {}  (数组 [i32;4] → &[i32] 自动强制转换)", sum(&arr2));
-    println!("  sum(&vec2)        = {}  (Vec<i32> → &[i32] 通过 Deref)", sum(&vec2));
+    println!(
+        "  sum(&arr2)        = {}  (数组 [i32;4] → &[i32] 自动强制转换)",
+        sum(&arr2)
+    );
+    println!(
+        "  sum(&vec2)        = {}  (Vec<i32> → &[i32] 通过 Deref)",
+        sum(&vec2)
+    );
     println!("  sum(slice2)       = {}  (&[i32] 直接传入)", sum(slice2));
-    println!("  sum(&arr2[..2])   = {}  (数组切片的切片)", sum(&arr2[..2]));
-    println!("  sum(&vec2[1..])   = {}  (Vec 的部分切片)", sum(&vec2[1..]));
+    println!(
+        "  sum(&arr2[..2])   = {}  (数组切片的切片)",
+        sum(&arr2[..2])
+    );
+    println!(
+        "  sum(&vec2[1..])   = {}  (Vec 的部分切片)",
+        sum(&vec2[1..])
+    );
     println!();
 
     // ❌ 如果参数写成 &Vec<i32>，数组和切片就无法传入
@@ -193,11 +202,18 @@ fn main() {
 
     // 空切片的安全访问
     let empty: &[i32] = &[];
-    println!("  空切片 first() = {:?}, last() = {:?}", empty.first(), empty.last());
+    println!(
+        "  空切片 first() = {:?}, last() = {:?}",
+        empty.first(),
+        empty.last()
+    );
     // ❌ 危险：直接下标访问空切片会 panic
     // let _ = empty[0]; // panic: index out of bounds: the len is 0 but the index is 0
     // ✅ 安全：用 first()/last() 或 get(i) 返回 Option，不会 panic
-    println!("  空切片 get(0)  = {:?}", empty.get(0)); // 返回 None，不 panic
+    // 刻意演示 get(0) 在空切片上安全返回 None，clippy 会建议 first()
+    #[allow(clippy::get_first)]
+    let first = empty.get(0);
+    println!("  空切片 get(0)  = {first:?}"); // 返回 None，不 panic
 
     println!("小结：用 first()/last()/get() 替代直接下标访问，避免越界 panic");
 
@@ -234,9 +250,9 @@ fn main() {
     // ✅ 正确：先用完不可变借用，再创建可变借用
     let mut v = vec![1, 2, 3];
     let read = &v[..];
-    println!("  先读: {:?}", read);       // read 借用在此结束（NLL）
+    println!("  先读: {:?}", read); // read 借用在此结束（NLL）
     let write = &mut v[..];
-    write[0] = 100;                       // 通过可变切片修改第一个元素
+    write[0] = 100; // 通过可变切片修改第一个元素
     println!("  再写后 v: {:?}", v);
 
     println!("小结：&mut [T] 可原地修改元素，sort()/iter_mut() 是常用操作，借用规则同样适用");
@@ -285,7 +301,10 @@ fn main() {
             [head, rest @ ..] => {
                 // head 是第一个元素，rest 是剩余切片
                 let rest_sum: i32 = rest.iter().sum();
-                println!("    → 头部: {head}，剩余 {} 个元素之和: {rest_sum}", rest.len());
+                println!(
+                    "    → 头部: {head}，剩余 {} 个元素之和: {rest_sum}",
+                    rest.len()
+                );
             }
         }
     }

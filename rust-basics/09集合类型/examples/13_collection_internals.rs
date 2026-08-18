@@ -20,10 +20,22 @@ use std::mem::size_of;
 // ============================================================================
 
 fn stack_sizes() {
-    println!("  size_of::<Vec<i32>>()       = {} B (ptr+len+cap)", size_of::<Vec<i32>>());
-    println!("  size_of::<String>()         = {} B (= Vec<u8>)", size_of::<String>());
-    println!("  size_of::<HashMap<u64, u64>>() = {} B", size_of::<HashMap<u64, u64>>());
-    println!("  size_of::<BTreeMap<u64, u64>>() = {} B", size_of::<BTreeMap<u64, u64>>());
+    println!(
+        "  size_of::<Vec<i32>>()       = {} B (ptr+len+cap)",
+        size_of::<Vec<i32>>()
+    );
+    println!(
+        "  size_of::<String>()         = {} B (= Vec<u8>)",
+        size_of::<String>()
+    );
+    println!(
+        "  size_of::<HashMap<u64, u64>>() = {} B",
+        size_of::<HashMap<u64, u64>>()
+    );
+    println!(
+        "  size_of::<BTreeMap<u64, u64>>() = {} B",
+        size_of::<BTreeMap<u64, u64>>()
+    );
     println!();
     println!("  → 容器在栈上都是固定大小, 真正的数据存堆上");
     println!("  → Vec / String 都是 24 B (3 个 usize: ptr/len/cap)");
@@ -61,7 +73,11 @@ fn vec_growth() {
             println!("    push #{i}: capacity 变了 → {}", v.capacity());
         }
     }
-    println!("    所有 push 都不需要 realloc, len={}, cap={}", v.len(), v.capacity());
+    println!(
+        "    所有 push 都不需要 realloc, len={}, cap={}",
+        v.len(),
+        v.capacity()
+    );
 }
 
 // ============================================================================
@@ -81,7 +97,7 @@ fn shrink_demo() {
 
     let mut v: Vec<u64> = (0..1000).collect();
     v.truncate(10);
-    v.shrink_to(50);                     // 至少保留 50 槽位
+    v.shrink_to(50); // 至少保留 50 槽位
     println!("  shrink_to(50):    len={}, cap={}", v.len(), v.capacity());
 }
 
@@ -118,13 +134,17 @@ fn with_capacity_perf() {
     // 不预分配
     let t = Instant::now();
     let mut v: Vec<i32> = Vec::new();
-    for i in 0..n { v.push(i); }
+    for i in 0..n {
+        v.push(i);
+    }
     let t1 = t.elapsed();
 
     // with_capacity
     let t = Instant::now();
     let mut v: Vec<i32> = Vec::with_capacity(n as usize);
-    for i in 0..n { v.push(i); }
+    for i in 0..n {
+        v.push(i);
+    }
     let t2 = t.elapsed();
 
     println!("  push {n} 次:");
@@ -134,12 +154,16 @@ fn with_capacity_perf() {
     // HashMap 同理
     let t = Instant::now();
     let mut m: HashMap<i32, i32> = HashMap::new();
-    for i in 0..(n / 10) { m.insert(i, i); }
+    for i in 0..(n / 10) {
+        m.insert(i, i);
+    }
     let t1 = t.elapsed();
 
     let t = Instant::now();
     let mut m: HashMap<i32, i32> = HashMap::with_capacity((n / 10) as usize);
-    for i in 0..(n / 10) { m.insert(i, i); }
+    for i in 0..(n / 10) {
+        m.insert(i, i);
+    }
     let t2 = t.elapsed();
 
     println!("  insert {} 次 (HashMap):", n / 10);
@@ -184,7 +208,9 @@ fn buffer_reuse_demo() {
     let mut total = 0usize;
     for _ in 0..n {
         let mut s = String::new();
-        for w in &words { s.push_str(w); }
+        for w in &words {
+            s.push_str(w);
+        }
         total += s.len();
     }
     let t1 = t.elapsed();
@@ -195,7 +221,9 @@ fn buffer_reuse_demo() {
     let mut total2 = 0usize;
     for _ in 0..n {
         s.clear();
-        for w in &words { s.push_str(w); }
+        for w in &words {
+            s.push_str(w);
+        }
         total2 += s.len();
     }
     let t2 = t.elapsed();

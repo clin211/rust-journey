@@ -20,6 +20,8 @@ fn main() {
     // let v: i32;
     // println!("{}", v); // 使用未初始化的变量会报错
 
+    // 刻意保留「先声明后初始化」的写法（教学：不推荐），clippy 会建议合并为 let v = 200
+    #[allow(clippy::needless_late_init)]
     let v;
     v = 200;
     println!("{}", v); // 先声明后初始化，容易使用未初始化的变量，不推荐！！！

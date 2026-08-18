@@ -26,10 +26,10 @@ use std::net::IpAddr;
 
 #[derive(Debug)]
 enum Message {
-    Quit,                                 // 单元变体：用户退出
-    Echo(String),                         // 元组变体：广播文本
-    Move { x: i32, y: i32 },              // 结构体变体：移动到坐标
-    ChangeColor(u8, u8, u8),              // 元组变体：RGB
+    Quit,                    // 单元变体：用户退出
+    Echo(String),            // 元组变体：广播文本
+    Move { x: i32, y: i32 }, // 结构体变体：移动到坐标
+    ChangeColor(u8, u8, u8), // 元组变体：RGB
 }
 
 fn process_message(msg: &Message) {
@@ -77,8 +77,8 @@ fn process_message(msg: &Message) {
 
 #[derive(Debug)]
 enum MyIpAddr {
-    V4(u8, u8, u8, u8),          // 四段
-    V6(String),                  // 简化：直接存字符串
+    V4(u8, u8, u8, u8), // 四段
+    V6(String),         // 简化：直接存字符串
 }
 
 fn describe_ip(addr: &MyIpAddr) -> String {
@@ -104,15 +104,18 @@ enum LogLevel {
 
 #[derive(Debug)]
 enum AppEvent {
-    UserSignedIn { user_id: u64, ip: IpAddr },
+    UserSignedIn {
+        user_id: u64,
+        ip: IpAddr,
+    },
     UserSignedOut(u64),
     ConfigChanged {
         key: String,
-        old: Option<String>,    // Option<String> 也是个 enum
+        old: Option<String>, // Option<String> 也是个 enum
         new: Option<String>,
     },
-    Log(LogLevel, String),      // 嵌套另一个 enum
-    Errors(Vec<String>),        // 一次报告一组错误
+    Log(LogLevel, String), // 嵌套另一个 enum
+    Errors(Vec<String>),   // 一次报告一组错误
 }
 
 fn handle_event(ev: &AppEvent) {
@@ -190,10 +193,7 @@ fn main() {
             new: Some("debug".into()),
         },
         AppEvent::Log(LogLevel::Warn, "接近内存上限".into()),
-        AppEvent::Errors(vec![
-            "数据库连接超时".into(),
-            "缓存未命中".into(),
-        ]),
+        AppEvent::Errors(vec!["数据库连接超时".into(), "缓存未命中".into()]),
     ];
     for ev in &events {
         handle_event(ev);

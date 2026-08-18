@@ -1,3 +1,7 @@
+// 本文件刻意用「占位符 + 字符串字面量参数」演示 {}、{0}、{name} 语法，
+// clippy 的 print_literal 会建议把字面量直接写进格式串，这里全部豁免
+#![allow(clippy::print_literal)]
+
 use colored::*;
 
 /// 格式化占位符的几种用法

@@ -107,7 +107,10 @@ struct Order {
 
 impl Order {
     fn new(id: u64) -> Self {
-        Order { id, state: OrderState::Created }
+        Order {
+            id,
+            state: OrderState::Created,
+        }
     }
 
     /// 事件触发的状态转移：用 match 把所有合法转换枚举出来，其它一律拒绝。
@@ -192,7 +195,11 @@ impl Connection {
 
     fn retry(self) -> Self {
         match self {
-            Connection::Connected { host, port, retries } => Connection::Connected {
+            Connection::Connected {
+                host,
+                port,
+                retries,
+            } => Connection::Connected {
                 host,
                 port,
                 retries: retries + 1,
@@ -276,11 +283,7 @@ fn main() {
     let mut o = Order::new(1001);
     println!("  初始: {:?}", o);
 
-    for event in [
-        OrderEvent::Pay,
-        OrderEvent::Ship,
-        OrderEvent::Deliver,
-    ] {
+    for event in [OrderEvent::Pay, OrderEvent::Ship, OrderEvent::Deliver] {
         match o.apply(event) {
             Ok(()) => println!("  事件后: {:?}", o),
             Err(e) => println!("  非法转换: {:?}", e),
@@ -314,7 +317,10 @@ fn main() {
     println!("  失败路径: {c:?}");
 
     println!("\n===== 4. Type-State 风格 =====");
-    let paid = PaidOrder { id: 9001, amount_cents: 19999 };
+    let paid = PaidOrder {
+        id: 9001,
+        amount_cents: 19999,
+    };
     println!("  paid: {paid:?}");
     let shipped = paid.ship("SF Express");
     println!("  shipped: {shipped:?}");

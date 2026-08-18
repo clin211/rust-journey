@@ -44,10 +44,10 @@ struct UserRef<'a> {
 // ── 一个混合字段类型的结构体：演示部分 move ─────────────────────────────────
 #[derive(Debug)]
 struct Document {
-    title: String,                           // 非 Copy：move 后原字段不可再用
-    content: String,                         // 同上
-    length: u32,                             // Copy：不参与 move
-    public: bool,                            // Copy：不参与 move
+    title: String,   // 非 Copy：move 后原字段不可再用
+    content: String, // 同上
+    length: u32,     // Copy：不参与 move
+    public: bool,    // Copy：不参与 move
 }
 
 // ── Drop 可视化：观察资源释放顺序 ───────────────────────────────────────────
@@ -97,7 +97,7 @@ fn main() {
         email: "bob@x.com".into(),
     };
 
-    let u2 = u1;                             // 整个 u1 move 到 u2
+    let u2 = u1; // 整个 u1 move 到 u2
     // println!("{:?}", u1);                 // ❌ u1 已经 move
     println!("  u2 = {:?}", u2);
     println!("  ⚠️ 原 u1 已经被 move，无法再访问");
@@ -114,7 +114,7 @@ fn main() {
     // 传值：move 进函数
     fn take(u: User) -> User {
         println!("    take: {:?}", u);
-        u                                    // 再把所有权还回来
+        u // 再把所有权还回来
     }
 
     // 只读借用
@@ -133,9 +133,9 @@ fn main() {
         email: "c@x.com".into(),
     };
 
-    peek(&user);                             // 借用，不 move
-    bump_id(&mut user);                      // 可变借用
-    let user = take(user);                   // move 进 take，再接收返回值
+    peek(&user); // 借用，不 move
+    bump_id(&mut user); // 可变借用
+    let user = take(user); // move 进 take，再接收返回值
     println!("  最终 user = {:?}", user);
 
     println!("  跟基本类型一样：传值 move、&借用、&mut 可变借用");
@@ -162,9 +162,9 @@ fn main() {
     //   - doc.content：非 Copy，但没有被 move，仍然可以单独访问（甚至再 move）
     //   - doc.length / doc.public：Copy 字段，本就不参与 move，永远可读
     println!("  stolen_title = {stolen_title}");
-    println!("  doc.content  = {}", doc.content);   // ✅ 没被 move，可单独访问
-    println!("  doc.length   = {}", doc.length);    // ✅ Copy
-    println!("  doc.public   = {}", doc.public);    // ✅ Copy
+    println!("  doc.content  = {}", doc.content); // ✅ 没被 move，可单独访问
+    println!("  doc.length   = {}", doc.length); // ✅ Copy
+    println!("  doc.public   = {}", doc.public); // ✅ Copy
 
     // 再把 content 也 move 出来
     let stolen_content = doc.content;
@@ -189,11 +189,11 @@ fn main() {
 
     // 借用 &str 的 UserRef：只是一张「看见外部字符串」的名片
     let n = String::from("borrowed-name");
-    let e = "borrowed@static";               // 字面量是 &'static str
+    let e = "borrowed@static"; // 字面量是 &'static str
     let borrowed = UserRef {
         id: 2,
-        name: &n,                            // 借用 n
-        email: e,                            // 借用字面量
+        name: &n, // 借用 n
+        email: e, // 借用字面量
     };
 
     println!("  owned  = {:?}", owned);
@@ -232,7 +232,7 @@ fn main() {
     // 可以同时借用多个不同的字段（Rust 支持分字段借用）
     // 注意：是「不同字段」才可以同时 &mut，同一字段不能同时 &mut 两次
     fn split_borrow(u: &mut User) -> (&mut u64, &mut String) {
-        (&mut u.id, &mut u.name)             // 同一结构体的两个「不同字段」可同时 &mut
+        (&mut u.id, &mut u.name) // 同一结构体的两个「不同字段」可同时 &mut
     }
 
     let mut u2 = User {
@@ -242,7 +242,7 @@ fn main() {
     };
     let (id_mut, name_mut) = split_borrow(&mut u2);
     *id_mut += 1;
-    name_mut.push_str("!");
+    name_mut.push('!');
     println!("  分字段借用后：u2.id = {}, u2.name = {}", u2.id, u2.name);
 
     println!("  Rust 的借用分析是「字段级」的，不同字段可以同时被可变借用");

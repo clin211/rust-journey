@@ -39,6 +39,8 @@ fn fill_vec(v: &mut Vec<i32>, count: usize) {
 }
 
 // 通过 &mut Vec<i32> 将所有元素翻倍（原地修改）
+// 刻意保留 &mut Vec<i32> 签名：本节主题是「可变引用指向 Vec」，clippy 会建议 &mut [i32]
+#[allow(clippy::ptr_arg)]
 fn double_all(v: &mut Vec<i32>) {
     for elem in v.iter_mut() {
         // iter_mut() 返回对每个元素的可变引用
@@ -102,7 +104,7 @@ fn main() {
 
     // ✅ 正确：同一时刻只创建一个可变引用
     let r1 = &mut data; // 唯一的可变引用，合法
-    r1.push_str("！"); // 通过 r1 修改
+    r1.push('！'); // 通过 r1 修改
     println!("  通过 r1 修改后: {r1}");
     // r1 的最后一次使用在上面，借用在此结束（NLL）
 

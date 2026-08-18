@@ -29,8 +29,8 @@
 //   预分配          Vec::with_capacity(1024)      已知大约要塞多少，避免反复 realloc
 
 fn create_demo() {
-    let a: Vec<i32> = Vec::new();              // 类型必须靠注解或后续推断给出
-    let b = vec![1, 2, 3, 4, 5];               // 自动推断为 Vec<i32>
+    let a: Vec<i32> = Vec::new(); // 类型必须靠注解或后续推断给出
+    let b = vec![1, 2, 3, 4, 5]; // 自动推断为 Vec<i32>
     let c: Vec<String> = Vec::with_capacity(8); // 预分配容量
 
     println!("  a = {a:?}, len={}, cap={}", a.len(), a.capacity());
@@ -65,11 +65,11 @@ fn add_demo() {
 
     // insert(idx, value): 在 idx 插入，后面元素整体后移 → O(n)
     v.insert(1, 99);
-    println!("  insert(1, 99) 后 = {v:?}");      // [10, 99, 20, 30]
+    println!("  insert(1, 99) 后 = {v:?}"); // [10, 99, 20, 30]
 
     // extend：把另一个迭代器的所有元素塞进来
     v.extend([100, 200, 300]);
-    v.extend(40..43);                            // 0..N 也是 IntoIterator
+    v.extend(40..43); // 0..N 也是 IntoIterator
     println!("  extend 完后 = {v:?}");
 
     // 注意：extend 不消费 v 自己, 等价于反复 push
@@ -92,13 +92,13 @@ fn remove_demo() {
     let mut v = vec![10, 20, 30, 40, 50];
     println!("  原始: {v:?}");
 
-    let last = v.pop();                        // Some(50), 末尾被取走
+    let last = v.pop(); // Some(50), 末尾被取走
     println!("  pop()        => {last:?},  v={v:?}");
 
-    let removed = v.remove(0);                 // 拿走第 0 个, 后面所有元素左移
+    let removed = v.remove(0); // 拿走第 0 个, 后面所有元素左移
     println!("  remove(0)    => {removed},  v={v:?}");
 
-    let swapped = v.swap_remove(0);            // 用末尾填回当前位置 → 顺序乱
+    let swapped = v.swap_remove(0); // 用末尾填回当前位置 → 顺序乱
     println!("  swap_remove  => {swapped},  v={v:?}");
 
     let mut v2 = vec![1, 2, 3, 4, 5];
@@ -110,7 +110,11 @@ fn remove_demo() {
     println!("  truncate(2)  => v3={v3:?}");
 
     v3.clear();
-    println!("  clear()      => v3={v3:?}, len={}, cap={}", v3.len(), v3.capacity());
+    println!(
+        "  clear()      => v3={v3:?}, len={}, cap={}",
+        v3.len(),
+        v3.capacity()
+    );
 }
 
 // ============================================================================
@@ -130,7 +134,7 @@ fn access_demo() {
 
     // 安全访问 get
     println!("  v.get(0)  = {:?}", v.get(0));
-    println!("  v.get(10) = {:?}", v.get(10));   // None
+    println!("  v.get(10) = {:?}", v.get(10)); // None
 
     // first / last 直接给 Option<&T>
     println!("  v.first() = {:?}", v.first());
@@ -159,17 +163,22 @@ fn iter_demo() {
 
     // 不可变遍历
     print!("  iter:     ");
-    for x in &v { print!("{x} "); }
+    for x in &v {
+        print!("{x} ");
+    }
     println!();
 
     // 可变遍历
     let mut v2 = vec![1, 2, 3, 4, 5];
-    for x in &mut v2 { *x *= 10; }
+    for x in &mut v2 {
+        *x *= 10;
+    }
     println!("  iter_mut: {v2:?}");
 
     // 消耗式遍历: 之后 v3 就不能用了
     let v3 = vec!["a".to_string(), "b".to_string()];
-    for s in v3 {                                // for s in v3 = into_iter
+    for s in v3 {
+        // for s in v3 = into_iter
         println!("  into_iter: 拿走了 {s}");
     }
     // println!("{v3:?}");                       // ❌ borrow of moved value
@@ -212,23 +221,23 @@ fn capacity_demo() {
 
 fn ownership_demo() {
     let v1 = vec![1, 2, 3];
-    let v2 = v1;                               // move: v1 所有权交给 v2
+    let v2 = v1; // move: v1 所有权交给 v2
     // println!("{v1:?}");                     // ❌ v1 已经 move 走
 
-    let v3 = v2.clone();                       // 深拷贝
+    let v3 = v2.clone(); // 深拷贝
     println!("  v2 = {v2:?}");
     println!("  v3 = {v3:?}, 这是独立的一份数据");
 
     // Vec<T: Copy> 元素的 indexing 不会 move 整个 Vec
     let v4 = vec![10, 20, 30];
-    let x = v4[0];                             // i32 是 Copy, 直接复制
+    let x = v4[0]; // i32 是 Copy, 直接复制
     println!("  v4[0] = {x}, v4 仍可用 = {v4:?}");
 
     // Vec<String> 的元素是 String (非 Copy), 直接 v[0] 会试图 move
     let v5 = vec!["a".to_string(), "b".to_string()];
     // let s = v5[0];                          // ❌ cannot move out of index
-    let s = &v5[0];                            // ✅ 借用
-    let s2 = v5[0].clone();                    // ✅ 显式 clone
+    let s = &v5[0]; // ✅ 借用
+    let s2 = v5[0].clone(); // ✅ 显式 clone
     println!("  v5[0] 借用 = {s}, clone = {s2}");
 }
 
@@ -253,8 +262,14 @@ fn ownership_demo() {
 
 fn layout_hint() {
     use std::mem::size_of;
-    println!("  size_of::<Vec<i32>>()    = {} B (栈上 ptr+len+cap)", size_of::<Vec<i32>>());
-    println!("  size_of::<Vec<String>>() = {} B (一样大, 因为只是个胖指针)", size_of::<Vec<String>>());
+    println!(
+        "  size_of::<Vec<i32>>()    = {} B (栈上 ptr+len+cap)",
+        size_of::<Vec<i32>>()
+    );
+    println!(
+        "  size_of::<Vec<String>>() = {} B (一样大, 因为只是个胖指针)",
+        size_of::<Vec<String>>()
+    );
 }
 
 fn main() {

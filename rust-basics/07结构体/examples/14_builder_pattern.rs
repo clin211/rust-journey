@@ -1,3 +1,6 @@
+// 对比表格刻意用「{} 占位符 + 字面量」排版（对齐列宽），
+// clippy 的 print_literal 会建议把字面量内联进格式串，这里全部豁免
+#![allow(clippy::print_literal)]
 #![allow(dead_code)]
 
 use colored::*;
@@ -78,11 +81,11 @@ impl LightConfig {
 // 目标结构体：我们希望构建出这个
 #[derive(Debug)]
 struct HttpRequest {
-    method: String,                              // 必填
-    url: String,                                 // 必填
-    headers: Vec<(String, String)>,              // 可选：默认为空
-    body: Option<String>,                        // 可选：默认为 None
-    timeout_secs: u64,                           // 可选：默认为 30
+    method: String,                 // 必填
+    url: String,                    // 必填
+    headers: Vec<(String, String)>, // 可选：默认为空
+    body: Option<String>,           // 可选：默认为 None
+    timeout_secs: u64,              // 可选：默认为 30
 }
 
 // Builder 专用的错误类型：用 enum 表达各种可能的校验失败
@@ -112,7 +115,7 @@ impl std::error::Error for BuildError {}
 struct HttpRequestBuilder {
     method: Option<String>,
     url: Option<String>,
-    headers: Vec<(String, String)>,              // 没必要 Option，空 Vec 就是「未设置」
+    headers: Vec<(String, String)>, // 没必要 Option，空 Vec 就是「未设置」
     body: Option<String>,
     timeout_secs: Option<u64>,
 }
@@ -184,8 +187,8 @@ impl HttpRequest {
 // =============================================================================
 
 // 状态标签：单元结构体，零大小
-struct Empty;                                    // 未设置
-struct Set;                                      // 已设置
+struct Empty; // 未设置
+struct Set; // 已设置
 
 // Builder 带两个类型参数：分别表示 url 和 method 是否已设置
 // PhantomData 让这些状态参数只存在于类型系统中，运行时零开销
@@ -269,9 +272,7 @@ fn main() {
     // ─────────────────────────────────────────
 
     // 简单场景：字段全部可选，默认就够用
-    let cfg = LightConfig::new("my-app")
-        .verbose(true)
-        .threads(8);
+    let cfg = LightConfig::new("my-app").verbose(true).threads(8);
 
     println!("  cfg = {:?}", cfg);
 
@@ -301,9 +302,7 @@ fn main() {
     println!("  构建成功：{:?}", req);
 
     // 校验失败：缺少 url
-    let bad = HttpRequest::builder()
-        .method("GET")
-        .build();
+    let bad = HttpRequest::builder().method("GET").build();
 
     match bad {
         Ok(_) => println!("  不应该成功"),
@@ -345,8 +344,8 @@ fn main() {
 
     // 顺序可以随便颠倒，只要最终 url 和 method 都设置了就行
     let req2 = RequestBuilder::new()
-        .method("POST")                          // 先 method
-        .url("https://api.example.com")          // 再 url
+        .method("POST") // 先 method
+        .url("https://api.example.com") // 再 url
         .build();
 
     println!("  顺序颠倒也 OK：{:?}", req2);
@@ -385,14 +384,23 @@ fn main() {
     println!("\n4、三种 builder 对比");
     // ─────────────────────────────────────────
 
-    println!("  {:<30} {:<15} {:<20} {}", "方式", "复杂度", "必填检查", "推荐场景");
+    println!(
+        "  {:<30} {:<15} {:<20} {}",
+        "方式", "复杂度", "必填检查", "推荐场景"
+    );
     println!("  {:-<30} {:-<15} {:-<20} {:-<30}", "", "", "", "");
-    println!("  {:<30} {:<15} {:<20} {}",
-        "with_xxx 链式（第一层）", "★☆☆☆☆", "无", "字段全可选、内部工具");
-    println!("  {:<30} {:<15} {:<20} {}",
-        "独立 Builder + Result", "★★★☆☆", "运行时", "生产库、对外 API");
-    println!("  {:<30} {:<15} {:<20} {}",
-        "Type-State Builder", "★★★★☆", "编译期", "强一致性关键 API");
+    println!(
+        "  {:<30} {:<15} {:<20} {}",
+        "with_xxx 链式（第一层）", "★☆☆☆☆", "无", "字段全可选、内部工具"
+    );
+    println!(
+        "  {:<30} {:<15} {:<20} {}",
+        "独立 Builder + Result", "★★★☆☆", "运行时", "生产库、对外 API"
+    );
+    println!(
+        "  {:<30} {:<15} {:<20} {}",
+        "Type-State Builder", "★★★★☆", "编译期", "强一致性关键 API"
+    );
 
     println!("  大多数情况下第二层就够用了，第三层留给真正需要零错误容忍的场景");
     println!("小结：选型核心是「错误检查发生在什么时候」——运行时 vs 编译期");

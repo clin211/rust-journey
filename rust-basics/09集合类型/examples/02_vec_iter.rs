@@ -19,7 +19,7 @@
     clippy::useless_vec,
     clippy::iter_count,
     clippy::unnecessary_fold,
-    clippy::iter_cloned_collect,
+    clippy::iter_cloned_collect
 )]
 
 // ============================================================================
@@ -36,7 +36,7 @@ fn three_iters() {
     let v = vec![1, 2, 3];
 
     // iter()：只读
-    let sum: i32 = v.iter().sum();           // 1+2+3 = 6
+    let sum: i32 = v.iter().sum(); // 1+2+3 = 6
     println!("  iter sum = {sum}, v 仍可用 = {v:?}");
 
     // iter_mut()：可变
@@ -127,14 +127,21 @@ fn consumers() {
     println!("  max      = {:?}", v.iter().max());
 
     let by_abs: Vec<i32> = vec![-5, 3, -2, 4];
-    println!("  max_by_key abs = {:?}", by_abs.iter().max_by_key(|x| x.abs()));
+    println!(
+        "  max_by_key abs = {:?}",
+        by_abs.iter().max_by_key(|x| x.abs())
+    );
 
     // fold: 通用的"折叠/累积"
     let sum_via_fold: i32 = v.iter().fold(0, |acc, x| acc + x);
     println!("  fold sum = {sum_via_fold}");
 
     let csv: String = v.iter().fold(String::new(), |acc, x| {
-        if acc.is_empty() { x.to_string() } else { format!("{acc},{x}") }
+        if acc.is_empty() {
+            x.to_string()
+        } else {
+            format!("{acc},{x}")
+        }
     });
     println!("  fold csv = {csv}");
 
@@ -188,7 +195,7 @@ fn collect_demo() {
 
     // 收成 String：直接 join
     let words = vec!["hello", "rust", "world"];
-    let joined: String = words.join(" ");          // join 比 fold 自然
+    let joined: String = words.join(" "); // join 比 fold 自然
     println!("  join = {joined}");
 
     // turbofish 写法
@@ -204,10 +211,10 @@ fn pipeline_demo() {
     let text = "The 42 quick brown fox jumps over 7 lazy dogs and 1 cat";
 
     let words: Vec<String> = text
-        .split_whitespace()                       // 切词
-        .filter(|w| !w.chars().all(|c| c.is_ascii_digit()))  // 不是纯数字
-        .filter(|w| w.len() >= 4)                 // 长度 >= 4
-        .map(|w| w.to_lowercase())                // 小写化
+        .split_whitespace() // 切词
+        .filter(|w| !w.chars().all(|c| c.is_ascii_digit())) // 不是纯数字
+        .filter(|w| w.len() >= 4) // 长度 >= 4
+        .map(|w| w.to_lowercase()) // 小写化
         .collect();
 
     println!("  pipeline -> {words:?}");
