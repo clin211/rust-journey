@@ -11,5 +11,5 @@ members = [
     "rust-basics/08枚举与模式匹配",
     "rust-basics/09集合类型",
     "rust-primer/01hellword",
-    "code-practice/guessing_game", "rust-primer/cargo-workshop/greeter-core", "rust-primer/cargo-workshop/greeter-cli",
+    "code-practice/guessing_game", "rust-primer/cargo-workshop/greeter-core", "rust-primer/cargo-workshop/greeter-cli", "code-practice/generate-image",
 ]
