@@ -32,7 +32,7 @@ fn main() {
     println!("\n1、String 赋值默认会 move（所有权转移，堆数据不动）");
     let s1 = String::from("hello");
     //         ┌──栈──────────────────┐
-    // s1  →   │ ptr → 堆: "hello"   │
+    // s1  →   │ ptr → 堆: "hello"    │
     //         │ len = 5              │
     //         │ cap = 5              │
     //         └──────────────────────┘

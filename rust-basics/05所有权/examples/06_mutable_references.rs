@@ -43,15 +43,15 @@ fn main() {
     {
         let r1 = &mut language;
         r1.push_str(" language");
-        println!("r1 使用完毕 -> {r1}");
+        println!("r1 使用完毕 -> {r1}"); // r1 使用完毕 -> Rust language
     } // r1 的可变借用在这里结束
 
     {
         let r2 = &mut language; // 前一个 &mut 已结束，可以开新的
         r2.push_str(" ownership");
-        println!("r2 使用完毕 -> {r2}");
+        println!("r2 使用完毕 -> {r2}"); // r2 使用完毕 -> Rust language ownership
     } // r2 的可变借用在这里结束
-    println!("language = {language}");
+    println!("language = {language}"); // language = Rust language ownership
     println!("小结：同一时刻只能有一个 &mut，但可以串行使用多次");
 
     println!("\n3、&T 和 &mut T 不能同时活跃（规则 C）");
